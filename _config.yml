@@ -12,7 +12,7 @@ language:         # 博客使用的语言
 timezone:         # 博客使用的时区, 默认使用电脑时区
 
 # URL
-## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+# If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://roastduckcd.github.io      # 博客地址
 root: /       # 博客根目录
 permalink: :year/:month/:day/:title/    # 博客链接的格式
@@ -72,6 +72,13 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
+# 自动生成sitemap
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+path: baidusitemap.xml
+
+
 ## Themes: https://hexo.io/themes/
 # theme: landscape   # 默认主题
 theme: yilia
