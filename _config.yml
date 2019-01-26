@@ -3,42 +3,42 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle:
-description:
-keywords:
-author: John Doe
-language:
-timezone:
+title: 烤鸭的小火炉       # 博客标题
+subtitle: 一只喜欢看布袋戏的烤鸭   # 博客副标题
+description: 蹉跎错,消磨过,最是光阴化浮沫  # 博客描述, 硬生生干成座右铭
+keywords: iOS, Swift, 程序猿       # 不知道是不是博客的搜索关键字
+author: 阳仔            # 博客作者
+language:         # 博客使用的语言
+timezone:         # 博客使用的时区, 默认使用电脑时区
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
-root: /
-permalink: :year/:month/:day/:title/
+url: https://roastduckcd.github.io      # 博客地址
+root: /       # 博客根目录
+permalink: :year/:month/:day/:title/    # 博客链接的格式
 permalink_defaults:
 
 # Directory
-source_dir: source
-public_dir: public
-tag_dir: tags
-archive_dir: archives
-category_dir: categories
-code_dir: downloads/code
-i18n_dir: :lang
-skip_render:
+source_dir: source        # 源文件夹
+public_dir: public        # 静态网页文件夹
+tag_dir: tags             # 标签
+archive_dir: archives     # 归档
+category_dir: categories  # 分类
+code_dir: downloads/code  # ？？
+i18n_dir: :lang           # 国际化
+skip_render:              # 
 
 # Writing
-new_post_name: :title.md # File name of new posts
-default_layout: post
-titlecase: false # Transform title into titlecase
-external_link: true # Open external links in new tab
-filename_case: 0
-render_drafts: false
-post_asset_folder: false
-relative_link: false
-future: true
-highlight:
+new_post_name: :title.md  # 新 MarkDown 文件名
+default_layout: post      # 预设布局（网页版式）
+titlecase: false          # 标题首字母大写
+external_link: true       # 在新标签中打开链接
+filename_case: 0          # 文件名小写(1)大写(2)
+render_drafts: false      # 显示草稿
+post_asset_folder: false  # 图片上传需要设置为 true
+relative_link: false      # 相对路径，默认是绝对路径
+future: true              # 显示之后的文件
+highlight:                # 代码块设置
   enable: true
   line_number: true
   auto_detect: false
@@ -49,20 +49,20 @@ highlight:
 # per_page: Posts displayed per page. (0 = disable pagination)
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
-  path: ''
-  per_page: 10
-  order_by: -date
+  path: ''          # index.html 文件路径
+  per_page: 10      # 每页显示博文数量
+  order_by: -date   # 博文排序方式，默认日期降序
   
 # Category & Tag
-default_category: uncategorized
-category_map:
-tag_map:
+default_category: uncategorized   # 博文默认分类
+category_map:                     # 分类别名
+tag_map:                          # 标签分类
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
 ## You can customize the date format as defined in
 ## http://momentjs.com/docs/#/displaying/format/
-date_format: YYYY-MM-DD
+date_format: YYYY-MM-DD   
 time_format: HH:mm:ss
 
 # Pagination
@@ -73,7 +73,8 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+# theme: landscape   # 默认主题
+theme: yilia
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
