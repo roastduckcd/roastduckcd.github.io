@@ -58,6 +58,16 @@ default_category: uncategorized   # 博文默认分类
 category_map:                     # 分类别名
 tag_map:                          # 标签分类
 
+
+# Archives
+## 2: Enable pagination
+## 1: Disable pagination
+## 0: Fully Disable
+archive: 1
+category: 1
+tag: 1
+
+
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
 ## You can customize the date format as defined in
@@ -80,8 +90,9 @@ path: baidusitemap.xml
 
 
 ## Themes: https://hexo.io/themes/
-# theme: landscape   # 默认主题
+#theme: landscape   # 默认主题
 theme: yilia
+exclude_generator:
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -89,3 +100,24 @@ deploy:
   type: git			# 使用 Github 部署
   repo: git@github.com:roastduckcd/roastduckcd.github.io.git		# SSH 方式的 Github 仓
   branch: master 		# 博客静态文件部署的分支
+
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true
+
+  
