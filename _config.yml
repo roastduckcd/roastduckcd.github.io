@@ -80,4 +80,4 @@ theme: landscape
 deploy:
   type: git			# 使用 Github 部署
   repo: git@github.com:roastduckcd/roastduckcd.github.io.git		# SSH 方式的 Github 仓
-  branch: gh_pages		# 博客静态文件部署的分支
+  branch: gh-pages		# 博客静态文件部署的分支
