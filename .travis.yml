@@ -7,17 +7,17 @@ branches:                     # 指定要构建的分支
   only:                       # only 表示只构建以下分支
   - source					  # Github 源代码分支	
 
-#before_install:               # install 阶段之前执行
-#  - export TZ='Asia/Beijing'  # 设置时区
-#  - npm install -g hexo-cli   # 全局安装 Hexo 命令行工具
-#
-#install:                      
-#  - npm install               # 安装 package.json 中的依赖
-#
-#script:                      
-#  - hexo clean
-#  - hexo generate             # Hexo 常规命令，执行清理和生成
-#
+before_install:               # install 阶段之前执行
+  - export TZ='Asia/Beijing'  # 设置时区
+  - npm install -g hexo-cli   # 全局安装 Hexo 命令行工具
+
+install:                      
+  - npm install               # 安装 package.json 中的依赖
+
+script:                      
+  - hexo clean
+  - hexo generate             # Hexo 常规命令，执行清理和生成
+
 #after_success:                # script 阶段成功时执行，构建失败不会执行，其他同上
 #  - git config --local user.name "roastduckcd"
 #  - git config --local user.email "sjy457346652@aliyun.com"
