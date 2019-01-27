@@ -24,4 +24,5 @@ after_success:                # script 阶段成功时执行，构建失败不�
   # 配置 hexo _config.yml 中的 deploy 字段。也就是博客部署的分支
   - sed -i'' "s~git@github.com:~https://${GITHUB_TOKEN}@github.com/~" _config.yml
   # - hexo deploy 			  # 通过 Hexo 的 deploy 命令部署博客
-  #cat _config.yml
+  ls -l
+  cat _config.yml
