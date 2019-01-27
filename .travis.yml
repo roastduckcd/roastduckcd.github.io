@@ -1,6 +1,6 @@
 language: node_js             # 指定博客源码语言环境
 node_js: 
-  - '8.9.3'     	          # 指定语言版本
+- '11'   		  	          # 指定语言版本
 cache: npm                    # 指定 npm 缓存方案，会缓存 $HOME/.npm 或 node_modules 文件夹
 
 branches:                     # 指定要构建的分支
