@@ -9,10 +9,10 @@ tags: 工具
 #### 登录过程，（RSA， PC 为客户端，手机为服务端）
 我这里客户端就是 Mac，服务端就是 5s手机。
 * 首先 Mac 发起连接请求，从手机上得到公钥。提示输入密码。(我这里用的 USB 登录演示)
-![](http://plzdzm54a.bkt.clouddn.com/ssh_login_start.jpg)
+![](https://i.loli.net/2019/01/28/5c4f05cb710aa.jpg)
 * 然后 Mac 将输入的密码用手机公钥进行加密，加密后的信息发到手机
 * 手机则使用私钥解密，得到登录密码。然后验证密码正确性。
-![ssh_login](http://plzdzm54a.bkt.clouddn.com/ssh_login.gif)
+![ssh_login](https://i.loli.net/2019/01/28/5c4f05cb72cbb.gif)
 
 
 * 为防[中间人攻击](https://roastduckcd.github.io/2019/01/28/中间人攻击/#more)，PC 端将正常登录获取的手机端的公钥以 IP 为 key 都保存在 `~/.ssh/known_hosts` 文件中。登录时进行匹配，如果失败则可能遇到中间人攻击。
@@ -22,9 +22,9 @@ tags: 工具
 客户端将自己的公钥发给服务器保存。登录时，服务器发送一段随机字符串给客户端。客户端使用自己的私钥加密后发给服务器，服务器使用客户端公钥进行解密，如果字符串匹配。则说明用户可信，不发起密码登录请求。（RSA 签名与验证）
 * 进入 PC 端目录`~/.ssh`
 * `ssh-keygen` 生成自己的公钥、私钥。相关信息可以不用输入,直接回车。
-跟上`-f othername` 可以生成指定名字的公私钥 ![-w784](http://plzdzm54a.bkt.clouddn.com/ssh-keygen.jpg)
+跟上`-f othername` 可以生成指定名字的公私钥 ![-w784](https://i.loli.net/2019/01/28/5c4f05cbdc631.jpg)
 * `ssh-copy-id 用户名@服务器ip地址`拷贝到服务器(`~/.ssh/authorized_keys`)
-![-w1290](http://plzdzm54a.bkt.clouddn.com/ssh-copy-id.jpg)
+![-w1290](https://i.loli.net/2019/01/28/5c4f05cbd2c30.jpg)
 
 ### 配置别名登录
 ##### 使用局域网连接
@@ -46,7 +46,7 @@ User 用户名
 作者已经将脚本写成可以直接执行的命令。进到`enableUSBSSh.command`的目录下终端直接执行即可。
 
    每次使用进一长串目录不方便，可以配置脚本或者环境变量。或者像我一样整个快捷方式。`~/.bash_profile`中添加
-![-w1440](http://plzdzm54a.bkt.clouddn.com/shell_alias.jpg)
+![-w1440](https://i.loli.net/2019/01/28/5c4f05cba16db.jpg)
 接下来就可以在终端直接使用`USBSSH`映射端口。注意默认映射的端口号是 22。你可以使用编辑器打开`enableUSBSSh.command`文件修改。
 * 一般登录 `ssh 用户名@localhost`
 * 别名登录 `ssh 别名`, 修改`~/.ssh.config`没有则创建。
