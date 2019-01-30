@@ -1,4 +1,4 @@
-title: Hexo 使用  [//]:标题
+title: Hexo 使用
 categories:
 - 工具
 - 编辑工具
@@ -7,7 +7,7 @@ tags:
 ---
 
 # Hexo 使用
-
+<!--more-->
 * [//]:这东西是注释,浏览器不显示
 * layout: {{ layout }}	       [//]:布局
 * title: {{ title }} 			    [//]:标题
