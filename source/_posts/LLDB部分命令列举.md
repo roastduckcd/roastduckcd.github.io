@@ -13,7 +13,7 @@ permalink:
 * [官网](http://lldb.llvm.org/)
 * 完整的 lldb 命令[点击进入](http://lldb.llvm.org/lldb-gdb.html)
 * 终端中输入 `lldb` 即可进入环境。本文是在 Xcode 中调试。
-
+<!--more-->
 ### 流程控制命令 
 * `c（continue）`:继续运行到下一个断点处
 * `s（step into）`:进入函数
