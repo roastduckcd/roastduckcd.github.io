@@ -1,7 +1,12 @@
 ---
 title: SSH 连接iPhone
 date: 2019-01-28 13:43:47
-tags: 工具
+categories:
+- 工具
+- 控制工具
+tags: 
+- 工具
+- SSH
 ---
 
 # OpenSSH 连接iPhone

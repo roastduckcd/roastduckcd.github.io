@@ -1,6 +1,9 @@
 ---
 title: LLDB部分命令列举
 comments: true
+categories:
+- 工具
+- 调试工具
 tags:
   - 工具
   - LLDB
