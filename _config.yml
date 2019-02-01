@@ -15,7 +15,7 @@ timezone:         # 博客使用的时区, 默认使用电脑时区
 # If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://roastduckcd.github.io      # 博客地址
 root: /       # 博客根目录
-permalink: :year/:month/:day/:title/    # 博客链接的格式
+permalink: article/:title.html    # 博客文章链接的格式
 permalink_defaults:
 
 # Directory
@@ -93,6 +93,13 @@ path: baidusitemap.xml
 #theme: landscape   # 默认主题
 theme: yilia
 exclude_generator:
+
+## 版权声明
+declare_type: 1
+licensee_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+licensee_name: '知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议'
+licensee_img: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
+
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

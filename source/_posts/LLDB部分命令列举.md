@@ -1,18 +1,17 @@
 ---
 title: LLDB部分命令列举
 comments: true
-categories:
-- 工具
-- 调试工具
+toc: true
+top: 15489914741
+declare: true
 tags:
   - 工具
   - LLDB
 date: 2019-01-30 16:44:02
 updated:
-permalink:
+permalink: 
 ---
 
-# LLDB 部分命令列举
 * [官网](http://lldb.llvm.org/)
 * 完整的 lldb 命令[点击进入](http://lldb.llvm.org/lldb-gdb.html)
 * 终端中输入 `lldb` 即可进入环境。本文是在 Xcode 中调试。
@@ -30,7 +29,6 @@ permalink:
 * 缩写为 `p` 或 `e` + 语句
 * 在 lldb 中新变量的声明和使用都必须在前面加 `$`。调试程序中的变量直接使用
 
->
 ```c
 (lldb) expression int $a = 10;
 (lldb) p a
@@ -42,7 +40,6 @@ error: use of undeclared identifier 'a'
 ##### ==`p 表达式`: 动态执行语句==
 * `p 对象`: 打印对象所有信息，包括类型、地址、值等
 
->
 ```ObjC
 (lldb) p NSString *$str = @"string1";
 (lldb) p $str
@@ -59,7 +56,6 @@ error: use of undeclared identifier 'a'
 
 * `po 对象`: 调用对象的 description 方法。如果是 OC 基本类型对象，只打印值。我们可以重写对象的`-description`方法来改变该调试语句的输出。
 
->
 ```ObjC
 // 上面的po打印
 (lldb) po $str
@@ -77,7 +73,6 @@ jinmao
 
 * 当程序被断住时，我们可以操作当前作用域的变量、调用对象方法等。
 
->
 ```ObjC
 // 取值
 (lldb) p self.view.backgroundColor
@@ -89,7 +84,6 @@ jinmao
 
 * `p` 命令操作属性或成员变量时会自动分配一个`$n`局部变量来接收值。我们也可以直接操作这个变量。
 
->
 ```Objc
 (lldb) p jinmao
 (Dog *) $0 = 0x0000600002892980
@@ -103,7 +97,6 @@ erha
 
 * 指定不同打印格式
 
->
 ```
 p/x
 ```
@@ -113,10 +106,9 @@ p/x
 * breakpoint 可缩写为 break
 
 ##### 查看断点 `breakpoint list`, 缩写`break list`
->断点分组，组号从1开始。每组下的断点也从1开始编号。某个具体断点用 `组号.断点号` 表示
+断点分组，组号从1开始。每组下的断点也从1开始编号。某个具体断点用 `组号.断点号` 表示
 ![lldb_break_list](https://i.loli.net/2019/01/30/5c5161672de1e.jpg)
 ##### 下断点
->
 * `breakpoint set -n 函数名`
 <br/>`breakpoint set` 可以缩写为 `b`
 * `b -n "[类 方法]" -n "[类n 方法n:]"`，`-n`可选。
@@ -155,7 +147,6 @@ target stop-hook add -o "frame variable"
 * 该命令一旦退出程序就失效。可以使用 lldb 的初始化文件 `.lldb` 来配置 target-hook 命令使其长期有效，直接将命令写入即可。
 
 ### 堆栈操作命令
->
 * 查看函数调用栈 `bt`
 * 查看上(下)一个函数的汇编信息 `up/down`，不会改变执行流程
 * 查看某一个栈帧的函数的汇编信息 `frame select 栈帧编号`, 这个栈帧
@@ -165,7 +156,6 @@ target stop-hook add -o "frame variable"
     * 相当于在函数开头直接 return。
 
 ### 内存镜像命令 image
->
 ##### image list 查看加载了哪些动态库
 列出所有内存中正在运行的模块在系统的路径，和此时在内存中的真实物理地址。
 ##### image lookup 当前进程加载的模块列表
@@ -174,7 +164,6 @@ target stop-hook add -o "frame variable"
 * image lookup -a 方法内存地址 模块名
 在指定模块中查找指定地址的**==方法==**信息，不指定模块名就是在所有模块中找。(笔者使用对象地址没有得到任何信息···)
 
->>
 ```
 Dog *a = [[Dog alloc] init];
 [a performSelector:@selector(run)];
@@ -184,8 +173,8 @@ a 调用了一个不存在的 run 方法。此时崩溃
 由于奔溃地方指向如图位置，给我们定位 bug 带来困难。此时根据图中所示找到奔溃方法的上一个函数栈帧，得到它的地址，然后使用 `image lookup`
 ![lldb_imagelookup_getExcep](https://i.loli.net/2019/01/30/5c51616703d50.jpg)
 这样直接就定位奔溃代码位置在`ViewController.m`中的第25行。
-`Tip:这个功能也可以通过Xcode设置异常断点来实现`
->
+>Tip:这个功能也可以通过Xcode设置异常断点来实现
+
 * image lookup -t 类名 
 查看类的成员变量及属性等，但是看不到类的方法。
 * image lookup -n 函数名

@@ -1,16 +1,18 @@
 ---
 title: SSH 连接iPhone
 date: 2019-01-28 13:43:47
-categories:
-- 工具
-- 控制工具
+comments: true
+toc: true
+top: 15489913271
+declare: true
+permalink:
 tags: 
 - 工具
 - SSH
 ---
 
-# OpenSSH 连接iPhone
-* `passwd` 修改密码: mobile权限下需要旧密码，root 下直接覆盖原密码，这就是为什么 root 权限不轻易开放的原因。<!--more-->
+* `passwd` 修改密码: mobile权限下需要旧密码，root 下直接覆盖原密码，这就是为什么 root 权限不轻易开放的原因。
+<!--more-->
 #### 登录过程，（RSA， PC 为客户端，手机为服务端）
 我这里客户端就是 Mac，服务端就是 5s手机。
 * 首先 Mac 发起连接请求，从手机上得到公钥。提示输入密码。(我这里用的 USB 登录演示)
@@ -62,8 +64,25 @@ User 用户名
 Port 映射的端口号
 ```
 但USB连接不建议在 config 中取别名。因为如果链接多台手机，又没配置免密登录，PC 端 RSAKEYS 文件中的 127.0.0.1 会对应多个公钥。造成中间人攻击的情况。这种情况推荐使用脚本。
-**补充：**也可以百度`iProxy`工具映射端口。
 
-   
-* `localhost`和`127.0.0.1`虽然代表同一个地址，但是在`known_hosts`文件中存储时以字符串保存。所以如果多台手机使用，出现中间人攻击？？？
+>**补充：**也可以百度`iProxy`工具映射端口。
+
+### 使用脚本快速连接
+* 创建 xxx.sh
+
+```
+ssh root@localhost
+```
+这样在脚本目录下，使用终端`sh xxx.sh`即可快速连接。如果没有配置免密登录会提示输入密码。
+* 全局配置
+在shell 配置文件中添加如下
+```
+export SHELL=~/Desktop/SHELL
+PATH=:${PATH}:/bin:/usr/bin:$SHELL
+```
+修改路径为你创建 `.sh`的目录即可。`:$SHELL`直接添加到你的`PATH`后。注意`:`和`$`不能少。
+
+
+~~ * `localhost`和`127.0.0.1`虽然代表同一个地址~~
+~~但是在`known_hosts`文件中存储时以字符串保存。所以如~~果~~多台手机使用，出现中间人攻击？？？~~
     
