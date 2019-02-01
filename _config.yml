@@ -91,7 +91,7 @@ path: baidusitemap.xml
 
 ## Themes: https://hexo.io/themes/
 #theme: landscape   # 默认主题
-theme: yilia
+theme: next
 exclude_generator:
 
 ## 版权声明
