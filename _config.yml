@@ -58,6 +58,13 @@ default_category: uncategorized   # 博文默认分类
 category_map:                     # 分类别名
 tag_map:                          # 标签分类
 
+# search
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
 
 # Archives
 ## 2: Enable pagination
