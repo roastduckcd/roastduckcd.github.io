@@ -18,6 +18,7 @@ script:
   - hexo clean
   - hexo generate             # Hexo 常规命令，执行清理和生成
 
+
 after_success:                # script 阶段成功时执行，构建失败不会执行，其他同上
   - git config --local user.name "roastduckcd"
   - git config --local user.email "sjy457346652@aliyun.com"
