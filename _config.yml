@@ -8,7 +8,7 @@ subtitle: 一只喜欢看布袋戏的烤鸭   # 博客副标题
 description: 蹉跎错,消磨过,最是光阴化浮沫  # 博客描述, 硬生生干成座右铭
 keywords: iOS, Swift, 程序猿       # 不知道是不是博客的搜索关键字
 author: 阳仔            # 博客作者
-language:         # 博客使用的语言
+language: zh-CN        # 博客使用的语言
 timezone:         # 博客使用的时区, 默认使用电脑时区
 
 # URL
