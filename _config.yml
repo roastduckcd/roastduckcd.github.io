@@ -8,7 +8,7 @@ subtitle: 一只喜欢看布袋戏的烤鸭   # 博客副标题
 description: 蹉跎错,消磨过,最是光阴化浮沫  # 博客描述, 硬生生干成座右铭
 keywords: iOS, Swift, 程序猿       # 不知道是不是博客的搜索关键字
 author: 阳仔            # 博客作者
-language:         # 博客使用的语言
+language: zh-CN        # 博客使用的语言
 timezone:         # 博客使用的时区, 默认使用电脑时区
 
 # URL
@@ -58,6 +58,13 @@ default_category: uncategorized   # 博文默认分类
 category_map:                     # 分类别名
 tag_map:                          # 标签分类
 
+# search
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
 
 # Archives
 ## 2: Enable pagination
@@ -91,7 +98,7 @@ path: baidusitemap.xml
 
 ## Themes: https://hexo.io/themes/
 #theme: landscape   # 默认主题
-theme: yilia
+theme: next
 exclude_generator:
 
 ## 版权声明
