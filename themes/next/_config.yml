@@ -45,12 +45,13 @@ cache:
 # For example, you put your favicons into `hexo-site/source/images` directory.
 # Then need to rename & redefine them on any other names, otherwise icons from Next will rewrite your custom icons in Hexo.
 favicon:
-  small: /images/favicon-16x16-next.png
-  medium: /images/favicon-32x32-next.png
-  apple_touch_icon: /images/apple-touch-icon-next.png
-  safari_pinned_tab: /images/logo.svg
-  #android_manifest: /images/manifest.json
-  #ms_browserconfig: /images/browserconfig.xml
+  small: /my_images/roastduck.png
+  #medium: /my_images/favicon-32x32-next.png
+  medium: /my_images/roastduck.png
+  apple_touch_icon: /roastduck.png
+  safari_pinned_tab: /roastduck.png
+  #android_manifest: /my_images/manifest.json
+  #ms_browserconfig: /my_images/browserconfig.xml
 
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link, and install hexo-generator-feed: `npm install hexo-generator-feed --save`.
@@ -221,11 +222,11 @@ avatar:
   # You can also use other linking images.
   url: /jianxiu.png  #/images/avatar.gif
   # If true, the avatar would be dispalyed in circle.
-  rounded: false
+  rounded: true
   # The value of opacity should be choose from 0 to 1 to set the opacity of the avatar.
   opacity: 1
   # If true, the avatar would be rotated with the cursor.
-  rotated: false
+  rotated: true
 
 # Table Of Contents in the Sidebar
 toc:
@@ -296,21 +297,13 @@ post_meta:
   item_text: true
   created_at: true
   updated_at:
-    enabled: true
+    enabled: false
     # If true, show updated date label only if `updated date` different from `created date` (post edited in another day than was created).
     # And if post will edited in same day as created, edited time will show in popup title under created time label.
     # If false show anyway, but if post edited in same day, show only edited time.
     another_day: true
   categories: true
 
-# Post wordcount display settings
-# Dependencies: https://github.com/theme-next/hexo-symbols-count-time
-symbols_count_time:
-  separated_meta: true
-  item_text_post: true
-  item_text_total: false
-  awl: 4
-  wpm: 275
 
 codeblock:
   # Manual define the border radius in codeblock
@@ -318,7 +311,7 @@ codeblock:
   border_radius:
   # Add copy button on codeblock
   copy_button:
-    enable: false
+    enable: true
     # Show text copy result
     show_result: false
 
@@ -526,9 +519,9 @@ pangu: false
 
 # Disqus
 disqus:
-  enable: true
+  enable: false
   shortname: RD
-  count: true
+  count: false
   lazyload: false
 
 # Changyan
@@ -553,9 +546,14 @@ valine:
   visitor: false # leancloud-counter-security is not supported for now. When visitor is set to be true, appid and appkey are recommended to be the same as leancloud_visitors' for counter compatibility. Article reading statistic https://valine.js.org/visitor.html
   comment_count: true # if false, comment count will only be displayed in post page, not in home page
 
-# Support for LiveRe comments system.
+# 评论与留言
+# Support for LiveRe comments system. 来比利评论
 # You can get your uid from https://livere.com/insight/myCode (General web site)
-#livere_uid: your uid
+livere_uid: MTAyMC80MjY0Mi8xOTE4OQ==
+# 刀言留言
+# 
+daovoice: true
+daovoice_app_id: 58b50729
 
 # Gitment
 # Introduction: https://github.com/imsun/gitment
@@ -708,16 +706,33 @@ firestore:
   projectId: #required
   bluebird: false #enable this if you want to include bluebird 3.5.1(core version) Promise polyfill
 
+# 统计：阅读次数、字数等
 # Show Views/Visitors of the website/page with busuanzi.
 # Get more information on http://ibruce.info/2015/04/04/busuanzi
 busuanzi_count:
-  enable: true
+  enable: false
   total_visitors: false
   total_visitors_icon: user
   total_views: false
   total_views_icon: eye
   post_views: true
   post_views_icon: eye
+
+# Post wordcount display settings无效？？hexo 和 theme 的_config.yml都要设置
+# Dependencies: https://github.com/theme-next/hexo-symbols-count-time
+symbols_count_time:
+  separated_meta: true
+  item_text_post: true
+  item_text_total: true
+  awl: 4
+  wpm: 275
+
+# Post wordcount display settings无效？？
+# Dependencies: https://github.com/willin/hexo-wordcount
+# post_wordcount:
+#   item_text: true
+#   wordcount: true
+#   min2read: true
 
 # Tencent analytics ID
 #tencent_analytics:

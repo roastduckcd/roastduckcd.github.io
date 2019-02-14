@@ -93,7 +93,7 @@ pagination_dir: page
 sitemap:
   path: sitemap.xml
 baidusitemap:
-path: baidusitemap.xml
+  path: baidusitemap.xml
 
 
 ## Themes: https://hexo.io/themes/
@@ -114,6 +114,16 @@ deploy:
   type: git			# 使用 Github 部署
   repo: git@github.com:roastduckcd/roastduckcd.github.io.git		# SSH 方式的 Github 仓
   branch: master 		# 博客静态文件部署的分支
+
+
+# 统计
+## dependenices: https://github.com/theme-next/hexo-symbols-count-time
+symbols_count_time:
+  symbols: true
+  time: true
+  total_symbols: true
+  total_time: false
+
 
 jsonContent:
   meta: false

@@ -4,6 +4,7 @@ comments: true
 toc: true
 top: 15489912031
 declare: true
+copyright: true
 tags:
   - 图床
   - 博客

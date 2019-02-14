@@ -16,6 +16,7 @@
 //         )
 //     }    
 // );
+// ############
 document.body.setAttribute("onclick", "closesidebar()");
 bar = document.getElementById("sidebar");
 function closesidebar() {
@@ -29,6 +30,8 @@ bar.onclick = function(){
     // function(event){
     //     event.stopPropagation();
     // }
-    window.event.returnValue = false;
+    // 关闭子元素事件
+    // window.event.returnValue = false;
+    // 关闭当前元素事件
     window.event.cancelBubble = true;
 }

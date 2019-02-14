@@ -5,6 +5,7 @@ updated: {{ updated }}
 permalink: article/:date:title.html
 comments: true
 toc: true
+copyright: true
 declare: true
 top:
 categories:
