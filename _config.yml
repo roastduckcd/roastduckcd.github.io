@@ -114,7 +114,7 @@ deploy:
   type: git			# 使用 Github 部署
   repo: git@github.com:roastduckcd/roastduckcd.github.io.git,master		# SSH 方式的 Github 仓,博客静态文件部署的分支
   type: git     # 使用 Github 部署
-  repo: git@git.dev.tencent.com:roastduckcd/blog.git,master
+  repo: git@git.dev.tencent.com:roastduckcd/roastduckcd.coding.me.git,master
 # 统计
 ## dependenices: https://github.com/theme-next/hexo-symbols-count-time
 symbols_count_time:
