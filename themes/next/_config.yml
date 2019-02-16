@@ -45,13 +45,12 @@ cache:
 # For example, you put your favicons into `hexo-site/source/images` directory.
 # Then need to rename & redefine them on any other names, otherwise icons from Next will rewrite your custom icons in Hexo.
 favicon:
-  small: /my_images/roastduck.png
-  #medium: /my_images/favicon-32x32-next.png
-  medium: /my_images/roastduck.png
-  apple_touch_icon: /roastduck.png
-  safari_pinned_tab: /roastduck.png
-  #android_manifest: /my_images/manifest.json
-  #ms_browserconfig: /my_images/browserconfig.xml
+  small: /images/favicon-16x16-next.png
+  medium: /images/favicon-32x32-next.png
+  apple_touch_icon: /images/apple-touch-icon-next.png
+  safari_pinned_tab: /images/logo.svg
+  #android_manifest: /images/manifest.json
+  #ms_browserconfig: /images/browserconfig.xml
 
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link, and install hexo-generator-feed: `npm install hexo-generator-feed --save`.
@@ -61,7 +60,7 @@ rss:
 footer:
   # Specify the date when the site was setup.
   # If not defined, current year will be used.
-  since: 2019-1-1
+  #since: 2015
 
   # Icon between year and copyright info.
   icon:
@@ -72,10 +71,6 @@ footer:
     animated: false
     # Change the color of icon, using Hex Code.
     color: "#808080"
-
-
-post_copyright:
-  enable: true
 
   # If not defined, `author` from Hexo main config will be used.
   copyright:
@@ -115,14 +110,13 @@ creative_commons:
 # SEO Settings
 # ---------------------------------------------------------------
 
-
 # Canonical, set a canonical link tag in your hexo, you could use it for your SEO of blog.
 # See: https://support.google.com/webmasters/answer/139066
 # Tips: Before you open this tag, remember set up your URL in hexo _config.yml (e.g. url: http://yourdomain.com)
 canonical: true
 
 # Change headers hierarchy on site-subtitle (will be main site description) and on all post/pages titles for better SEO-optimization.
-seo: true
+seo: false
 
 # If true, will add site-subtitle to index page, added in main hexo config.
 # subtitle: Subtitle
@@ -144,14 +138,13 @@ exturl: false
 # External url should start with http:// or https://
 menu:
   home: / || home
-  tags: /tags/ || tags
+  #about: /about/ || user
+  #tags: /tags/ || tags
   #categories: /categories/ || th
   archives: /archives/ || archive
   #schedule: /schedule/ || calendar
   #sitemap: /sitemap.xml || sitemap
-  #commonweal: /404.html || heartbeat
-  gossip: /gossip/ || gossip
-  about: /about/ || user
+  #commonweal: /404/ || heartbeat
 
 # Enable/Disable menu icons / item badges.
 menu_settings:
@@ -164,8 +157,8 @@ menu_settings:
 # ---------------------------------------------------------------
 
 # Schemes
-#scheme: Muse
-scheme: Mist
+scheme: Muse
+#scheme: Mist
 #scheme: Pisces
 #scheme: Gemini
 
@@ -182,9 +175,8 @@ site_state: true
 # Key is the link label showing to end users.
 # Value before `||` delimeter is the target permalink.
 # Value after `||` delimeter is the name of FontAwesome icon. If icon (with or without delimeter) is not specified, globe icon will be loaded.
-social:
-  GitHub: https://github.com/roastduckcd || github
-  简书: https://www.jianshu.com/u/8f6ea27db0c7
+#social:
+  #GitHub: https://github.com/yourname || github
   #E-Mail: mailto:yourname@gmail.com || envelope
   #Weibo: https://weibo.com/yourname || weibo
   #Google: https://plus.google.com/yourname || google
@@ -220,13 +212,13 @@ avatar:
   # in theme directory(source/images): /images/avatar.gif
   # in site  directory(source/uploads): /uploads/avatar.gif
   # You can also use other linking images.
-  url: /jianxiu.png  #/images/avatar.gif
+  url: #/images/avatar.gif
   # If true, the avatar would be dispalyed in circle.
-  rounded: true
+  rounded: false
   # The value of opacity should be choose from 0 to 1 to set the opacity of the avatar.
   opacity: 1
   # If true, the avatar would be rotated with the cursor.
-  rotated: true
+  rotated: false
 
 # Table Of Contents in the Sidebar
 toc:
@@ -277,7 +269,7 @@ sidebar:
 scroll_to_more: true
 
 # Automatically saving scroll position on each post/page in cookies.
-save_scroll: true
+save_scroll: false
 
 # Automatically excerpt description in homepage as preamble text.
 excerpt_description: true
@@ -297,13 +289,21 @@ post_meta:
   item_text: true
   created_at: true
   updated_at:
-    enabled: false
+    enabled: true
     # If true, show updated date label only if `updated date` different from `created date` (post edited in another day than was created).
     # And if post will edited in same day as created, edited time will show in popup title under created time label.
     # If false show anyway, but if post edited in same day, show only edited time.
     another_day: true
   categories: true
 
+# Post wordcount display settings
+# Dependencies: https://github.com/theme-next/hexo-symbols-count-time
+symbols_count_time:
+  separated_meta: true
+  item_text_post: true
+  item_text_total: false
+  awl: 4
+  wpm: 275
 
 codeblock:
   # Manual define the border radius in codeblock
@@ -311,7 +311,7 @@ codeblock:
   border_radius:
   # Add copy button on codeblock
   copy_button:
-    enable: true
+    enable: false
     # Show text copy result
     show_result: false
 
@@ -360,7 +360,7 @@ post_edit:
 disable_baidu_tranformation: false
 
 # Reduce padding / margin indents on devices with narrow width.
-mobile_layout_economy: true
+mobile_layout_economy: false
 
 # Android Chrome header panel color ($brand-bg / $headband-bg => $black-deep).
 android_chrome_color: "#222"
@@ -444,9 +444,8 @@ font:
 # ---------------------------------------------------------------
 
 # Math Equations Render Support
-mathjax: true
 math:
-  enable: true
+  enable: false
 
   # Default(true) will load mathjax/katex script on demand
   # That is it only render those page who has `mathjax: true` in Front Matter.
@@ -520,8 +519,8 @@ pangu: false
 # Disqus
 disqus:
   enable: false
-  shortname: RD
-  count: false
+  shortname:
+  count: true
   lazyload: false
 
 # Changyan
@@ -546,14 +545,9 @@ valine:
   visitor: false # leancloud-counter-security is not supported for now. When visitor is set to be true, appid and appkey are recommended to be the same as leancloud_visitors' for counter compatibility. Article reading statistic https://valine.js.org/visitor.html
   comment_count: true # if false, comment count will only be displayed in post page, not in home page
 
-# 评论与留言
-# Support for LiveRe comments system. 来比利评论
+# Support for LiveRe comments system.
 # You can get your uid from https://livere.com/insight/myCode (General web site)
-livere_uid: MTAyMC80MjY0Mi8xOTE4OQ==
-# 刀言留言
-# 
-daovoice: true
-daovoice_app_id: 58b50729
+#livere_uid: your uid
 
 # Gitment
 # Introduction: https://github.com/imsun/gitment
@@ -563,7 +557,7 @@ gitment:
   count: true # Show comments count in post meta area
   lazy: false # Comments lazy loading with a button
   cleanly: false # Hide 'Powered by ...' on footer, and more
-  language: zh-CN   # Force language, or auto switch by theme
+  language: # Force language, or auto switch by theme
   github_user: # MUST HAVE, Your Github Username
   github_repo: # MUST HAVE, The name of the repo you use to store Gitment comments
   client_id: # MUST HAVE, Github client id for the Gitment
@@ -682,8 +676,6 @@ rating:
   color:  fc6423
 # ---------------------------------------------------------------
 
-jiathis: true
-
 # Show number of visitors to each article.
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
@@ -706,33 +698,16 @@ firestore:
   projectId: #required
   bluebird: false #enable this if you want to include bluebird 3.5.1(core version) Promise polyfill
 
-# 统计：阅读次数、字数等
 # Show Views/Visitors of the website/page with busuanzi.
 # Get more information on http://ibruce.info/2015/04/04/busuanzi
 busuanzi_count:
   enable: false
-  total_visitors: false
+  total_visitors: true
   total_visitors_icon: user
-  total_views: false
+  total_views: true
   total_views_icon: eye
   post_views: true
   post_views_icon: eye
-
-# Post wordcount display settings无效？？hexo 和 theme 的_config.yml都要设置
-# Dependencies: https://github.com/theme-next/hexo-symbols-count-time
-symbols_count_time:
-  separated_meta: true
-  item_text_post: true
-  item_text_total: true
-  awl: 4
-  wpm: 275
-
-# Post wordcount display settings无效？？
-# Dependencies: https://github.com/willin/hexo-wordcount
-# post_wordcount:
-#   item_text: true
-#   wordcount: true
-#   min2read: true
 
 # Tencent analytics ID
 #tencent_analytics:
@@ -775,7 +750,7 @@ algolia_search:
 # Local search
 # Dependencies: https://github.com/theme-next/hexo-generator-searchdb
 local_search:
-  enable: true
+  enable: false
   # if auto, trigger search by changing input
   # if manual, trigger search by pressing enter key or search button
   trigger: auto
@@ -841,7 +816,7 @@ reading_progress:
 # Use velocity to animate everything.
 motion:
   enable: true
-  async: true
+  async: false
   transition:
     # Transition variants:
     # fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut
@@ -894,13 +869,12 @@ canvas_nest:
 
 # JavaScript 3D library.
 # Dependencies: https://github.com/theme-next/theme-next-three
-#use_motion: true
 # three_waves
-#three_waves: false
+three_waves: false
 # canvas_lines
-#canvas_lines: true
+canvas_lines: false
 # canvas_sphere
-#canvas_sphere: false
+canvas_sphere: false
 
 # Canvas-ribbon
 # Dependencies: https://github.com/theme-next/theme-next-canvas-ribbon

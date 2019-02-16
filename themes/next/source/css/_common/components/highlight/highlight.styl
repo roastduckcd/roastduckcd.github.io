@@ -4,7 +4,6 @@
 @require "diff"
 
 // Placeholder: $code-block
-// 大代码块
 $code-block {
   overflow: auto;
   margin: 20px 0;
@@ -30,7 +29,7 @@ pre {
   @extend $code-block;
   padding: 10px;
   code {
-    padding: 200;
+    padding: 0;
     color: $highlight-foreground;
     background: none;
     text-shadow: none;
@@ -86,7 +85,7 @@ pre {
     text-align: right
     background-color: $highlight-gutter.bg-color
   }
-  //大代码块样式
+
   .code pre {
     width: 100%
     padding-left: 10px

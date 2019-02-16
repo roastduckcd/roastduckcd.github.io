@@ -58,5 +58,5 @@
 {% if theme.footer.custom_text %}
   <div class="footer-custom">{#
   #}{{ theme.footer.custom_text }}{#
-#}这里</div>
+#}</div>
 {% endif %}
