@@ -215,7 +215,7 @@
           {% endif %}
 
           {% if config.symbols_count_time.symbols or config.symbols_count_time.time %}
-            <div class="post-symbolscount">
+            <span class="post-symbolscount">
               {% if not theme.symbols_count_time.separated_meta %}
                 <span class="post-meta-divider">|</span>
               {% endif %}
@@ -247,7 +247,7 @@
                 #}{{ symbolsTime(post.content, theme.symbols_count_time.awl, theme.symbols_count_time.wpm, __('symbols_count_time.time_minutes')) }}{#
               #}</span>
               {% endif %}
-            </div>
+            </span>
           {% endif %}
 
           {% if post.description and (not theme.excerpt_description or not is_index) %}
