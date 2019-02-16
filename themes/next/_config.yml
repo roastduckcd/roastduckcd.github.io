@@ -551,6 +551,12 @@ valine:
 # You can get your uid from https://livere.com/insight/myCode (General web site)
 livere_uid: MTAyMC80MjY0Mi8xOTE4OQ==
 
+
+# DaoVoice Online contact 
+daovoice: true
+daovoice_app_id: 58b50729
+
+
 # Gitment
 # Introduction: https://github.com/imsun/gitment
 gitment:
