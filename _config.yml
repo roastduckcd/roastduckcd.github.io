@@ -94,6 +94,7 @@ sitemap:
   path: sitemap.xml
 baidusitemap:
   path: baidusitemap.xml
+  url: https://roastduckcd.coding.me
 
 
 ## Themes: https://hexo.io/themes/

@@ -13,7 +13,7 @@ tags:
 date: 2019-02-17 19:39:44
 top:
 ---
-
+目前已经使用 next 主题，[详情点击](https://roastduckcd.github.io/article/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%BA%94.html)
 ### 安装 yilia
 * 进入博客根目录
 
