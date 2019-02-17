@@ -1,3 +1,4 @@
 [submodule "themes/next"]
 	path = themes/next
-	url = git@github.com:roastduckcd/hexo-theme-next.git
+	url = https://github.com/roastduckcd/hexo-theme-next.git
+	#url = git@github.com:roastduckcd/hexo-theme-next.git
