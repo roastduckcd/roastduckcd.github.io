@@ -16,10 +16,10 @@ branches:                     # 指定要构建的分支
   - source                    # Github 源代码分支  
 
 
-before_script:
-  - git clone --depth=50 --branch=source https://github.com/roastduckcd/roastduckcd.github.io.git
-  - cd /home/travis/build/roastduckcd/roastduckcd.github.io/
-  - git submodule update --init --recursive
+# before_script:
+#   - git clone --depth=50 --branch=source https://github.com/roastduckcd/roastduckcd.github.io.git
+#   - cd /home/travis/build/roastduckcd/roastduckcd.github.io/
+#   - git submodule update --init --recursive
 
 
 script:                      
