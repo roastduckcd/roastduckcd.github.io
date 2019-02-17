@@ -1,8 +1,6 @@
 ---
 title: {{ title }}
 date: {{ date }}
-updated: {{ updated }}
-permalink: article/:date:title.html
 comments: true
 toc: true
 copyright: true
