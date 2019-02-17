@@ -1,11 +1,8 @@
 language: node_js             # 指定博客源码语言环境
 node_js: 
-- '11'   		  	          # 指定语言版本
+- '11'   		  	              # 指定语言版本
 cache: npm                    # 指定 npm 缓存方案，会缓存 $HOME/.npm 或 node_modules 文件夹
 
-branches:                     # 指定要构建的分支
-  only:                       # only 表示只构建以下分支
-  - source					  # Github 源代码分支	
 
 before_install:               # install 阶段之前执行
   - export TZ='Asia/Beijing'  # 设置时区
@@ -14,15 +11,22 @@ before_install:               # install 阶段之前执行
 install:                      
   - npm install               # 安装 package.json 中的依赖
 
+branches:                     # 指定要构建的分支
+  only:                       # only 表示只构建以下分支
+  - source                    # Github 源代码分支  
+
+
+before_script:
+  - git clone --depth=50 --branch=source https://github.com/roastduckcd/roastduckcd.github.io.git
+  - cd /home/travis/build/roastduckcd/roastduckcd.github.io/
+  - git submodule update --init --recursive
+
+
 script:                      
   - hexo clean
   - hexo generate             # Hexo 常规命令，执行清理和生成
 
 
 after_success:                # script 阶段成功时执行，构建失败不会执行，其他同上
-  - git config --local user.name "roastduckcd"
-  - git config --local user.email "sjy457346652@aliyun.com"
-  # 配置 hexo _config.yml 中的 deploy 字段。也就是博客部署的分支
-  - sed -i'' "s~git@github.com:~https://${GITHUB_TOKEN}@github.com/~" _config.yml
-  - sed -i'' "s~git@git.dev.tencent.com:~https://${CODING_TOKEN}@git.dev.tencent.com/~" _config.yml
+  
   - hexo deploy 			  # 通过 Hexo 的 deploy 命令部署博客
