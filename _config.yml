@@ -112,12 +112,14 @@ licensee_img: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git			# 使用 Github 部署
-  repo: 
-    github: git@github.com:roastduckcd/roastduckcd.github.io.git		# SSH 方式的 Github 仓,博客静态文件部署的分支
-    coding: git@git.dev.tencent.com:roastduckcd/roastduckcd.coding.me.git
-    vultr:/home/git/repo/hexo.git
-  branch: master
+  - type: git			# 使用 Github 部署
+    repo: 
+      github: git@github.com:roastduckcd/roastduckcd.github.io.git		# SSH 方式的 Github 仓,博客静态文件部署的分支
+      #coding: git@git.dev.tencent.com:roastduckcd/roastduckcd.coding.me.git
+    branch: master
+  - type: git
+    repo: vultr:/home/git/repo/hexo.git
+
 # 统计
 ## dependenices: https://github.com/theme-next/hexo-symbols-count-time
 symbols_count_time:
