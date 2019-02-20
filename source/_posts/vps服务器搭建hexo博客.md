@@ -130,7 +130,7 @@ https://www.cnblogs.com/eaglezb/p/6073739.html
 	>
 	>[端口已通过防火墙,还是不能访问,看这篇文末](https://www.jianshu.com/p/8ded7c5fda1d)
 
-* 修改 nginx 默认配置 `/etc/nginx/conf.d/default.conf`，最好备份一下`cp default.conf default_old.conf`
+* 修改 nginx 默认配置 `/etc/nginx/conf.d/default.conf`。建议备份一下`cp default.conf default_old.co`，有个对照。注意后缀千万不能和源文件相同。
 
 	```
 	# 修改监听端口为刚才新开放的
@@ -146,11 +146,17 @@ https://www.cnblogs.com/eaglezb/p/6073739.html
 
 	此时在浏览器通过`ip:新端口`号访问，如果出现`index.html`中的内容说明配置成功
 
-	>如果出现 403 错误，首先确认`default.conf`正确配置，`root`字段必须是绝对路径，即便`~`路径标识都不行。然后确认绝对路径上的每一个文件夹或文件都有可读权限。
+	>出现 403 错误
+	>>1.首先确认`default.conf`正确配置，`root`字段必须是绝对路径，即便`~`路径标识都不行。
+	>>2.然后确认绝对路径上的每一个文件夹或文件都有可读权限。`chmod 755 xxx`
+	>>3.其他403网上自己搜搜吧[试试](https://www.cnblogs.com/smallSevens/p/5714690.html)
+	>>4.在`/etc/nginx/nginx.conf`中有这么一句
+	```
+	# 导入路径下所有后缀为 conf 的配置文件
+	include /etc/nginx/conf.d/*.conf
+	```
+	这就是上面笔者提醒备份文件后缀不能保持一致的原因。如果不改，备份的配置可能覆盖真正的配置文件，导致无限403。因为谨慎起见给自己挖了个大坑，人生无常啊😂😂🤣
 	
-	```
-	chmod 755 xxx
-	```
 
 #### 安装 git 服务，建立服务仓
 　　服务端操作
@@ -321,3 +327,13 @@ https://www.cnblogs.com/eaglezb/p/6073739.html
 	```
 
 * 浏览器`服务器ip:端口号`访问博客
+
+#### nginx 中使用 hexo 中的 404 页面
+　　服务器操作
+
+* 修改`/etc/nginx/conf.d/default.conf`, 打开一个注释并修改路径。
+
+    ```
+    error_page 404 /404/index.html
+    ```
+`/404/index.html` 是 hexo 博客中`public`目录下的 404 页面路径。
