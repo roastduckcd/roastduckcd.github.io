@@ -13,7 +13,7 @@ date: 2019-02-22 09:40:04
 top:
 ---
 
-* 需求：笔者想写技术类和碎碎念类文章。但是想把他们分别展示，比如主页就展示技术类，另起一个随笔分类展示碎碎念文章。这是我的[博客地址](http://roastduck.xyz)
+* 需求：笔者想写技术类和碎碎念类文章。但是想把他们分别展示，比如主页就展示技术类文章，另起一个随笔分类展示碎碎念文章。这是我的[博客地址](http://roastduck.xyz)
 <!-- more -->
 开始动手
 
@@ -58,9 +58,10 @@ top:
 	---
 	```
 
-* 最后 `hexo g`,`hexo s`本地先查看下。
+* 接下来我们修改`themes/next/layout/index.swig`，在主页中屏蔽掉`gossip`分类下的文章。[Github 代码](https://github.com/roastduckcd/hexo-theme-next/blob/master/layout/index.swig)。这样我们的需求就搞定了。
+
+* 现在 `hexo g``hexo s`本地浏览，如果没问题就可以发布了。
 
 #### 一些问题，还请不吝赐教
 * 最好是自定义一个模板`custom_name.swig`去渲染。但是笔者没找到`category.swig`是`在哪被谁`调用的，所以自定义的模板不知道在哪去`include`。
 * BUG: 因为使用的是`category/gossip`，所以点击`gossip`时，`category`分类菜单也会处于选中状态。
-* 主页默认展示所有文章，但是在主页好像拿不到文章的分类，所以不能使用`if`语句来屏蔽`gossip`分类下的文章。
