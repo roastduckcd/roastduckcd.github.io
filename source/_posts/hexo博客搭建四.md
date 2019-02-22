@@ -7,9 +7,8 @@ declare: true
 categories:
   - 博客
 tags:
-  - 博客搭建
+  - 博客
   - hexo
-  - 自动部署
   - travis
 date: 2019-02-17 19:42:09
 top:

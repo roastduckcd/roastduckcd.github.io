@@ -5,6 +5,9 @@ toc: true
 top: 
 declare: true
 copyright: true
+categories:
+  - 工具
+  - 调试工具
 tags:
   - 工具
   - LLDB

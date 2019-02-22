@@ -7,7 +7,7 @@ declare: true
 categories:
   - 博客
 tags:
-  - 博客搭建
+  - 博客
   - hexo
   - yilia
 date: 2019-02-17 19:39:44

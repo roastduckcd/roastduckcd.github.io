@@ -7,7 +7,7 @@ declare: true
 categories:
   - 博客
 tags:
-  - 博客搭建
+  - 博客
   - hexo
 date: 2019-02-17 19:37:34
 top:

@@ -5,6 +5,8 @@ toc: true
 top: 
 declare: true
 copyright: true
+cagtegories:
+  - 博客
 tags:
   - 图床
   - 博客

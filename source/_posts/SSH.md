@@ -8,6 +8,9 @@ copyright: true
 top: 
 declare: true
 permalink:
+categories:
+  - 工具
+  - 服务工具
 tags: 
 - 工具
 - SSH
