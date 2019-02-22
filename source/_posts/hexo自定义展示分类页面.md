@@ -33,14 +33,14 @@ top:
       gossip: 随笔
     ```
 
-* 修改`themes/next/layout/category.swig`，在`entends`后面引入一个模板。[Github代码](https://github.com/roastduckcd/hexo-theme-next/blob/07ff100e1bc38cfdfb915640e3afc3861cc2e0ef/layout/category.swig)（由于 `hexo` 使用的 `swig` 模板引擎会解析 `MarkDown`代码块中 swig 语法。所以会受影响的代码块都使用 Github 代码链接代替😔😔😔😔😔😔）
+* 修改`themes/next/layout/category.swig`，在`entends`后面引入一个模板。[Github代码](https://github.com/roastduckcd/hexo-theme-next/blob/master/layout/category.swig)（由于 `hexo` 使用的 `swig` 模板引擎会解析 `MarkDown`代码块中 swig 语法。所以会受影响的代码块都使用 Github 代码链接代替😔😔😔😔😔😔）
 
 * 我们在点击某一个分类时，它只展示了该分类下的文章`title`
 
     ![blog_category_only_title](https://i.loli.net/2019/02/22/5c6f5330ba610.jpg)
     因为渲染模板使用的是`post-collapse.swig`。但是笔者想要它像主页一样展示一些摘要。所以在上面引入了`post.swig`模板。
     
-* 接下来我们需要添加一个`if`语句，效果是只在笔者`gossip`分类下使用`post.swig`，其他分类还是使用原来的。[Github代码](https://github.com/roastduckcd/hexo-theme-next/blob/07ff100e1bc38cfdfb915640e3afc3861cc2e0ef/layout/category.swig)
+* 接下来我们需要添加一个`if`语句，效果是只在笔者`gossip`分类下使用`post.swig`，其他分类还是使用原来的。[Github代码](https://github.com/roastduckcd/hexo-theme-next/blob/master/layout/category.swig)
 
 * 最后这一步必不可少，要在博客根目录下`public/category/`下生成 `gossip`分类。必须至少存在一篇使用该分类的文章。否则出现访问404。
 
