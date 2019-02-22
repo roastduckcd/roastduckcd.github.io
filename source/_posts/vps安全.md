@@ -14,12 +14,15 @@ top:
 ---
 
 　　这篇文章是[简书作者@乜明文章](https://www.jianshu.com/p/b35d9a4b4eb5) 的 CentOS 6 64位版本。
+
 #### 修改 ssh 默认端口（远程连接安全）
+
 * 查看要修改的端口是否被占用<!--more-->
 
-    ```
-    netstat -anp | grep 2101
-    ``` 
+	```
+	netstat -anp | grep 2101
+	```
+
 * 修改`/etc/ssh/sshd_config`
 
     ```
@@ -74,26 +77,25 @@ top:
 
 * 禁止非`wheel`组用户使用`su`命令
 
-    ```
-    vi /etc/pam.d/su
-    
-    打开下面这句的注释，注意看清楚，看清楚，看清楚!!!
-    auth required pam_wheel.so use_uid
-    ```
-    
-    保存后，再使用`git`用户登录。即使密码输入正确也会提示错误或者无权限。
-    
-    ```
-    // 登录 git 用户
-    su git
-    
-    // 登录 root 用户
-    su
-    // su: incorrect passwd
-    
-    sudo -i
-    // git is not in the sudoers file.  This incident will be reported.
-    ```
+	```
+	vi /etc/pam.d/su
+	    
+	打开下面这句的注释，注意看清楚，看清楚，看清楚!!!
+	auth required pam_wheel.so use_uid
+	```
+	保存后，再使用`git`用户登录。即使密码输入正确也会提示错误或者无权限。
+	
+	```
+	// 登录 git 用户
+	su git
+	    
+	// 登录 root 用户
+	su
+	// su: incorrect passwd
+	    
+	sudo -i
+	// git is not in the sudoers file.  This incident will be reported.
+	```
     ![linux_no_wheel_login](https://i.loli.net/2019/02/23/5c7038d913436.jpg)
 
 * 要登录`root`，需要将 `git` 用户添加到 `wheel` 组。再执行上面的命令就 ok。
