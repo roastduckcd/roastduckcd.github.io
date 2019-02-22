@@ -242,8 +242,8 @@ https://www.cnblogs.com/eaglezb/p/6073739.html
 * 本地复制公钥到刚才服务端新建的`authorized_keys`文件中
 
 	```
-	// 本地执行，复制公钥内容到粘贴板
-	pbcopy < blog_server_rsa.pub
+	// 本地执行
+	ssh-copy-id -i ~/.ssh/blog_server_rsa.pub -p 端口号 git@服务器IP
 	```
 
 * 免密登录测试
