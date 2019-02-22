@@ -4,7 +4,8 @@ node_js:
 cache: npm
 before_install:
 - chmod 666 ~/.ssh/config
-- echo "Host vultr\n  HostName $HostName\n  User git\n  Port $Port\n  PreferredAuthentications publickey\n  IdentityFile ~/.ssh/blog_server_rsa" >> ~/.ssh/config
+#- echo "Host vultr\n  HostName $HostName\n  User git\n  Port $Port\n  PreferredAuthentications publickey\n  IdentityFile ~/.ssh/blog_server_rsa" >> ~/.ssh/config
+- cat ~/.ssh/config
 - openssl aes-256-cbc -K $encrypted_2c1446b86c6a_key -iv $encrypted_2c1446b86c6a_iv -in blog_server_rsa.enc -out ~/.ssh/blog_server_rsa -d
 - chmod 600 ~/.ssh/blog_server_rsa
 - export TZ='Asia/Beijing'
