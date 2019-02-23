@@ -8,7 +8,7 @@ before_install:
 - echo "  HostName $HostName" >> ~/.ssh/config
 - echo "  User git" >> ~/.ssh/config
 - echo "  Port $Port" >> ~/.ssh/config
-- echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+- echo "  StrictHostKeyChecking yes" >> ~/.ssh/config
 - echo "  IdentityFile ~/.ssh/blog_server_rsa" >> ~/.ssh/config
 - cat ~/.ssh/config
 - cat /etc/hosts
