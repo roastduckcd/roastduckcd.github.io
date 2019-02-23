@@ -1,7 +1,13 @@
 language: node_js
 node_js:
 - '11'
+
 cache: npm
+
+addons:
+  hosts:
+    - vultr
+
 before_install:
 - chmod 600 ~/.ssh/config
 - echo "Host vultr" >> ~/.ssh/config
