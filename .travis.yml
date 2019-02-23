@@ -14,10 +14,8 @@ before_install:
 - echo "  HostName $HostName" >> ~/.ssh/config
 - echo "  User git" >> ~/.ssh/config
 - echo "  Port $Port" >> ~/.ssh/config
-- echo "  StrictHostKeyChecking yes" >> ~/.ssh/config
+- echo "  StrictHostKeyChecking no" >> ~/.ssh/config
 - echo "  IdentityFile ~/.ssh/blog_server_rsa" >> ~/.ssh/config
-- cat ~/.ssh/config
-- cat /etc/hosts
 - openssl aes-256-cbc -K $encrypted_2c1446b86c6a_key -iv $encrypted_2c1446b86c6a_iv -in blog_server_rsa.enc -out ~/.ssh/blog_server_rsa -d
 - chmod 600 ~/.ssh/blog_server_rsa
 - export TZ='Asia/Beijing'
