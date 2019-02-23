@@ -278,6 +278,8 @@ https://www.cnblogs.com/eaglezb/p/6073739.html
 	`IdentityFile`: 本地私钥文件路径
 
 	注意字段和值之间有一个空格
+	
+	>小提示: `config` 文件的权限必须是600，否则报`bad owner or permission`错误。`chmod 600 ~/.ssh/config`
 
 #### 安装 node.js 
 
