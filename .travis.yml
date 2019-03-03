@@ -19,7 +19,7 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_2c1446b86c6a_key -iv $encrypted_2c1446b86c6a_iv -in blog_server_rsa.enc -out ~/.ssh/blog_server_rsa -d
 - chmod 600 ~/.ssh/blog_server_rsa
 - export TZ='Asia/Beijing'
-- npm shrinkwrap
+# - npm shrinkwrap  # npm 包如果出现版本问题使用
 - npm install -g hexo-cli
 install:
 - npm install
