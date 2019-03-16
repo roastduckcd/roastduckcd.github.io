@@ -10,7 +10,7 @@ declare: true
 permalink:
 categories:
   - 工具
-  - 服务工具
+  - 实用工具
 tags: 
 - 工具
 - SSH
