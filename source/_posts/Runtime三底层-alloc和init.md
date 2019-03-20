@@ -15,10 +15,10 @@ top:
 ---
 
 上篇我们创建了一个对象 `Person *person = [[Person alloc] init];`， 在这句前面先打上断点。我们今天就来探索一下对象到底是如何被创建的？
-<!--more-->
+
 * 对象是在什么时候创建和初始化的
 * alloc 做了哪些事
-
+<!-- more -->
 > 由于在我们的对象创建前，OC 底层还会创建其他的对象，都会使用 alloc 底层函数。因此断点调试时，如果底层函数有断点，但是获取的值跟实际推论有区别，很有可能调用 alloc 的不是 Person 类。建议调试时，先只启用对象创建这一个断点。等断住后再去启用底层的断点。
 
 ## alloc 流程
@@ -103,20 +103,21 @@ top:
     ```
     自己动手算一算，结果都会是"离待对齐值最近的8的倍数"。
     
-* 回到核心函数`_class_createInstanceFromZone`中，`size_t size = 16 bytes` 吗？ 我们使用控制台打印却得到`size = 24`。原因很简单，不要忘了OC 中的对象都是继承于 `NSObject`。来看看它在`NSObject.h`中的声明
+* 回到核心函数`_class_createInstanceFromZone`中，`size_t size = 16 bytes` 吗？ 我们使用控制台打印却得到`size = 24`。原因很简单，不要忘了OC 中的对象都是结构体`objc_object`，默认有一个 [isa 的联合体成员变量](http://roastduck.xyz/article/Runtime一对象和方法的本质.html#对象的-isa)。
 
     ```
-    @interface NSObject <NSObject> {
-        Class isa  OBJC_ISA_AVAILABILITY;
+    struct objc_object {
+        private:
+            isa_t isa;
     }
     ```
-    因此 OC 对象会自动继承一个 `isa` 成员变量。再查看一下 `Class`的声明`typedef struct objc_class *Class;`。得出`isa` 是一个指针，占 8 个字节。所以 `size = ( 8(isa) + 8(NSSTring *) + 4(int) ) & 字节对齐 = 24 bytes`。
+    因此 OC 对象会自动继承一个 `isa` 成员变量。该联合体中的成员都是 8 bytes，所以整个 `isa` 占 8 个字节。所以 `size = ( 8(isa) + 8(NSSTring *) + 4(int) ) & 字节对齐 = 24 bytes`。
     
 ### 分配内存空间
 
 * 获取实例空间的大小后，使用`calloc`函数分配真实的内存空间大小。成功分配内存后，该函数会返回该段内存的首地址。我们先看看系统分配了多大的空间
 
-    ![calloc_size](https://i.loli.net/2019/03/12/5c879a1272bce.jpg)
+    ![calloc_size](https://i.loli.net/2019/03/20/5c91f52061750.jpg)
     实际内存分配 32 bytes。如何改变的呢？其实是又做了一次 16 字节对齐操作。( OC 对象)
 
 * 该函数属于`libmalloc`库，我们需要另一个项目来调试。打开[可编译的`libmalloc`](https://github.com/roastduckcd/libmalloc)，在`main`函数中直接调用`void *p = calloc(1, 24)`，断点进入。函数内部又使用了其他对象的 `calloc` 函数，因此最好不要使用 Xcode 鼠标单击进入函数，而是利用断点调试。这样才好进入正确的函数，来到最终的对齐函数
@@ -142,9 +143,9 @@ top:
 
     >问题：为什么16字节对齐？实例空间按照8字节对齐是因为 64位 系统。笔者没找到资料来解释，难道是王八的屁股？☺☺
     
-* 内存空间分配完毕，接下来是 [isa 的初始化]()了。
+* 内存空间分配完毕，接下来是 [isa 的初始化](http://roastduck.xyz/article/Runtime%E4%B8%80%E5%AF%B9%E8%B1%A1%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%9C%AC%E8%B4%A8.html#对象-isa-的初始化)了。 `isa`初始完毕，对象就正式存在于内存中了。
 
-## init 做了什么
+### init 做了什么
 * 其实到这里一个对象已经创建完毕，已经可以调用方法了。
 
     ```

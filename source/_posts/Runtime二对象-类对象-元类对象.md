@@ -43,6 +43,18 @@ top:
 
 #### isa 走位验证
 
+```objc Person.h 
+@interface Person : NSObject
+
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, assign) int age;
+
+@end
+```
+```objc ViewController.m
+Person *p = [Person alloc];
+```
+
 ![isa_chain_verified](https://i.loli.net/2019/03/20/5c91eb62f2b8a.jpg)
 
 * 所有对象都是`objc_object`结构体，有一个 `isa`成员。所有类对象都是`objc_class`结构体，继承自`objc_object`。所以第一个 8 字节就是 `isa`。OBJECTIVE2 后的 `isa`不仅包含类的地址，其 bit 位还存储有其他信息。因此需要 `& 0xffffffff8`。[详细看这 shiftcls 字段](http://roastduck.xyz/article/iOS-non-pointer-isa.html)

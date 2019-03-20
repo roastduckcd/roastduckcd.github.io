@@ -15,7 +15,7 @@ top:
 
 
 * 在[objc4-750.1源码](https://github.com/roastduckcd/Objc4_750_1.git)自定义`target`中新建`Person`类，写点属性和方法，然后在`main.m`中创建实例并调用方法。
-    
+    <!-- more -->
     ```objc Person.h
     @property (nonatomic, copy) NSString *name;
     @property (nonatomic, assign) int age;
@@ -24,7 +24,6 @@ top:
     + (void)walk;
 
     ```
-    
     ```objc main.m
     Person *p = [[Person alloc] init];
     
@@ -134,11 +133,12 @@ top:
     #endif
     }
     ```
-    
     {% blockquote Greg Parker, http://www.sealiesoftware.com/blog/archive/2013/09/24/objc_explain_Non-pointer_isa.html, Non-pointer isa %}
 `arm64`下的 `isa`不再只是一个指针。 OC 并没有完全利用64位地址。为了节省内存和提高响应速度 Runtime 利用一些额外二进制位来存储对象的部分信息，比如引用计数或是否是弱引用等等。
-    {% endblockquote %}
+    {% endblockquote %}<br/>
+
     　　联合体包含的3个成员变量`Class`、`uintptr_t`和一个结构体位域都是8个字节，所有该联合体的大小是 8 bytes。~~之前一直以为 isa 是指针所以才是 8 个字节。~~
+    
     　　`union` 同一时刻只能操作一个成员，不同时刻可以操作不同成员。 比如我们可以对 bits 赋值，我却可以通过结构体位域去操作一个或几个 bit，得到不同的值，达到存储简单信息的目的。由于成员都是8个字节，我可以一次性赋值或读取，也可以按位赋值或读取。在后面能看到苹果通过不同的 MASK 和 bits 按位与得到不同的值。
     　　
 * 位域都是从低地址开始存储。 注意不同 cpu 结构是有区别的。[具体的位域值](http://roastduck.xyz/article/iOS-non-pointer-isa.html)
@@ -177,10 +177,10 @@ top:
     #endif
     }
     ```
-    
     `SUPPORT_INDEXED_ISA` 不用理，ARM64、X86_64 不支持。
     
     这里调试下来是执行了 `else` 中的语句。arm64 下`ISA_MASK` 就是 `0x0000000ffffffff8`。 `isa.bits` 就需要了解 `isa`是如何被初始化的。所幸苹果将重要的方法都写在结构体前面的，一眼就找到初始化的几个函数。如果没有，就只能新建对象，一步一步调试了。
+
     ```c++ objc-private.h
     struct objc_object {
     private:
