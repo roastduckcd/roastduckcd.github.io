@@ -13,7 +13,8 @@ date: 2019-03-17 01:38:45
 top:
 ---
 
-* 在[objc4-750.1源码](https://github.com/roastduckcd/Objc4_750_1.git)自定义`target`中新建`Person`类，写点属性和方法，然后在`main.m`中创建实例并调用方法。<!--more-->
+
+* 在[objc4-750.1源码](https://github.com/roastduckcd/Objc4_750_1.git)自定义`target`中新建`Person`类，写点属性和方法，然后在`main.m`中创建实例并调用方法。
     
     ```objc Person.h
     @property (nonatomic, copy) NSString *name;
@@ -44,33 +45,19 @@ top:
     ```c++ main.cpp
     int main(int argc, const char * argv[]) {
             
-            // 对象的初始化
+            // 对象的实例化
             Person *p = objc_msgSend(objc_msgSend(objc_getClass("Person"), sel_registerName("alloc")), sel_registerName("init"));
             
             // 对象调用实例方法
             objc_msgSend(p, sel_registerName("run"), 100);
     
-            // 类调用类方法
+            // 类对象调用类方法
             objc_msgSend(objc_getClass("Person"), sel_registerName("walk"));
         }
         return 0;
     }
     ```
 
-### 方法的本质
-* 从上面的代码看到，OC 方法都被编译成了`objc_msgSend`的 c++函数。亦即 OC 方法的本质：消息发送。
-
-* 不管是实例对象还是类本身，都会将调用方法的对象和方法的编号作为该函数的第一、二个实参。如果方法有其他参数，则会从第三个实参开始往后排。
-
-* 按照上面的编译方法将`Person.m`也编译成 c++文件。然后找到实例方法 run 的 c++实现。
-
-    ```c++ main.cpp
-    static void _I_Person_run_(Person * self, SEL _cmd, NSInteger dis) {
-        NSLog((NSString *)&__NSConstantStringImpl__var_folders_07_13f7q65d7sj09t7q2sj3dymm0000gn_T_Person_390a3b_mi_1, dis);
-    }
-    ```
-    编译后的函数默认添加了`self`和`_cmd`两个形参，然后才是我们自己方法的形参。而`objc_msgSend`函数会根据传入对象的`isa`指针找到对应类，然后根据方法编号`_cmd`去查找对应的实现。所以`self`其实是指向方法调用者的指针，我们才能在方法中使用`self`来调用本类方法和属性。而`_cmd`就是当前方法的编号。这两者和`objc_msgSend`的实参是一一对应的。
-    
 ### 对象的本质
 
 ##### 对象是一个结构体
@@ -121,19 +108,16 @@ top:
     
     Class object_getClass(id obj)
     {
+        // 获取 isa 
         if (obj) return obj->getIsa();
         else return Nil;
     }   
     ```
-    最终还是通过类对象去调用的，而且是经由 `isa` 走位。
+    原来还是获取类对象的`superclass`，而且能得出对象的类的获取是通过 isa 得到的。
     
 ##### 对象的 isa
 
 * `objc_object`结构体只有有一个`isa`成员变量，其他都是成员函数。`isa` 实际是一个`union`联合体。
-    
-    {% blockquote Greg Parker, http://www.sealiesoftware.com/blog/archive/2013/09/24/objc_explain_Non-pointer_isa.html, Non-pointer isa %}
-`arm64`下的 `isa`不再只是一个指针，因为 OC 并没有完全利用64位地址。所以 Runtime 利用一些额外二进制位来存储对象的部分信息，比如引用计数或是否是弱引用等等。
-    {% endblockquote %}
     
     ```c++ objc-object.h
     union isa_t {
@@ -150,23 +134,14 @@ top:
     #endif
     }
     ```
-    　　它包含的3个成员变量`Class`、`uintptr_t`和一个结构体位域都是8个字节，所有该联合体的大小是 8 bytes。~~之前一直以为 isa 是指针所以才是 8 个字节。~~
+    
+    {% blockquote Greg Parker, http://www.sealiesoftware.com/blog/archive/2013/09/24/objc_explain_Non-pointer_isa.html, Non-pointer isa %}
+`arm64`下的 `isa`不再只是一个指针。 OC 并没有完全利用64位地址。为了节省内存和提高响应速度 Runtime 利用一些额外二进制位来存储对象的部分信息，比如引用计数或是否是弱引用等等。
+    {% endblockquote %}
+    　　联合体包含的3个成员变量`Class`、`uintptr_t`和一个结构体位域都是8个字节，所有该联合体的大小是 8 bytes。~~之前一直以为 isa 是指针所以才是 8 个字节。~~
     　　`union` 同一时刻只能操作一个成员，不同时刻可以操作不同成员。 比如我们可以对 bits 赋值，我却可以通过结构体位域去操作一个或几个 bit，得到不同的值，达到存储简单信息的目的。由于成员都是8个字节，我可以一次性赋值或读取，也可以按位赋值或读取。在后面能看到苹果通过不同的 MASK 和 bits 按位与得到不同的值。
     　　
-* 来看看具体的位域值，位域都是从低地址开始存储。 注意 macOS 和 iOS 是有区别的。
-
-    ```c++ isa.h
-    #   define ISA_BITFIELD 
-      uintptr_t nonpointer        : 1;  // 0 指针 1 非指针类型，比如基本类型？
-      uintptr_t has_assoc         : 1;  // 是否有其他引用指向该对象
-      uintptr_t has_cxx_dtor      : 1;  // 是否有析构函数
-      uintptr_t shiftcls          : 33; /*MACH_VM_MAX_ADDRESS 0x7fffffe00000*/
-      uintptr_t magic             : 6;  // 魔数，干什么用的？？？
-      uintptr_t weakly_referenced : 1;  // 是否有 weak 修饰引用指向该对象
-      uintptr_t deallocating      : 1;  // 是否正在被释放
-      uintptr_t has_sidetable_rc  : 1;  // 引用计数为1或0，大于1，将多出的计数存储到 extra_rc中
-      uintptr_t extra_rc          : 19   // 存储大于1的引用计数。如果 extra_rc = 3, 那么加上上面的 1 后retain_count = 4
-    ```
+* 位域都是从低地址开始存储。 注意不同 cpu 结构是有区别的。[具体的位域值](http://roastduck.xyz/article/iOS-non-pointer-isa.html)
 
 ##### 对象 isa 的获取
 
@@ -203,7 +178,7 @@ top:
     }
     ```
     
-    > 遗留问题：SUPPORT_INDEXED_ISA ??? 因此未能验证 if 是否进入
+    `SUPPORT_INDEXED_ISA` 不用理，ARM64、X86_64 不支持。
     
     这里调试下来是执行了 `else` 中的语句。arm64 下`ISA_MASK` 就是 `0x0000000ffffffff8`。 `isa.bits` 就需要了解 `isa`是如何被初始化的。所幸苹果将重要的方法都写在结构体前面的，一眼就找到初始化的几个函数。如果没有，就只能新建对象，一步一步调试了。
     ```c++ objc-private.h
@@ -214,8 +189,8 @@ top:
         Class ISA();    // 获取 isa 指向
         Class getIsa();
         // initIsa() 应该仅用于初始化新对象的 isa，也会用于以下情况之外的对象
-        // initInstanceIsa(): 初始化没有 自定义allocWithZone 和 RR?的实例对象 的 isa
-        // initClassIsa(): 初始化类对象isa
+        // initInstanceIsa(): 初始化没有自定义allocWithZone 和 RR?的实例对象 的 isa （指向所属的类对象）
+        // initClassIsa(): 初始化类对象isa  (指向元类对象)
         // initProtocolIsa(): 初始化协议对象的 isa
         void initIsa(Class cls /*nonpointer=false*/);
         void initClassIsa(Class cls /*nonpointer=maybe*/);
@@ -227,15 +202,7 @@ top:
 
 ##### 对象 isa 的初始化
 
-* 我们这里是创建新对象，根据注释直接看`initIsa()`
-
-    ```
-    inline void objc_object::initIsa(Class cls)
-    {
-        initIsa(cls, false, false);
-    }
-    ```
-    注意参数个数的不同，这里面又调用了私有的 `initIsa()`函数
+* 上面的各种初始化接口最终调用私有的 `initIsa(Class cls, bool nonpointer, bool hasCxxDtor)`函数。传入参数依次为类对象指针，是否是 nonpointer，是否有自定义析构函数
     
     ```
     inline void objc_object::initIsa(Class cls, bool nonpointer, bool hasCxxDtor) 
@@ -249,29 +216,27 @@ top:
         // 是否有析构函数，根据参数是 0
         newisa.has_cxx_dtor = hasCxxDtor;
         
-        // class 偏移三位？？？
+        // 移除类对象地址后3位的0
         newisa.shiftcls = (uintptr_t)cls >> 3;
         
         isa = newisa;
     ```
 
-* 再看 `isa.bits & ISA_MASK`,  就是将 `bits`后三位置0了。
-    
-    
-### OC 中的对象、类、元类
-https://www.jianshu.com/p/6b479d5ced46
-* 对象是类的实例，对象的 isa 指针指向它的类。
-* 类描述对象的信息：占用空间大小、成员类型和布局、行为(响应的方法和实现的实例方法)
-* 类也是对象，类也有 isa 指针，指向的是元类。
-* 元类描述类的信息，元类描述的实例方法就是类方法。
-* 元类是根元类的实例，根源类是它本身的实例。
-* 根元类的父类是根类，所以任意类都能响应的根元类的实例方法。（继承或实例化）
+* 再看 `isa.bits & ISA_MASK`,  就是将取第0~35位，并将低三位置0了。得到的结果就是(元)类对象的地址。这个过程其实是上面`cls >> 3`的逆过程。至于原因请查看[shiftcls字段的介绍](http://roastduck.xyz/article/iOS-non-pointer-isa.html)
 
-#### isa 走位
-* 实例的 isa 指向类，类的 isa 指向元类，元类的 isa 指向根源类，根源类的 isa 指向它本身。
+### 方法的本质
+* 从编译后代码看到，OC 方法都被编译成了`objc_msgSend`的 c++函数。亦即 OC 方法的本质：消息发送。
+
+* 不管是实例对象还是类本身，都会将调用方法的对象和方法的编号作为该函数的第一、二个实参。如果方法有其他参数，则会从第三个实参开始往后排。
+
+* 按照上面的编译方法将`Person.m`也编译成 c++文件。然后找到实例方法 run 的 c++实现。
+
+    ```c++ main.cpp
+    static void _I_Person_run_(Person * self, SEL _cmd, NSInteger dis) {
+        NSLog((NSString *)&__NSConstantStringImpl__var_folders_07_13f7q65d7sj09t7q2sj3dymm0000gn_T_Person_390a3b_mi_1, dis);
+    }
+    ```
+    编译后的函数默认添加了`self`和`_cmd`两个形参，然后才是我们自己方法的形参。而`objc_msgSend`函数会根据传入对象的`isa`指针找到对应类，然后根据方法编号`_cmd`去查找对应的实现。所以`self`其实是指向方法调用者的指针，我们才能在方法中使用`self`来调用本类方法和属性。而`_cmd`就是当前方法的编号。这两者和`objc_msgSend`的实参是一一对应的。
 
 #### 方法查询走位
-* 向对象发送消息时，先根据对象的 isa 指针查找对象所属类的的方法列表(类的实例方法)，然后根据类的 super_class 指针走父类链。然后根据类的 isa 指针查找元类实例方法(类方法), 然后根据元类的 super_class 指针走元父类链，最后到根元类。
-* ？？走父类链后又返回根据 isa 查找？
-
-#### 父类指针走位
+* 向对象发送消息时，先根据对象的 isa 指针查找对象所属类的的方法列表(类的实例方法)，然后根据类的 super_class 指针走父类链直到根类。[走位图](http://roastduck.xyz/article/Runtime%E4%BA%8C%E5%AF%B9%E8%B1%A1-%E7%B1%BB%E5%AF%B9%E8%B1%A1-%E5%85%83%E7%B1%BB%E5%AF%B9%E8%B1%A1.html)
