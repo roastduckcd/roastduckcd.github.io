@@ -13,7 +13,7 @@ date: 2019-03-22 03:08:58
 top:
 ---
 
-* 在 Runteim一 中我们已经看到过类的结构体
+* 在 [Runteim一](http://roastduck.xyz/article/Runtime%E4%B8%80%E5%AF%B9%E8%B1%A1%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%9C%AC%E8%B4%A8.html) 中我们已经看到过类的结构体
 <!--more-->
 
     ```objc Object.mm
@@ -75,7 +75,7 @@ top:
         uintptr_t bits;
     }
     ```
-    64 位下 long 占 8 bytes。也就是结构体的大小。综合一下得出`objc_class`在内存中占 40 bytes。
+    64 位下 long 占 8 bytes。也就是结构体的大小。综合一下得出`objc_class`在内存中占 40 bytes。之后验证我们需要根据字节数进行偏移。
     
 * 获取类的数据：`objc_class::data()`，该函数又调用了`class_data_bits_t::data()`
 
@@ -92,9 +92,9 @@ top:
     }
     ```
 
-### 类的数据
+### 类的可读可写数据
 
-* 函数最终返回一个结构体指针，这个结构体中就是真正的数据。这里面的数据时可读写。
+* 函数最终返回一个结构体指针，这个结构体中就是真正的数据。这里面的数据是可读写的。
     > const 离谁近就修饰的谁
 
     ```c++ objc-runtime-new.h
@@ -132,7 +132,7 @@ top:
         uint32_t reserved;      // 保留字段，ARM64下没有
     #endif
     
-        const uint8_t * ivarLayout; // type-encoding
+        const uint8_t * ivarLayout; // type-encoding ？
         
         const char * name;          // 类名    
         method_list_t * baseMethodList;
@@ -160,13 +160,13 @@ top:
     template <typename Element, typename List, uint32_t FlagMask>
     struct entsize_list_tt {
         // entsize_list_tt 的大小:flag
-        // method_list_t: 低2位为 flag，高14位为大小
-        // ivar和 property list: 4个字节都表示大小
+        // method_list_t: 低2位为 flag，高14位为大小	flagMasK 为 0x3
+        // ivar和 property list: 4个字节都表示大小	flagMasK 为 0x0
         uint32_t entsizeAndFlags; 
         uint32_t count;     // 方法/成员/属性的数量
         Element first;      // 第一个方法/成员/属性的数据
         
-        // flagMasg 为 0x3 或 0
+			
         uint32_t entsize() const {
             return entsizeAndFlags & ~FlagMask; 
         }
@@ -216,6 +216,8 @@ top:
         const char *attributes; // 属性类型，type-encoding
     };
     ```
+    
+    
     查看一下 method list并遍历出所有方法名
     ![method_list_t](https://i.loli.net/2019/03/22/5c93e11b3a388.jpg)
     遍历出的方法列表中并没有未实现的方法，同时类方法也没有出现。类方法应该出现在元类中。关于类方法其实[上一篇文章翻译的倒数第二段](http://roastduck.xyz/article/Runtime%E4%BA%8C%E5%AF%B9%E8%B1%A1-%E7%B1%BB%E5%AF%B9%E8%B1%A1-%E5%85%83%E7%B1%BB%E5%AF%B9%E8%B1%A1.html)已有提及。感兴趣的读者可以自行尝试。
