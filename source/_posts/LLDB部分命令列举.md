@@ -102,6 +102,7 @@ erha
 * 指定不同打印格式
 
 ```
+// 16 进制打印
 p/x
 ```
 
@@ -166,7 +167,7 @@ target stop-hook add -o "frame variable"
 * 崩溃代码定位
     * 先打全局断点，再 image lookup
 * image lookup -a 方法内存地址 模块名
-在指定模块中查找指定地址的**==方法==**信息，不指定模块名就是在所有模块中找。(笔者使用对象地址没有得到任何信息···)
+在指定模块中查找指定地址的**方法**信息，不指定模块名就是在所有模块中找。(笔者使用对象地址没有得到任何信息···)
 
 ```
 Dog *a = [[Dog alloc] init];
@@ -188,10 +189,20 @@ a 调用了一个不存在的 run 方法。此时崩溃
 * image dump symtab 模块名
 从内存中导出模块的 MachO symbols 信息。千万要加模块名，否则就是内存中所有的模块。笔者跑了三分钟没到个头啊···
 
-~~TODO: 后面补充~~
-~~### 查看内存命令 memory~~
-~~##### memory read~~
-~~##### memory write~~
 
+### 查看内存命令 memory
+##### memory read[/][分组数][进制格式][每组字节数]
+* 中括号表示参数可选。
+* 进制格式：`x 16进制(常用)`， `d 10进制`
+* 每组字节数：每组按多少个字节展示 `b 1个字节`，`h 2个字节`，`w 4个字节`，`g 8个字节`。如果是10进制，该参数无效。
+* `memory read/6xb 0xxxxxxxxx` 读取 0xxxxxxxxx 的内容，分成6组，按16进制显示，每1个字节一组。因此总共读取了 6 bytes。
+* `memory read` 也可以简写为 `x`: `x/6xb 0xxxxxxxxx`
+
+    ![lldb_memory_read_format](https://i.loli.net/2019/03/26/5c99f42771f4d.jpg)
+
+##### memory write
+* `memory write 0xxxxxxxx value`：向内存 0xxxxxxxx 写入 value 值。
+
+~~TODO: 后面补充~~
 ~~### 寄存器操作命令 register~~
 ~~##### register read / write~~
