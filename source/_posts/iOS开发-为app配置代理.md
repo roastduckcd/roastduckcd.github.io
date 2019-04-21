@@ -1,6 +1,6 @@
 ---
-title: {{ title }}
-date: {{ date }}
+title: iOS开发-为app配置代理
+date: 2019-4-21 23:45:23
 comments: true
 toc: true
 copyright: true
