@@ -17,17 +17,20 @@ tags:
 * 在[逆向实战录一](http://roastduck.xyz/article/%E9%80%86%E5%90%91%E5%AE%9E%E6%88%98%E5%BD%95%E4%B8%80.html)中我们使用直接修改汇编的方式破解，这篇采用注入 libsubstitute.dylib 来 hook 那两个方法。
 <!--more-->
 
+[MWeb逆向：汇编](http://roastduck.xyz/article/%E9%80%86%E5%90%91%E5%AE%9E%E6%88%98%E5%BD%95%E4%B8%80.html)
+[MWeb逆向：MonkeyDev](http://roastduck.xyz/article/%E9%80%86%E5%90%91%E5%AE%9E%E6%88%98%E5%BD%95%E4%BA%8CMWeb-substitute.html)
+[MWeb 逆向：DYLD_INSET_LIBRARIES](http://roastduck.xyz/article/%E9%80%86%E5%90%91%E5%AE%9E%E6%88%98%E5%BD%95%E4%B8%89-DYLD_INSERT_LIBRARIES.html)
 ### 准备
 * 本文使用 [MonkeyDev](https://github.com/AloneMonkey/MonkeyDev) 创建动态库项目。
-	![monkeyappmac](https://i.loli.net/2019/04/26/5cc1ded12e4f9.jpg)
-	![monkeyappmac_dylib](https://i.loli.net/2019/04/26/5cc1ded10dbbb.jpg)
+	![monkeyappmac](https://i.loli.net/2019/04/26/5cc2aa416af3b.jpg)
+	![monkeyappmac_dylib](https://i.loli.net/2019/04/26/5cc2aa4132ed4.jpg)
 	项目中默认是 hook QQ 消息撤回功能的代码，可以直接删掉。
 	
 ### 绕过试用框
 * 上篇文章我们我们使用汇编 ret 了一个 sub_1000xxxx 的函数返回值，来改变 if 进程，从而绕过试用验证。
-	![hook_sub_1000254ab0](https://i.loli.net/2019/04/26/5cc1ded12af34.jpg)
+	![hook_sub_1000254ab0](https://i.loli.net/2019/04/26/5cc2aa4132c1f.jpg)
 	由于该函数属于三方库 DevMateKit，在 MWeb 的 MachO 中没有它的符号表，所以 hopper 以该函数在 MachO 中的偏移地址表示。在 hopper 和 MachoOView 中对比，在 MachOView 中可能因为解析问题导致指令变化。
-	![sub_254ab0_in_macho](https://i.loli.net/2019/04/26/5cc1ded164bae.jpg)
+	![sub_254ab0_in_macho](https://i.loli.net/2019/04/26/5cc2aa4216994.jpg)
 	既然没有符号，我们就不能通过 `MSHookMessageEx` 去 hook 该函数。怎么办呢？[看这里](https://blog.csdn.net/glt_code/article/details/83420589)
 	
 	```c++ MWebHook.m
@@ -85,35 +88,41 @@ tags:
 
 	}
 	```
-	![image_callback_console](https://i.loli.net/2019/04/26/5cc1ded15f381.jpg)
+	![image_callback_console](https://i.loli.net/2019/04/26/5cc2aa4226399.jpg)
 	编译后，MWeb 运行已经绕过试用框。剩下 update error 的警告框。
 	
 ### 绕过 update error 提示
 
-* 在逆向一中，我们修改方法 `- bundleAtURLIsCodeSigned`的汇编，使其返回 1。该方法有符号存在，~~ 那就简单了。 ~~ 不简单啊，因为方法在 framework 中，需要去 hook DevMateKit，重新建一个项目？
-	![bundleAtURLIsCodeSigned](https://i.loli.net/2019/04/26/5cc1ded11bb52.jpg)
+* 在逆向一中，我们修改方法 `- checkIfConfiguredProperly ` ，直接 ret；或 `+ bundleAtURLIsCodeSigned`的汇编，使其返回 1。既然看到方法有符号存在，~~ 那就简单了。 ~~ 
+	![bundleAtURLIsCodeSigned](https://i.loli.net/2019/04/26/5cc2aa4142d98.jpg)
+	不简单啊，因为方法在 framework 中，需要去 hook DevMateKit。需要另外建一个项目。
+	
+* 这里选择 hook 上一级方法 `- [DM_SUUpdater checkIfConfiguredProperly]`。
+	在 MWebHook.m 中添加以下代码
 	
 	```c++ MWebHook.m
-	// MARK: TODO
+	@class DM_SUUpdater;
+
+    // 函数指针
+	static void (*origin_checkIfConfiguredProperly)(void *, void *);
+	
+	static void hook_checkIfConfiguredProperly(void * self, void * _cmd) {
+	
+	}
+	
+	static void __attribute__((constructor)) initialize(void) {
+	    // 注册回调
+	    _dyld_register_func_for_add_image(_callback_for_add_image);
+	    MSHookFunction((void *)(0x100254ab0 + g_slide), (void *)hook_sub254ab0, (void **)&origin_sub254ab0);
+	
+		// 添加 hook 消息
+	    MSHookMessageEx(objc_getClass("DM_SUUpdater"),  @selector(checkIfConfiguredProperly), (IMP)&hook_checkIfConfiguredProperly, (IMP*)&origin_checkIfConfiguredProperly);
+	}
 	```
-
-### 恢复符号表
-* 我们下载的 APP 一般都是删除符号表的，这样不仅增加一点逆向成本，APP 体积也更小。而且逆向总要去 hook 方法。
-
-	```shell restore-symbol路径
-	./restore-symbol /Applications/MWeb.app/Contents/MacOS/MWeb -o MWeb
-	```
-	可以看到恢复后的可执行文件变大了。然后将新的可执行文件替换原来的。发现启动应用没有任何反应。
+	编译后成功绕过 update error。将项目下 TargeApp 目录中的 MWeb.app 复制到 /Applications 就可以像其他软件正常使用了。
 	
-	打开 Console.app 查看日志
-	![console_mweb_crash](reverseMWeb/console_mweb_crash.jpg)
-	很明显，是检测了 APP 的什么状态, 然后直接终止应用。是时候祭出 Hopper 了。
-	
-	
-### UI 调试
+* 笔者也试过 hook 另一个方法`+ bundleAtURLIsCodeSigned`，但是 substitute 提示找不到符号。其实在 hopper 中搜索，发现两个方法都搜不到，为什么上一个方法却能 hook 呢？
 
-* Xcode 随便新建一个 MacOS 项目。`Debug - Attach To Process - 选中要附加的 APP`。Xcode 上方状态栏显示 Running xxx 后，使用 Xcode `Debug View Hierarchy`断住 APP。
-
-* 接下来使用 `bt all`打印 APP 所有在使用线程的堆栈。
-
-* 使用 `image list | grep xxx`来查看指定可执行文件的模块地址。 xxx 必须是完整可执行文件名。
+	在 Strings 区域中搜索两个方法的类，发现`DM_SUUpdater`以一个属性或 ivar 存在，而`DM_SUCodeSigningVerifier`搜索不到。
+	![dm_suupdater_referenced_mweb](https://i.loli.net/2019/04/26/5cc2aa42460e3.jpg)
+	个人推测：既然以属性存在，那么一定要引用头文件。头文件的方法就暴露给 MWeb 了。
