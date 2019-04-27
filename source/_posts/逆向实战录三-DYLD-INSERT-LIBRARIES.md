@@ -26,7 +26,7 @@ tags:
 <!--more-->
 [MWeb逆向：汇编](http://roastduck.xyz/article/%E9%80%86%E5%90%91%E5%AE%9E%E6%88%98%E5%BD%95%E4%B8%80.html)
 [MWeb逆向：MonkeyDev](http://roastduck.xyz/article/%E9%80%86%E5%90%91%E5%AE%9E%E6%88%98%E5%BD%95%E4%BA%8CMWeb-substitute.html)
-[MWeb 逆向：DYLD_INSET_LIBRARIES](http://roastduck.xyz/article/%E9%80%86%E5%90%91%E5%AE%9E%E6%88%98%E5%BD%95%E4%B8%89-DYLD_INSERT_LIBRARIES.html)
+[MWeb 逆向：DYLD_INSET_LIBRARIES](http://roastduck.xyz/article/%E9%80%86%E5%90%91%E5%AE%9E%E6%88%98%E5%BD%95%E4%B8%89-DYLD-INSERT-LIBRARIES.html)
 
 ### 使用 DYLD_INSET_LIBRARIES 破解
 
