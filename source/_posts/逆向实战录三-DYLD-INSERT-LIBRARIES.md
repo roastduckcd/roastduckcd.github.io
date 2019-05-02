@@ -167,13 +167,14 @@ DYLD_INSERT_LIBRARIES=libMWebInject.dylib /Applications/MWeb.app/Contents/MacOS/
 	./restore-symbol /Applications/MWeb.app/Contents/MacOS/MWeb -o MWeb
 	```
 	可以看到恢复后的可执行文件变大了。然后将新的可执行文件替换原来的。发现启动应用没有任何反应。
-	
-	打开 Console.app 查看日志
-	![console_mweb_crash](https://i.loli.net/2019/04/26/5cc2d07d52a1d.jpg)
-	很明显，是检测了 APP 的什么状态, 然后直接终止应用。是时候祭出 Hopper 了。
 
-* 使用 MonkeyDev，它已经集成了 restore-symbol，在 `/opt/MonkeyDev/Tools/mpack.sh`中。在注入前会自动恢复符号表以及去签名步骤。
-	
+* 使用 MonkeyDev 的 monkeyparser，它已经集成了 restore-symbol，在 `/opt/MonkeyDev/Tools/mpack.sh`中可以看到相关命令。在注入前会自动恢复符号表以及去签名步骤。
+* 恢复符号表之后，再启动app，可能启动不了。因为可执行文件被修改，签名遭到破坏。app中可能对签名信息作了验证。
+	安装了 MonkeyDev 后可以使用如下命了去掉签名。其实就是用strip命令去删除了MachO中签名的信息。
+	```
+	monkeyparser strip -t MWeb -o MWeb-unsigned
+	```
+		
 ### Xcode LLDB 调试
 
 * Xcode 随便新建一个 MacOS 项目。`Debug - Attach To Process - 选中要附加的 APP`。Xcode 上方状态栏显示 Running xxx 后，使用 Xcode `Debug View Hierarchy`断住 APP。
