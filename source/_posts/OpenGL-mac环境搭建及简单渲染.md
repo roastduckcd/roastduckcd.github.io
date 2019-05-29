@@ -15,9 +15,9 @@ tags:
 
 
 ### 搭建环境
-* 下面配置好的环境可以备份，每次写代码时复制一份。或者自定义一个 Xcode 模板。这是笔者的[模板](https://github.com/roastduckcd/OpenGL/blob/master/OpenGL.xctemplate.zip)。模板下载后, 解压放在`~/Library/Developer/Xcode/Templates/Project Templates`下。如图使用
+* 下面配置好的环境可以备份，每次写代码时复制一份。或者自定义一个 Xcode 模板。这是笔者的[模板](https://github.com/roastduckcd/OpenGL/blob/master/OpenGL.xctemplate.zip)。模板下载后, 解压放在`~/Library/Developer/Xcode/Templates/Project Templates`下。如果编译报头文件错误，可能要在`Build Settings`中修改`Header search Path`为`$(SRCROOT)/你的工程名/include/**`。然后如图使用
     ![opengl_environment_create_project](https://i.loli.net/2019/05/23/5ce69a07e9d7838014.jpg)
-    
+    <!--more-->
     > [git clone 克隆或下载一个仓库单个文件夹](https://www.cnblogs.com/zhoudaxiaa/p/8670481.html)
 
 * 开始搭建环境。创建一个 mac cocoa app。删除不需要的文件。
@@ -91,10 +91,10 @@ tags:
     // 注册回调函数
     // 1. 注册重塑回调：窗口 frame 改变则触发自定义函数
    
-    // 2. 注册显示回调：屏幕变化或者主动渲染触发自定义函数
+    // 2. 注册显示回调：屏幕变化或者主动渲染触发自定义函数（图形需要发生变化，就要重新渲染）
     
     // 3. 注册键盘输入回调：键盘输入触发自定义函数
-    // 字母数字回车等
+    // 字母、数字等ASCII码能标识的键位
     
     // 4. 注册特殊键位输入回调：键盘输入触发自定义函数
     // 方向键，F功能键等
@@ -133,7 +133,6 @@ tags:
     // 开启GLUT loop
     
     ```
-    
     ```c main.cpp 渲染回调
     // 1.1 设置背景色
     
@@ -141,9 +140,9 @@ tags:
     
     // 1.3 设置颜色
     
-    // 1.4 设置坐标系 glOrtho
+    // 1.4 设置裁减区域 glOrtho
     
-    // 1.5 开始渲染 glbegin beginMode
+    // 1.5 开始渲染 glbegin primitive mode glew.h
     // 不同mode需要重新begin end
     
     // 1.6 设置顶点（正方形，圆形，）

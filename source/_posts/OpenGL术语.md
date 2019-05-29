@@ -16,7 +16,7 @@ tags:
 
 * 3D物体：任何物体，其几何形状都是由三角形组成的。构成一个平面最少需要3个点。
 * GPU 处理大量运算。
-
+<!--more-->
 ### context 上下文
 * 状态机：管理许多对象，对象声明周期内的状态和动作。触发条件，状态机执行相应动作，改变对象的状态，直到对象销毁。
 * context：管理视觉对象，对象有颜色、位置等状态。外部输入，执行响应修改动作，改变当前状态。
@@ -56,10 +56,11 @@ tags:
 * 顶点数组可以存储在内存中，但是GPU访问内存肯定没有GPU访问自己的显存快。为了更高的性能，我们通常将其存储在显存中，使用的这部分显存就叫顶点缓冲区。
 * https://blog.csdn.net/u012501459/article/details/12945153
 
-### pipeline 管线，渲染流水线
+### [pipeline 管线，渲染流水线](https://www.khronos.org/opengl/wiki/Rendering_Pipeline_Overview)
 * OpenGL 渲染流程。GPU在处理数据的时候是有一定顺序的，就像画图是先点后线再及面，这个顺序是不能打破的。它描述的是`接收一组3D坐标，转换为2D坐标，然后将2D坐标转换为可视图像`的整个过程。
 * 固定管线：早起版本封装好的渲染流程 api，调用这些api就可以完成相应功能。开发者设置固定的参数（比如光照模式，纹理模式），就好比OC API中的NSOption选项。因此功能相对有限，不能满足每一个应用场景。
 * processing pipeline 可编程管线：由于固定管线的缺陷，OpenGL开放了部分模块供开发者自定义，一般来说就是顶点着色器和片元（片段、像素）着色器。
+* http://www.songho.ca/opengl/gl_pipeline.html
 
 ### shader 着色器
 * 实现图像渲染的一个程序，类比成一个函数吧。输入数据经过着色器处理后才能被下一阶段程序使用。
@@ -105,6 +106,7 @@ tags:
 * 可以使用片元着色器或者混合方程式。
 
 ### matrix 矩阵
+
 #### 变换矩阵
 * 使图形发生平移、旋转等变化的矩阵
 
@@ -119,28 +121,41 @@ tags:
 * http://mini.eastday.com/mobile/180309010002602.html#
 
 ### OpenGL 头文件
+* `<glut/glut.h>` 
+    * mac系统下使用如上形式，windows 和 linux 系统需要使用freeglut的静态库，并且添加一个宏。
+    
+    ```oc
+    #ifdef __APPLE__
+    #include <GLUT/GLUT.h> // mac下居然不区分大小写
+    #else
+    #define FREEGLUT_STATIC // 一定要添加宏
+    #include <GL/glut.h>
+    #endif
+    ```
+    {% blockquote 百度百科 GLUT https://baike.baidu.com/item/GLUT/6415146?fr=aladdin GLUT %}
+    负责处理和底层操作系统的交互以及I/O操作。适合学习OpenGL和开发简单的OpenGL应用程序。GLUT并不是一个功能全面的工具包所以大型应用程序需要复杂的用户界面最好使用本机窗口系统工具包。
+    {% endblockquote %}
+* `"glew.h"` 
+    {% blockquote -wbp- glew库的使用要点 以及 典型错误 https://blog.csdn.net/a_txpt_001/article/details/40356793 %}
+    长话短说，就是因为windows对opengl的支持不好，为了不使用软模拟的opengl，需要从显卡厂家的驱动里抽取opengl的实现，而glew方便了这个过程。只需要调用一下glewInit就可以使用gl*函数了。
+    {% endblockquote %}
+    {% blockquote 他山之金 GLEW库安装和初始化 https://blog.csdn.net/u010281174/article/details/45848003 %}
+    GLEW能自动识别你的平台所支持的全部OpenGL高级扩展涵数。也就是说，只要包含一个glew.h头文件，你就能使用gl, glu, glext, wgl, glx的全部函数[0]。
+    {% endblockquote %}
+    
 * `"GLTools.h"` 封装了OpenGL工具函数库、OpenGL实用工具库以及一些其他的常用函数，一般来说引入该文件足以。
-    * `"GLShaderManager.h"` 着色器管理器类，创建并管理着色器，还提供[一组存储着色器](http://http://roastduck.xyz/article/OpenGL-渲染架构及固定管线着色器.html#固定着色器)，能进行一些基本渲染操作。
-    
-    * `<glut/glut.h>` 
-        * mac系统下使用如上形式，windows 和 linux 系统需要使用freeglut的静态库，并且添加一个宏。
-    
-        ```oc
-        #ifdef __APPLE__
-        #include <GLUT/GLUT.h> // mac下居然不区分大小写
-        #else
-        #define FREEGLUT_STATIC // 一定要添加宏
-        #include <GL/glut.h>
-        #endif
-        ```
-        * {% blockquote 百度百科 GLUT https://baike.baidu.com/item/GLUT/6415146?fr=aladdin GLUT %}
-        负责处理和底层操作系统的交互以及I/O操作。适合学习OpenGL和开发简单的OpenGL应用程序。GLUT并不是一个功能全面的工具包所以大型应用程序需要复杂的用户界面最好使用本机窗口系统工具包。
-        {% endblockquote %}
-    * `"GLMatrixStack.h"` 矩阵工具类。可以加载单元矩阵/矩阵/矩阵相乘/压栈/出栈/缩放/平移/旋转等操作。
-    * `"GLFrame.h"` 矩阵工具类。表示位置，需要设置vOrigin, vForward ,vUp。
-    * `"GLFrustum.h"` 矩阵工具类。快速设置正投影、透视投影矩阵。完成坐标由3D到2D的转换。
-    * `"GLBatch.h"` 批处理类。它可以传输顶点/光照/纹理理/颜⾊色数据到存储着⾊色器器中.
-    * `"GLGeometryTransform.h"` 几何变换类。在代码中传输视图矩阵/投影矩阵/视图投影变换矩阵等.
-     
-     
         
+    * `"GLBatch.h"` 顶点数据处理类。它可以传输顶点/法线/纹理/颜⾊数据到顶点着色器中。
+    
+    * `"GLShaderManager.h"` 着色器管理类，创建并管理自定义着色器，同时也提供[一组固定管线存储着色器](http://http://roastduck.xyz/article/OpenGL-渲染架构及固定管线着色器.html#固定着色器)，能进行一些基本渲染操作。
+    
+    * `"GLFrame.h"` 矩阵工具类。表示位置，需要设置vOrigin, vForward ,vUp。GLFrame可以表示世界坐标系中任意物体的位置与方向。无论是相机还是模型，都可以使用GLFrame来表示。[详解](https://blog.csdn.net/fyyyr/article/details/79298664)
+
+    * `"GLMatrixStack.h"` 矩阵栈帧类。可以加载单元矩阵/矩阵相乘/缩放/平移/旋转等操作。压栈/出栈用来保存变换前的模型举证。
+    
+    * `"GLFrustum.h"` 矩阵视锥体类，跟摄像机相关。视锥体就是以摄像机为顶点的一个四棱锥，描述视野范围。快速设置正投影、透视投影矩阵。完成坐标由3D到2D的转换。
+    
+    * `"GLGeometryTransform.h"` 几何变换类。在代码中传输视图矩阵/投影矩阵/视图投影变换矩阵等。处理矩阵的叉乘、变换等。
+     
+### OpenGL 部分函数参考
+* https://www.cnblogs.com/1024Planet/p/5764646.html#_label03
