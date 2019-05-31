@@ -7,7 +7,7 @@ copyright: true
 declare: true
 top:
 categories:
-- 图像处理
+- 图形处理
 - OpenGL
 tags:
 - OpenGL术语

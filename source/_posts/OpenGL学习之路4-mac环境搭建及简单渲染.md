@@ -15,7 +15,7 @@ tags:
 
 
 ### 搭建环境
-* 下面配置好的环境可以备份，每次写代码时复制一份。或者自定义一个 Xcode 模板。这是笔者的[模板](https://github.com/roastduckcd/OpenGL/blob/master/OpenGL.xctemplate.zip)。模板下载后, 解压放在`~/Library/Developer/Xcode/Templates/Project Templates`下。如果编译报头文件错误，可能要在`Build Settings`中修改`Header search Path`为`$(SRCROOT)/你的工程名/include/**`。然后如图使用
+* 下面配置好的环境可以备份，每次写代码时复制一份。或者自定义一个 Xcode 模板。这是笔者的[代码仓,模板的 tag 是 OpenGL_template](https://github.com/roastduckcd/OpenGL/)。模板下载后, 放在`~/Library/Developer/Xcode/Templates/Project Templates`下。如果编译报头文件错误，可能要在`Build Settings`中修改`PublicOpenGLHeaderPath`为`$(SRCROOT)/你的工程名`。然后如图使用
     ![opengl_environment_create_project](https://i.loli.net/2019/05/23/5ce69a07e9d7838014.jpg)
     <!--more-->
     > [git clone 克隆或下载一个仓库单个文件夹](https://www.cnblogs.com/zhoudaxiaa/p/8670481.html)
@@ -77,7 +77,7 @@ tags:
     ```
 
 ### 使用默认坐标系渲染三角形
-* 渲染最基本的图元, 具体代码就不贴了, 看[我的Github](https://github.com/roastduckcd/OpenGL/blob/master/StartOpenGL.zip)
+* 渲染最基本的图元, 具体代码就不贴了, 看[我的Github，tag为 20190523-1-A](https://github.com/roastduckcd/OpenGL/)
 
     ```
     // 据说是 Resource 文件夹，实际仍是可执行文件路径
@@ -121,7 +121,7 @@ tags:
     ```
 
 ### 使用自定义坐标
-* 渲染复杂滴滴的图形, [Github代码](https://github.com/roastduckcd/OpenGL/blob/master/CircleSquare.zip)
+* 渲染复杂滴滴的图形, [Github代码，tag为 20190523-1-B](https://github.com/roastduckcd/OpenGL/)
 
     ```c main.cpp main函数 
     // 初始化GLUT库，参数为 main 函数形参
