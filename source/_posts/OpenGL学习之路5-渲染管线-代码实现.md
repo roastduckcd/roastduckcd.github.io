@@ -17,7 +17,7 @@ tags:
 * [Github 代码仓](https://github.com/roastduckcd/OpenGL/)
 
 ### 渲染流程概述
-* [渲染管线的大概流程看这](http://roastduck.xyz/article/OpenGL-%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%9B%BA%E5%AE%9A%E7%AE%A1%E7%BA%BF%E7%9D%80%E8%89%B2%E5%99%A8.html#渲染管线（流水线）一般流程)
+* [渲染管线的大概流程看这](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF3-%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%9B%BA%E5%AE%9A%E7%AE%A1%E7%BA%BF%E7%9D%80%E8%89%B2%E5%99%A8.html#渲染管线（流水线）一般流程)
 * 流程虽然有好几步，但是开发者真正可操作的很少。尤其是固定管线：准备好顶点（纹理等）数据，指定着色器，打开一些功能和测试开关，最后交换缓冲区。顶点坐标和片元的着色处理由OpenGL内部完成；包括图元装配、光栅化等都不要开发者干预。
 * 即便是可编程管线，开发者也就是要自己写顶点和片元着色器。其他流程还是一样的。
 * 当然简单只是宏观上的。
@@ -87,7 +87,7 @@ tags:
     ```
     上面的裁减区域如果不设置，默认范围(-1,1)，x,y,z都是。
 
-* 我们重点使用 [`GLBatch`](http://roastduck.xyz/article/OpenGL%E6%9C%AF%E8%AF%AD.html#OpenGL-头文件) 处理数据。 `Github tag : 20190523-2-C`
+* 我们重点使用 [`GLBatch`](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF%E4%B8%80-%E9%83%A8%E5%88%86%E6%9C%AF%E8%AF%AD.html#OpenGL-头文件) 处理数据。 `Github tag : 20190523-2-C`
 
     ``` c++ main.cpp 
     // 这是全局变量 
@@ -111,7 +111,7 @@ tags:
     * 指定点的大小可以通过`glPointSize`函数。也可以在使用GLSL语言自定义着色器的时候，对内部变量 `gl_PointSize`赋值，但前提是必须激活选项`glEnable(GL_PROGRAM_POINT_SIZE)`。一旦该选项被激活，`glPointSize`函数将会失效。
 
 #### 使用固定管线着色器
-* 关于着色器种类[看这](http://roastduck.xyz/article/OpenGL-%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%9B%BA%E5%AE%9A%E7%AE%A1%E7%BA%BF%E7%9D%80%E8%89%B2%E5%99%A8.html#固定管线着色器)
+* 关于着色器种类[看这](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF3-%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%9B%BA%E5%AE%9A%E7%AE%A1%E7%BA%BF%E7%9D%80%E8%89%B2%E5%99%A8.html#固定管线着色器)
 * 由于我们暂时只画点，这里选择使用`GLT_GLT_SHADER_IDENTITY`。
 * 首先初始化着色器管理类。我们在 `prepareToRender` 函数中 `glewinit()` 之后添加代码。一定要在 `glewinit()`之后初始化着色器。着色器的状态由渲染上下文管理，先有上下文，状态才能被管理。
     
@@ -133,7 +133,7 @@ tags:
     // 指定着色器
     shaderManager.UseStockShader(GLT_SHADER_IDENTITY, rgbaColor);
     ```
-    [平面着色器需要的两个参数](http://roastduck.xyz/article/OpenGL-%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%9B%BA%E5%AE%9A%E7%AE%A1%E7%BA%BF%E7%9D%80%E8%89%B2%E5%99%A8.html#单元着色器-GLT-SHADER-IDENTITY)。
+    [平面着色器需要的两个参数](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF3-%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%9B%BA%E5%AE%9A%E7%AE%A1%E7%BA%BF%E7%9D%80%E8%89%B2%E5%99%A8.html#单元着色器-GLT-SHADER-IDENTITY)。
     
 #### 开始渲染和交换缓冲区
 * 在 `render`函数最后添加两句
@@ -145,7 +145,7 @@ tags:
     glutSwapBuffers();
     ```
     * 从这里能推断出 `GLBatch` 是顶点传送的通道，从原始数据到最后片元都由它来管理。
-    * [关于缓冲区交换](http://roastduck.xyz/article/OpenGL%E6%9C%AF%E8%AF%AD.html#渲染上屏-交换缓冲区)
+    * [关于缓冲区交换](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF%E4%B8%80-%E9%83%A8%E5%88%86%E6%9C%AF%E8%AF%AD.html#渲染上屏-交换缓冲区)
 
 #### 刷新颜色缓冲区
 * 运行程序，运气好应该能看到3个正方形的红点。正方形是因为像素点。不过多半看到的类似这样

@@ -147,7 +147,7 @@ tags:
         
     * `"GLBatch.h"` 顶点数据处理类。它可以传输顶点/法线/纹理/颜⾊数据到顶点着色器中。
     
-    * `"GLShaderManager.h"` 着色器管理类，创建并管理自定义着色器，同时也提供[一组固定管线存储着色器](http://http://roastduck.xyz/article/OpenGL-渲染架构及固定管线着色器.html#固定着色器)，能进行一些基本渲染操作。
+    * `"GLShaderManager.h"` 着色器管理类，创建并管理自定义着色器，同时也提供[一组固定管线存储着色器](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF3-%E6%B8%B2%E6%9F%93%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%9B%BA%E5%AE%9A%E7%AE%A1%E7%BA%BF%E7%9D%80%E8%89%B2%E5%99%A8.html#固定着色器)，能进行一些基本渲染操作。
     
     * `"GLFrame.h"` 矩阵工具类。表示位置，需要设置vOrigin, vForward ,vUp。GLFrame可以表示世界坐标系中任意物体的位置与方向。无论是相机还是模型，都可以使用GLFrame来表示。[详解](https://blog.csdn.net/fyyyr/article/details/79298664)
 
