@@ -156,6 +156,8 @@ tags:
     * `"GLFrustum.h"` 矩阵视锥体类，跟摄像机相关。视锥体就是以摄像机为顶点的一个四棱锥，描述视野范围。快速设置正投影、透视投影矩阵。完成坐标由3D到2D的转换。
     
     * `"GLGeometryTransform.h"` 几何变换类。在代码中传输视图矩阵/投影矩阵/视图投影变换矩阵等。处理矩阵的叉乘、变换等。
+
+    * `"math3d.h"` 3D数学类。
      
 ### OpenGL 部分函数参考
 * https://www.cnblogs.com/1024Planet/p/5764646.html#_label03

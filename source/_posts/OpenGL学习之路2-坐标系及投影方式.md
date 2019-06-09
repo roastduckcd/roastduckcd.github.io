@@ -17,8 +17,9 @@ tags:
 
 ### 坐标系
 * [OpenGL: 你不知道的左右手坐标系](https://www.cnblogs.com/h2zZhou/p/5148487.html)
-* OpenGL 中实际计算时使用的都是齐次坐标(x,y,z,w)，w 为缩放因子，通常为1。
+* OpenGL 中实际计算时使用的都是齐次坐标(x,y,z,w)，w 为缩放因子，通常为1。x,y,z值通过除以w，来进⾏行行缩放。
 <!--more-->
+
 #### 标准化设备坐标(normalized device coordinates NDC)也叫归一化坐标
 * x,y,z范围为[-1,1]的坐标系。左手坐标系。 OpenGL 推荐使用NDC作为着色器数据，但是习惯上我们会自定义坐标范围。因此通常在顶点着色器中将坐标标准化，再进行下一步。
 
