@@ -1,2 +1,2 @@
-# roastduckcd.github.io
+# http://roastduck.xyz
 personal blog repo
