@@ -5,6 +5,7 @@ comments: true
 toc: true
 copyright: true
 declare: true
+mathjax: false
 top:
 categories:
 - 一级分类
