@@ -5,7 +5,7 @@ comments: true
 toc: true
 copyright: true
 declare: true
-mathjax: false
+mathjax: true
 top:
 categories:
 - 图形处理
