@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<!-- coding百度验证 -->
+<meta name="baidu-site-verification" content="SjtXCxQWOd">
+<!-- 个人域名百度验证 -->
+<meta name="baidu-site-verification" content="TFmrmKi4uB">
+<!-- github Google验证 -->
+<meta name="google-site-verification" content="hYqx1rSMO38c9cDs_PiE1zWzjtVPBuqdZZPtMnuOHrc">
+<!-- 个人域名 Google验证 -->
+<meta name="google-site-verification" content="tVCh-si3HbVcbGa9jP_lMVTEu4Ps0f9HoNrEWwom5tY">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-fill-left.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/roastduck32x32.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/roastduck16x16.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+
+  <meta name="description" content="本机作为服务提供者。 CBPeripheralManager对象表示外围设备（当前提供服务的app）。用于发布和广播服务，响应中心设备发来的读写请求。CBCentral对象表示中心设备。我们需要处理它发过来的request。">
+<meta name="keywords" content="蓝牙">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS蓝牙开发-本机作为外围设备角色开发">
+<meta property="og:url" content="http://roastduck.xyz/article/iOS蓝牙开发-本机作为外围设备角色开发.html">
+<meta property="og:site_name" content="烤鸭的小火炉">
+<meta property="og:description" content="本机作为服务提供者。 CBPeripheralManager对象表示外围设备（当前提供服务的app）。用于发布和广播服务，响应中心设备发来的读写请求。CBCentral对象表示中心设备。我们需要处理它发过来的request。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oyo48xwkg.bkt.clouddn.com/1253.png">
+<meta property="og:image" content="http://oyo48xwkg.bkt.clouddn.com/1436.png">
+<meta property="og:updated_time" content="2019-07-15T11:16:18.542Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS蓝牙开发-本机作为外围设备角色开发">
+<meta name="twitter:description" content="本机作为服务提供者。 CBPeripheralManager对象表示外围设备（当前提供服务的app）。用于发布和广播服务，响应中心设备发来的读写请求。CBCentral对象表示中心设备。我们需要处理它发过来的request。">
+<meta name="twitter:image" content="http://oyo48xwkg.bkt.clouddn.com/1253.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://roastduck.xyz/article/iOS蓝牙开发-本机作为外围设备角色开发.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>iOS蓝牙开发-本机作为外围设备角色开发 | 烤鸭的小火炉</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/roastduckcd" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#FB6D6F; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">烤鸭的小火炉</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">一只喜欢看布袋戏的烤鸭</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-gossip">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/gossip" rel="section"><i class="menu-item-icon fa fa-fw fa-coffee"></i> <br>随笔</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://roastduck.xyz/article/iOS蓝牙开发-本机作为外围设备角色开发.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="阳仔">
+      <meta itemprop="description" content="蹉跎错,消磨过,最是光阴化浮沫">
+      <meta itemprop="image" content="/jianxiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="烤鸭的小火炉">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">iOS蓝牙开发-本机作为外围设备角色开发
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-18 23:10:26" itemprop="dateCreated datePublished" datetime="2019-03-18T23:10:26+00:00">2019-03-18</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS/功能开发/" itemprop="url" rel="index"><span itemprop="name">功能开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/article/iOS蓝牙开发-本机作为外围设备角色开发.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/article/iOS蓝牙开发-本机作为外围设备角色开发.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-symbolscount">
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.9k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">13 分钟</span>
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本机作为服务提供者。</p>
+<p><code>CBPeripheralManager</code>对象表示外围设备（当前提供服务的app）。用于发布和广播服务，响应中心设备发来的读写请求。<br><code>CBCentral</code>对象表示中心设备。我们需要处理它发过来的<code>request</code>。<a id="more"></a><br><img src="http://oyo48xwkg.bkt.clouddn.com/1253.png" alt=""></p>
+<h2 id="CBPeripheralManagerDelegate协议"><a href="#CBPeripheralManagerDelegate协议" class="headerlink" title="CBPeripheralManagerDelegate协议"></a>CBPeripheralManagerDelegate协议</h2><h3 id="1-创建外围设备管理对象"><a href="#1-创建外围设备管理对象" class="headerlink" title="1. 创建外围设备管理对象"></a>1. 创建外围设备管理对象</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> @param options 一个字典值</span><br><span class="line"> *  用于在实例化时，蓝牙断开是否提示用户，默认为NO</span><br><span class="line"> *  CBPeripheralManagerOptionShowPowerAlertKey : NSNumber Bool</span><br><span class="line"> *  用于唯一标识外围设备对象的字符串 : NSString * (16位或32位或者是蓝牙技术联盟规定的16位标识)</span><br><span class="line"> *  CBPeripheralManagerOptionRestoreIdentifierKey</span><br><span class="line"> */</span><br><span class="line">self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil options:nil];</span><br></pre></td></tr></table></figure>
+<p>创建好后调用代理方法检查蓝牙状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> *  成功实例化一个外围设备对象时调用，确定设备是否支持蓝牙以及是否可用</span><br><span class="line"> */</span><br><span class="line">- (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral &#123;</span><br><span class="line">    // 判断状态</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>状态参数具体查看<a href="http://www.jianshu.com/p/71bbf2346034" target="_blank" rel="noopener">相关概念章节中的CBManagerState部分</a></p>
+<h3 id="2-创建特征"><a href="#2-创建特征" class="headerlink" title="2. 创建特征"></a>2. 创建特征</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> 创建一个特征</span><br><span class="line"> */</span><br><span class="line">- (CBMutableCharacteristic *)createCharacteristicWithUUID:(CBUUID *)uuid &#123;</span><br><span class="line">    CBMutableCharacteristic *characteristic =</span><br><span class="line">      [[CBMutableCharacteristic alloc] initWithType:uuid</span><br><span class="line">        properties:</span><br><span class="line">         CBCharacteristicPropertyRead | CBCharacteristicPropertyWrite</span><br><span class="line">        value:[@&quot;songyang&quot; dataUsingEncoding:NSUTF8StringEncoding]</span><br><span class="line">        permissions:CBAttributePermissionsReadable];</span><br><span class="line">        </span><br><span class="line">    return characteristic;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>UUID</code>：特征的唯一标识，UUID相关请参看相关概念章节<br><code>properties</code>：特征的属性，具体查看<a href="http://www.jianshu.com/p/71bbf2346034" target="_blank" rel="noopener">相关概念章节中的CBCharacteristicProperties部分</a><br><code>value</code>：特征的值，如果在此处设置了值，那么值会被缓存并且properties和ermissions被设为只读。如果需要值可写或者值能动态变化，就需要实例化时置value为nil。<br><code>permissions</code>：特征的值的权限。具体查看<a href="http://www.jianshu.com/p/71bbf2346034" target="_blank" rel="noopener">相关概念章节中的CBAttributePermissions部分</a>。</p>
+<p><code>Tip</code>：两个特征的建议配置</p>
+<ul>
+<li>订阅方式能使中心设备以较节能的方式获取值，这样外围设备也能做到在需要的时候才响应请求。所以苹果鼓励使用<code>CBCharacteristicPropertyNotify</code>。</li>
+<li>为了保证安全，建议使用<code>CBCharacteristicPropertyNotifyEncryptionRequired</code>或者<code>CBCharacteristicPropertyIndicateEncryptionRequired</code>，只允许受信任设备交互，尤其是特征的值能被写入的情况。这样才会在链接时看到是否允许配对的界面框???。</li>
+<li>另外要记得保持一致。总不能<code>properties</code>设了只读，然后<code>pemissions</code>又设成可写吧。<h3 id="3-创建服务"><a href="#3-创建服务" class="headerlink" title="3. 创建服务"></a>3. 创建服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> 创建一个服务</span><br><span class="line"></span><br><span class="line"> @param uuid 唯一标识</span><br><span class="line">  param primary YES为主服务，用于描述一个设备的主要功能。主服务可以被其他服务引用。</span><br><span class="line">                NO为次要服务,用于描述一个被它引用的其他服务的相关功能</span><br><span class="line">                如计步器主要服务是记录步数，次要服务可以是记录时间，距离等。</span><br><span class="line"> */</span><br><span class="line">- (CBMutableService *)createServiceWithUUID:(CBUUID *)uuid &#123;</span><br><span class="line">    CBMutableService *service = [[CBMutableService alloc] initWithType:uuid primary:YES];</span><br><span class="line">    return service;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>将服务和特征进行关联<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 一个服务可以有多个特征</span><br><span class="line">service.characteristics = @[characteristic];</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-发布服务"><a href="#4-发布服务" class="headerlink" title="4. 发布服务"></a>4. 发布服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> 发布服务</span><br><span class="line"> * 一旦发布服务，服务和它的特征会被缓存，服务不能再被修改</span><br><span class="line"> */</span><br><span class="line">[self.peripheralManager addService:service];</span><br></pre></td></tr></table></figure>
+<p> 添加服务后调用代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error &#123;</span><br><span class="line">    // 处理后续或错误</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="5-向外广播服务"><a href="#5-向外广播服务" class="headerlink" title="5. 向外广播服务"></a>5. 向外广播服务</h3><p>　　<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> 广播部分服务和特征。</span><br><span class="line"> */</span><br><span class="line">- (void)adviseServices:(NSArray *)services &#123;</span><br><span class="line">    for (CBMutableService *service in services) &#123;</span><br><span class="line">        // 广播数据</span><br><span class="line">        [self.peripheralManager startAdvertising:@&#123;CBAdvertisementDataServiceUUIDsKey :@[service.UUID]&#125;];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　<code>startAdvertising:</code>的参数<code>advertisementData</code>是一个字典值，其中包含要广播出去的数据和它对应的<code>key</code>。需要注意的iOS中这些数据不仅对大小有限制，数据内容也有。比如广告包中虽然可以包含外围设备的很多信息，但是iOS中只能传递以下两个：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// CBPeripheralManager 仅支持两个key:</span><br><span class="line">* `CBAdvertisementDataLocalNameKey` : value = 服务名称</span><br><span class="line">* `CBAdvertisementDataServiceUUIDsKey` : value = 服务UUID数组</span><br></pre></td></tr></table></figure></p>
+<p>　　对于大小限制，一个广告包为31个字节，除去必要的2个字节作为头信息（数据段的长度和类型），剩下的为数据段。如果app正在运行，以上两个key代表的信息大小限制为28个字节；如果大小不够，在响应包中还能额外使用10个字节，但是仅能用于传递服务名字。<br>　　不符合已分配空间的UUID会加入一个特殊的“溢出”包，该类型数据包只能被iOS设备扫描？？？（此处还需填坑）。<br>如果app在后台运行，则只能通过“溢出”包广播服务的UUID。</p>
+<p>蓝牙数据包格式：<code>Bluetooth 4.0 specification, Volume 3, Part C, Section 11</code><br>参考链接:<a href="https://www.cnblogs.com/smart-mutouren/p/5882038.html" target="_blank" rel="noopener">https://www.cnblogs.com/smart-mutouren/p/5882038.html</a><br><br><br>开始广播服务后，会调用代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(NSError *)error &#123;</span><br><span class="line">    // 处理后续或错误</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　接下来就是等待中心设备扫描和连接。当连接建立后，就可以收到中心设备的请求并开始处理（通过代理方法）。</p>
+<p>　　一旦链接建立，外围设备就不需要再广播广播包。因为设备间可以直接进行数据交互（交互方式？？？）。此时为了节省电量，应该及时停止广播：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[self.peripheralManager stopAdvertising];</span><br></pre></td></tr></table></figure></p>
+<p><code>Tip</code>：</p>
+<ul>
+<li>什么时候需要广播广播包？需要和中心设备连接的时候，如果有需要，甚至可以在创建好<code>CBPeripheralManager</code>对象后就开始广播。不过扮演外围角色的app并没有探测其他设备的方式，而用户是能直接知道的。所以最好提供一个界面让用户自己选择是否<code>startAdvitising:</code>。</li>
+<li>发布服务和广播服务都必须在<code>powered on</code>状态下进行。</li>
+<li>如果此时app进入后台，而我们又没有进行后台处理，广播会停止。</li>
+</ul>
+<h3 id="6-响应中心设备发来的读写请求"><a href="#6-响应中心设备发来的读写请求" class="headerlink" title="6. 响应中心设备发来的读写请求"></a>6. 响应中心设备发来的读写请求</h3><h5 id="响应读取请求-两种方式"><a href="#响应读取请求-两种方式" class="headerlink" title="响应读取请求(两种方式)"></a>响应读取请求(两种方式)</h5><ul>
+<li><p>中心设备调用<code>readValueForCharacteristic</code>发送读取请求，外围设备收到后，会调用代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> 收到读取数据的请求</span><br><span class="line"> @param request 读数据的请求，已被包装过（CBATTRequest对象）</span><br><span class="line"> */</span><br><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveReadRequest:(CBATTRequest *)request &#123;</span><br><span class="line">    // 根据请求中的信息进行响应</span><br><span class="line">    // 确认请求的特征UUID是否存在</span><br><span class="line">    if ([request.characteristic.UUID isEqual:self.characteristic.UUID])</span><br><span class="line">        &#123;   &#125;</span><br><span class="line">    // 检查读取的偏移量(从哪开始读)是否超出本地数据长度</span><br><span class="line">    if (request.offset &gt; self.characteristic.value.length) &#123;</span><br><span class="line">        // 超出则返回越界错误</span><br><span class="line">        [self.eripheralManager respondToRequest:request withResult:CBATTErrorInvalidOffset];</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // 从请求的偏移量开始读取之后的数据</span><br><span class="line">    request.value = [self.characteristic.value subdataWithRange:NSMakeRange(request.offset, self.characteristic.value.length - request.offset)];</span><br><span class="line">    // 更新请求的值后，向中心设备回传请求结果（必须调用，成功则返回数据，失败返回错误）</span><br><span class="line">    [self.peripheralManager respondToRequest:request withResult:CBATTErrorSuccess];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>中心设备通过订阅方式读取数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> 收到中心设备(setNotifyValue:YES forCharacteristic:)调用该代理</span><br><span class="line"> */</span><br><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic &#123;</span><br><span class="line">    // 修改特征值</span><br><span class="line">    // centrals 为nil，表示向所有订阅了的中心设备发通知。当然也可以通过数组指定通知</span><br><span class="line">    // 当发送通知的队列不足时，该方法返回NO；此时进入等待，当有可用队列时会触发代理peripheralManagerIsReadyToUpdateSubscribers:</span><br><span class="line">    BOOL didSendValue = [myPeripheralManager updateValue:updatedValue forCharacteristic:characteristic onSubscribedCentrals:nil];</span><br><span class="line">    if (!didSendValue) &#123;</span><br><span class="line">        // 将未发送的特征保存，之后重新发送</span><br><span class="line">        [self.shouldSendArray addObject:characteristic];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/**</span><br><span class="line"> 有可用队列时，调用该代理继续发送通知</span><br><span class="line"> */</span><br><span class="line">- (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral &#123;</span><br><span class="line"></span><br><span class="line">    BOOL didSendValue = [self.peripheralManager updateValue:updatedValue forCharacteristic:characteristic onSubscribedCentrals:nil];</span><br><span class="line">&#125;</span><br><span class="line">/**</span><br><span class="line"> 收到中心设备(setNotifyValue:NO forCharacteristic:)取消订阅特征的请求</span><br><span class="line"> */</span><br><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didUnsubscribeFromCharacteristic:(CBCharacteristic *)characteristic &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="响应写入请求"><a href="#响应写入请求" class="headerlink" title="响应写入请求"></a>响应写入请求</h5><p>收到该请求，调用代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> 收到中心设备写入数据的请求</span><br><span class="line"> @param requests 写数据的请求，已被包装过。注意这里是数组，可能包含多个写请求</span><br><span class="line"> */</span><br><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray&lt;CBATTRequest *&gt; *)requests &#123;</span><br><span class="line">    // 确认权限后，能写则写。写的时候也需要考虑偏移量</span><br><span class="line">    myCharacteristic.value = request.value;</span><br><span class="line">    // 如果所有请求都被完成，回传写入成功。随便取一个request</span><br><span class="line">    // 如果数组中有任意一个请求完成失败，那么后续请求都不用再响应。直接将失败的原因回传</span><br><span class="line">    // 该方法必须调用</span><br><span class="line">    [self.peripheralManager respondToRequest:requests.firstObject withResult:CBATTErrorSuccess];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="7-调试问题"><a href="#7-调试问题" class="headerlink" title="7. 调试问题"></a>7. 调试问题</h3><p>笔者在设备调试时，曾一直卡在以下问题上。<br>现填坑如下：</p>
+<ol>
+<li><code>XPC Connection invalid</code><br>　　<code>CBPeripheralManager</code>对象需要被全局持有（使用属性）。如果你将Manager封装在B类中，然后在C类中使用；那么C类也需要全局持有B类。原因是<code>CBPeripheralManager</code>对象（包括<code>CBCentralManager</code>对象）是异步创建的，创建成局部对象会很快被释放。<br>参考链接：@蒋小飞<a href="http://www.jianshu.com/p/ec659ffcacfe的“编码”部分。" target="_blank" rel="noopener">http://www.jianshu.com/p/ec659ffcacfe的“编码”部分。</a></li>
+<li>设备不支持（state：unsupported）<br>　　这个一方面可能是你的设备真的不支持BLE（通过你的设备信息去了解），另一方面可能是项目配置问题。<br>　　笔者使用<code>mac app</code>项目作为外部设备，然后用真机作为中心设备。运行<code>mac app</code>时一直出现以上两个问题。解决如下：（运行环境macOS 10.13，xcode 9.2 beta）<br><code>Targets</code>-&gt;<code>Capabilities</code>中勾选<br><img src="http://oyo48xwkg.bkt.clouddn.com/1436.png" alt=""></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/article/iOS蓝牙开发-本机作为外围设备角色开发.html">iOS蓝牙开发-本机作为外围设备角色开发</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 阳仔 的个人博客">阳仔</a></p>
+  <p><span>发布时间:</span>2019年03月18日 - 23:03</p>
+  <p><span>最后更新:</span>2019年07月15日 - 11:07</p>
+  <p><span>原始链接:</span><a href="/article/iOS蓝牙开发-本机作为外围设备角色开发.html" title="iOS蓝牙开发-本机作为外围设备角色开发">http://roastduck.xyz/article/iOS蓝牙开发-本机作为外围设备角色开发.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://roastduck.xyz/article/iOS蓝牙开发-本机作为外围设备角色开发.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+      });
+    });  
+</script>
+
+      
+    </div>
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/蓝牙/" rel="tag"><i class="fa fa-tags"></i> 蓝牙</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/article/iOS蓝牙开发-本机作为中心设备角色开发.html" rel="next" title="iOS蓝牙开发-本机作为中心设备角色开发">
+                <i class="fa fa-chevron-left"></i> iOS蓝牙开发-本机作为中心设备角色开发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/article/iOS-non-pointer-isa.html" rel="prev" title="iOS-non-pointer-isa">
+                iOS-non-pointer-isa <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/jianxiu.png" alt="阳仔">
+            
+              <p class="site-author-name" itemprop="name">阳仔</p>
+              <p class="site-description motion-element" itemprop="description">蹉跎错,消磨过,最是光阴化浮沫</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/roastduckcd" title="GitHub &rarr; https://github.com/roastduckcd" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.jianshu.com/u/8f6ea27db0c7" title="简书 &rarr; https://www.jianshu.com/u/8f6ea27db0c7" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CBPeripheralManagerDelegate协议"><span class="nav-text">CBPeripheralManagerDelegate协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建外围设备管理对象"><span class="nav-text">1. 创建外围设备管理对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-创建特征"><span class="nav-text">2. 创建特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-创建服务"><span class="nav-text">3. 创建服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-发布服务"><span class="nav-text">4. 发布服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-向外广播服务"><span class="nav-text">5. 向外广播服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-响应中心设备发来的读写请求"><span class="nav-text">6. 响应中心设备发来的读写请求</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#响应读取请求-两种方式"><span class="nav-text">响应读取请求(两种方式)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#响应写入请求"><span class="nav-text">响应写入请求</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-调试问题"><span class="nav-text">7. 调试问题</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">阳仔</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">162k</span>
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'Ck2z7fsTPsdmwBD4N3JjmNRG-gzGzoHsz',
+    appKey: 'JXRAAfxGqYDsVLnOGO5Fcc4u',
+    placeholder: '各位道友，请举手发言',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; 
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  <!-- 鼠标单击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  <!-- 点击窗口关闭侧边栏 -->
+  <script type="text/javascript" src="/js/src/close-sidebar.js"></script>
+  <!-- 百度分享 -->
+  <!-- <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","qzone","sqq","tsina","bdysc","renren","tqq","bdxc","tieba","douban","ibaidu","youdao","sdo","mail","isohu","ty","fbook","twi","linkedin","copy","print"],"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"4","bdPos":"right","bdTop":"101.28695678710938"},"image":{"viewList":["weixin","sqq","tsina","tqq","renren"],"viewText":"分享到：","viewSize":"16"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+  </script> -->
+</body>
+</html>

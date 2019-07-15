@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<!-- coding百度验证 -->
+<meta name="baidu-site-verification" content="SjtXCxQWOd">
+<!-- 个人域名百度验证 -->
+<meta name="baidu-site-verification" content="TFmrmKi4uB">
+<!-- github Google验证 -->
+<meta name="google-site-verification" content="hYqx1rSMO38c9cDs_PiE1zWzjtVPBuqdZZPtMnuOHrc">
+<!-- 个人域名 Google验证 -->
+<meta name="google-site-verification" content="tVCh-si3HbVcbGa9jP_lMVTEu4Ps0f9HoNrEWwom5tY">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-fill-left.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/roastduck32x32.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/roastduck16x16.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+
+  <meta name="description" content="官网 完整的 lldb 命令点击进入 终端中输入 lldb 即可进入环境。本文是在 Xcode 中调试。">
+<meta name="keywords" content="工具,LLDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLDB部分命令列举">
+<meta property="og:url" content="http://roastduck.xyz/article/LLDB部分命令列举.html">
+<meta property="og:site_name" content="烤鸭的小火炉">
+<meta property="og:description" content="官网 完整的 lldb 命令点击进入 终端中输入 lldb 即可进入环境。本文是在 Xcode 中调试。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/01/30/5c5161672de1e.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/01/30/5c5161674883a.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/01/30/5c51616703d50.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/03/26/5c99f42771f4d.jpg">
+<meta property="og:updated_time" content="2019-07-15T11:16:18.538Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LLDB部分命令列举">
+<meta name="twitter:description" content="官网 完整的 lldb 命令点击进入 终端中输入 lldb 即可进入环境。本文是在 Xcode 中调试。">
+<meta name="twitter:image" content="https://i.loli.net/2019/01/30/5c5161672de1e.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://roastduck.xyz/article/LLDB部分命令列举.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>LLDB部分命令列举 | 烤鸭的小火炉</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/roastduckcd" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#FB6D6F; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">烤鸭的小火炉</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">一只喜欢看布袋戏的烤鸭</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-gossip">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/gossip" rel="section"><i class="menu-item-icon fa fa-fw fa-coffee"></i> <br>随笔</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://roastduck.xyz/article/LLDB部分命令列举.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="阳仔">
+      <meta itemprop="description" content="蹉跎错,消磨过,最是光阴化浮沫">
+      <meta itemprop="image" content="/jianxiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="烤鸭的小火炉">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">LLDB部分命令列举
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-30 16:44:02" itemprop="dateCreated datePublished" datetime="2019-01-30T16:44:02+00:00">2019-01-30</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/工具/调试工具/" itemprop="url" rel="index"><span itemprop="name">调试工具</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/article/LLDB部分命令列举.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/article/LLDB部分命令列举.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-symbolscount">
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.9k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><a href="http://lldb.llvm.org/" target="_blank" rel="noopener">官网</a></li>
+<li>完整的 lldb 命令<a href="http://lldb.llvm.org/lldb-gdb.html" target="_blank" rel="noopener">点击进入</a></li>
+<li>终端中输入 <code>lldb</code> 即可进入环境。本文是在 Xcode 中调试。<a id="more"></a>
+<h3 id="流程控制命令"><a href="#流程控制命令" class="headerlink" title="流程控制命令"></a>流程控制命令</h3></li>
+<li><code>c（continue）</code>:继续运行到下一个断点处</li>
+<li><code>s（step into）</code>:进入函数</li>
+<li><code>si</code>:进入函数，汇编级别指令</li>
+<li><code>n</code>:单步向下过掉==一条源码==语句，不会进入函数</li>
+<li><code>ni</code>:单步向下过掉==一条汇编==语句，不会进入函数</li>
+<li><code>finish</code>:进入到函数后，退出当前函数，回到上一个函数</li>
+</ul>
+<h3 id="对象操作命令-expression"><a href="#对象操作命令-expression" class="headerlink" title="对象操作命令 expression"></a>对象操作命令 expression</h3><p>一般我们用来查看变量的值，二般写些简单语句。</p>
+<ul>
+<li>缩写为 <code>p</code> 或 <code>e</code> + 语句</li>
+<li>在 lldb 中新变量的声明和使用都必须在前面加 <code>$</code>。调试程序中的变量直接使用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(lldb) expression <span class="keyword">int</span> $a = <span class="number">10</span>;</span><br><span class="line">(lldb) p a</span><br><span class="line">error: use of undeclared identifier <span class="string">'a'</span></span><br><span class="line">(lldb) p $a</span><br><span class="line">(<span class="keyword">int</span>) $a = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<h5 id="p-表达式-动态执行语句"><a href="#p-表达式-动态执行语句" class="headerlink" title="==p 表达式: 动态执行语句=="></a>==<code>p 表达式</code>: 动态执行语句==</h5><ul>
+<li><code>p 对象</code>: 打印对象所有信息，包括类型、地址、值等</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(lldb) p <span class="built_in">NSString</span> *$str = <span class="string">@"string1"</span>;</span><br><span class="line">(lldb) p $str</span><br><span class="line">(<span class="built_in">NSTaggedPointerString</span> *) $str = <span class="number">0x8692ace9390c5ac2</span> <span class="string">@"string1"</span></span><br><span class="line">(lldb) p <span class="built_in">NSArray</span> *$arr = @[@<span class="number">1</span>, <span class="string">@"string2"</span>];</span><br><span class="line">(lldb) p $arr</span><br><span class="line">(__NSArrayI *) $arr = <span class="number">0x00006000039b2ac0</span> <span class="string">@"2 elements"</span></span><br><span class="line">(lldb) p jinmao</span><br><span class="line">(Dog *) $<span class="number">0</span> = <span class="number">0x00006000039be820</span></span><br><span class="line">(lldb) p jinmao.name</span><br><span class="line">(__NSCFConstantString *) $<span class="number">1</span> = <span class="number">0x0000000108b80070</span> <span class="string">@"jinmao"</span></span><br><span class="line">(lldb)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>po 对象</code>: 调用对象的 description 方法。如果是 OC 基本类型对象，只打印值。我们可以重写对象的<code>-description</code>方法来改变该调试语句的输出。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上面的po打印</span></span><br><span class="line">(lldb) po $str</span><br><span class="line">string1</span><br><span class="line">(lldb) po $arr</span><br><span class="line">&lt;__NSArrayI <span class="number">0x6000039b2ac0</span>&gt;(</span><br><span class="line"><span class="number">1</span>,</span><br><span class="line">string2</span><br><span class="line">)</span><br><span class="line">(lldb) po jinmao</span><br><span class="line">&lt;Dog: <span class="number">0x6000039be820</span>&gt;</span><br><span class="line">(lldb) po jinmao.name</span><br><span class="line">jinmao</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当程序被断住时，我们可以操作当前作用域的变量、调用对象方法等。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 取值</span></span><br><span class="line">(lldb) p <span class="keyword">self</span>.view.backgroundColor</span><br><span class="line">(<span class="built_in">UIDeviceRGBColor</span> *) $<span class="number">10</span> = <span class="number">0x0000600002cb4140</span></span><br><span class="line"><span class="comment">// 修改值、调用方法</span></span><br><span class="line">(lldb) p <span class="keyword">self</span>.view.backgroundColor = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">(<span class="built_in">UICachedDeviceRGBColor</span> *) $<span class="number">11</span> = <span class="number">0x0000600002ca0b40</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>p</code> 命令操作属性或成员变量时会自动分配一个<code>$n</code>局部变量来接收值。我们也可以直接操作这个变量。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(lldb) p jinmao</span><br><span class="line">(Dog *) $<span class="number">0</span> = <span class="number">0x0000600002892980</span></span><br><span class="line">(lldb) po jinmao.name</span><br><span class="line">jinmao</span><br><span class="line">(lldb) po $<span class="number">0.</span>name = <span class="string">@"erha"</span></span><br><span class="line">erha</span><br></pre></td></tr></table></figure>
+<p>和操作原对象没什么区别。注意也许有的 lldb <code>$n</code>变量并不能直接使用点语法。这时需要在前面显示指明类型即可。<br><code>(lldb) po (Dog *)$0.name</code></p>
+<ul>
+<li>指定不同打印格式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 16 进制打印</span><br><span class="line">p/x</span><br></pre></td></tr></table></figure>
+<h3 id="断点命令"><a href="#断点命令" class="headerlink" title="断点命令"></a>断点命令</h3><ul>
+<li><code>help breakpoint</code> 断点命令参数列表, 区分大小写</li>
+<li>breakpoint 可缩写为 break</li>
+</ul>
+<h5 id="查看断点-breakpoint-list-缩写break-list"><a href="#查看断点-breakpoint-list-缩写break-list" class="headerlink" title="查看断点 breakpoint list, 缩写break list"></a>查看断点 <code>breakpoint list</code>, 缩写<code>break list</code></h5><p>断点分组，组号从1开始。每组下的断点也从1开始编号。某个具体断点用 <code>组号.断点号</code> 表示<br><img src="https://i.loli.net/2019/01/30/5c5161672de1e.jpg" alt="lldb_break_list"></p>
+<h5 id="下断点"><a href="#下断点" class="headerlink" title="下断点"></a>下断点</h5><ul>
+<li><code>breakpoint set -n 函数名</code><br><br><code>breakpoint set</code> 可以缩写为 <code>b</code></li>
+<li><code>b -n &quot;[类 方法]&quot; -n &quot;[类n 方法n:]&quot;</code>，<code>-n</code>可选。<br><br>同时对 OC 方法设置多个断点，这种方法会将这些断点归为一组, 注意根据方法名称有可能不成功。</li>
+<li><code>b --file 文件名 --selector 方法名</code><br><br>为某个文件中的所有同名方法设置断点，省略 file 就是给整个项目中的同名方法设置断点。</li>
+<li><code>b -r xxx</code> 为带有 xxx 字段的所有方法下断点 </li>
+<li><code>b -a 函数地址</code> 汇编状态下常用</li>
+</ul>
+<h5 id="断点命令-breakpoint-command"><a href="#断点命令-breakpoint-command" class="headerlink" title="断点命令 breakpoint command"></a>断点命令 <code>breakpoint command</code></h5><ul>
+<li>给某一个断点添加命令 <code>breakpoint command add 断点组号</code></li>
+</ul>
+<h5 id="启用-禁用断点"><a href="#启用-禁用断点" class="headerlink" title="启用/禁用断点"></a>启用/禁用断点</h5><ul>
+<li><code>break enable 组号/断点号</code></li>
+<li><code>break disable 组号/断点号</code><br>注意如果先使用组号禁用断点，再使用断点号启用某一个断点会无效。所以如果要禁用某一组的断点，推荐使用<code>break dis 组号.*</code>。<code>*</code>号就表示所有。</li>
+</ul>
+<h5 id="删除断点"><a href="#删除断点" class="headerlink" title="删除断点"></a>删除断点</h5><ul>
+<li><code>breakpoint delete 断点组号</code>：删除某组所有断点</li>
+<li><code>breakpoint delete 断点号</code>：禁用某个断点</li>
+<li><code>breakpoint delete</code> 删除所有断点</li>
+</ul>
+<h3 id="内存断点-watchpoint"><a href="#内存断点-watchpoint" class="headerlink" title="内存断点 watchpoint"></a>内存断点 watchpoint</h3><ul>
+<li>监控某个属性值变化 <code>watchpoint set variable xxx</code>，只能使用<code>对象-&gt;成员变量</code>，不能使用点语法。</li>
+</ul>
+<h3 id="target-hook-命令，只要触发断点就调用"><a href="#target-hook-命令，只要触发断点就调用" class="headerlink" title="target hook 命令，只要触发断点就调用"></a>target hook 命令，只要触发断点就调用</h3><ul>
+<li><p><code>target stop-hook add -o &quot;frame variable&quot;</code><br>进入断点需要默认执行的 lldb 命令，此处是已进入断点就打印函数参数。一般写一些每个函数都能触发的通用命令。<br>针对 breakpoint 和 watchpoint 命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target stop-hook add -o &quot;frame variable&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>list</p>
+</li>
+<li>disable / able</li>
+<li>delete</li>
+<li>该命令一旦退出程序就失效。可以使用 lldb 的初始化文件 <code>.lldb</code> 来配置 target-hook 命令使其长期有效，直接将命令写入即可。</li>
+</ul>
+<h3 id="堆栈操作命令"><a href="#堆栈操作命令" class="headerlink" title="堆栈操作命令"></a>堆栈操作命令</h3><ul>
+<li>查看函数调用栈 <code>bt</code></li>
+<li>查看上(下)一个函数的汇编信息 <code>up/down</code>，不会改变执行流程</li>
+<li>查看某一个栈帧的函数的汇编信息 <code>frame select 栈帧编号</code>, 这个栈帧</li>
+<li>查看当前栈帧函数的参数 <code>frame variable</code></li>
+<li>断点回滚 <code>thread return</code> 回滚到该函数被调用的地方。<ul>
+<li>回滚后不会再继续往下执行</li>
+<li>相当于在函数开头直接 return。</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存镜像命令-image"><a href="#内存镜像命令-image" class="headerlink" title="内存镜像命令 image"></a>内存镜像命令 image</h3><h5 id="image-list-查看加载了哪些动态库"><a href="#image-list-查看加载了哪些动态库" class="headerlink" title="image list 查看加载了哪些动态库"></a>image list 查看加载了哪些动态库</h5><p>列出所有内存中正在运行的模块在系统的路径，和此时在内存中的真实物理地址。</p>
+<h5 id="image-lookup-当前进程加载的模块列表"><a href="#image-lookup-当前进程加载的模块列表" class="headerlink" title="image lookup 当前进程加载的模块列表"></a>image lookup 当前进程加载的模块列表</h5><ul>
+<li>崩溃代码定位<ul>
+<li>先打全局断点，再 image lookup</li>
+</ul>
+</li>
+<li>image lookup -a 方法内存地址 模块名<br>在指定模块中查找指定地址的<strong>方法</strong>信息，不指定模块名就是在所有模块中找。(笔者使用对象地址没有得到任何信息···)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Dog *a = [[Dog alloc] init];</span><br><span class="line">[a performSelector:@selector(run)];</span><br></pre></td></tr></table></figure>
+<p>a 调用了一个不存在的 run 方法。此时崩溃<br><img src="https://i.loli.net/2019/01/30/5c5161674883a.jpg" alt="lldb_imagelookup_exception"><br>由于奔溃地方指向如图位置，给我们定位 bug 带来困难。此时根据图中所示找到奔溃方法的上一个函数栈帧，得到它的地址，然后使用 <code>image lookup</code><br><img src="https://i.loli.net/2019/01/30/5c51616703d50.jpg" alt="lldb_imagelookup_getExcep"><br>这样直接就定位奔溃代码位置在<code>ViewController.m</code>中的第25行。</p>
+<blockquote>
+<p>Tip:这个功能也可以通过Xcode设置异常断点来实现</p>
+</blockquote>
+<ul>
+<li>image lookup -t 类名<br>查看类的成员变量及属性等，但是看不到类的方法。</li>
+<li>image lookup -n 函数名<br>查找函数在模块/App中的位置</li>
+<li>image dump sections 模块名<br>从内存中导出模块的 MachO section 信息。一定要加模块名，否则是导出内存中所有的模块</li>
+<li>image dump symtab 模块名<br>从内存中导出模块的 MachO symbols 信息。千万要加模块名，否则就是内存中所有的模块。笔者跑了三分钟没到个头啊···</li>
+</ul>
+<h3 id="查看内存命令-memory"><a href="#查看内存命令-memory" class="headerlink" title="查看内存命令 memory"></a>查看内存命令 memory</h3><h5 id="memory-read-分组数-进制格式-每组字节数"><a href="#memory-read-分组数-进制格式-每组字节数" class="headerlink" title="memory read[/][分组数][进制格式][每组字节数]"></a>memory read[/][分组数][进制格式][每组字节数]</h5><ul>
+<li>中括号表示参数可选。</li>
+<li>进制格式：<code>x 16进制(常用)</code>， <code>d 10进制</code></li>
+<li>每组字节数：每组按多少个字节展示 <code>b 1个字节</code>，<code>h 2个字节</code>，<code>w 4个字节</code>，<code>g 8个字节</code>。如果是10进制，该参数无效。</li>
+<li><code>memory read/6xb 0xxxxxxxxx</code> 读取 0xxxxxxxxx 的内容，分成6组，按16进制显示，每1个字节一组。因此总共读取了 6 bytes。</li>
+<li><p><code>memory read</code> 也可以简写为 <code>x</code>: <code>x/6xb 0xxxxxxxxx</code></p>
+<p>  <img src="https://i.loli.net/2019/03/26/5c99f42771f4d.jpg" alt="lldb_memory_read_format"></p>
+</li>
+</ul>
+<h5 id="memory-write"><a href="#memory-write" class="headerlink" title="memory write"></a>memory write</h5><ul>
+<li><code>memory write 0xxxxxxxx value</code>：向内存 0xxxxxxxx 写入 value 值。</li>
+</ul>
+<p><del>TODO: 后面补充</del><br><del>### 寄存器操作命令 register</del><br><del>##### register read / write</del></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/article/LLDB部分命令列举.html">LLDB部分命令列举</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 阳仔 的个人博客">阳仔</a></p>
+  <p><span>发布时间:</span>2019年01月30日 - 16:01</p>
+  <p><span>最后更新:</span>2019年07月15日 - 11:07</p>
+  <p><span>原始链接:</span><a href="/article/LLDB部分命令列举.html" title="LLDB部分命令列举">http://roastduck.xyz/article/LLDB部分命令列举.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://roastduck.xyz/article/LLDB部分命令列举.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+      });
+    });  
+</script>
+
+      
+    </div>
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/工具/" rel="tag"><i class="fa fa-tags"></i> 工具</a>
+          
+            <a href="/tags/LLDB/" rel="tag"><i class="fa fa-tags"></i> LLDB</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/article/Mweb配置七牛云图床.html" rel="next" title="Mweb配置七牛云图床">
+                <i class="fa fa-chevron-left"></i> Mweb配置七牛云图床
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/article/hexo博客搭建一.html" rel="prev" title="Github + Hexo + yilia 主题+ travis 自动部署个人博客(搭建)">
+                Github + Hexo + yilia 主题+ travis 自动部署个人博客(搭建) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/jianxiu.png" alt="阳仔">
+            
+              <p class="site-author-name" itemprop="name">阳仔</p>
+              <p class="site-description motion-element" itemprop="description">蹉跎错,消磨过,最是光阴化浮沫</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/roastduckcd" title="GitHub &rarr; https://github.com/roastduckcd" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.jianshu.com/u/8f6ea27db0c7" title="简书 &rarr; https://www.jianshu.com/u/8f6ea27db0c7" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程控制命令"><span class="nav-text">流程控制命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象操作命令-expression"><span class="nav-text">对象操作命令 expression</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#p-表达式-动态执行语句"><span class="nav-text">==p 表达式: 动态执行语句==</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#断点命令"><span class="nav-text">断点命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查看断点-breakpoint-list-缩写break-list"><span class="nav-text">查看断点 breakpoint list, 缩写break list</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下断点"><span class="nav-text">下断点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#断点命令-breakpoint-command"><span class="nav-text">断点命令 breakpoint command</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启用-禁用断点"><span class="nav-text">启用/禁用断点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删除断点"><span class="nav-text">删除断点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存断点-watchpoint"><span class="nav-text">内存断点 watchpoint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#target-hook-命令，只要触发断点就调用"><span class="nav-text">target hook 命令，只要触发断点就调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆栈操作命令"><span class="nav-text">堆栈操作命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存镜像命令-image"><span class="nav-text">内存镜像命令 image</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#image-list-查看加载了哪些动态库"><span class="nav-text">image list 查看加载了哪些动态库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#image-lookup-当前进程加载的模块列表"><span class="nav-text">image lookup 当前进程加载的模块列表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看内存命令-memory"><span class="nav-text">查看内存命令 memory</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#memory-read-分组数-进制格式-每组字节数"><span class="nav-text">memory read[/][分组数][进制格式][每组字节数]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#memory-write"><span class="nav-text">memory write</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">阳仔</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">162k</span>
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'Ck2z7fsTPsdmwBD4N3JjmNRG-gzGzoHsz',
+    appKey: 'JXRAAfxGqYDsVLnOGO5Fcc4u',
+    placeholder: '各位道友，请举手发言',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; 
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  <!-- 鼠标单击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  <!-- 点击窗口关闭侧边栏 -->
+  <script type="text/javascript" src="/js/src/close-sidebar.js"></script>
+  <!-- 百度分享 -->
+  <!-- <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","qzone","sqq","tsina","bdysc","renren","tqq","bdxc","tieba","douban","ibaidu","youdao","sdo","mail","isohu","ty","fbook","twi","linkedin","copy","print"],"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"4","bdPos":"right","bdTop":"101.28695678710938"},"image":{"viewList":["weixin","sqq","tsina","tqq","renren"],"viewText":"分享到：","viewSize":"16"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+  </script> -->
+</body>
+</html>

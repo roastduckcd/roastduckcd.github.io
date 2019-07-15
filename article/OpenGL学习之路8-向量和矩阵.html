@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<!-- coding百度验证 -->
+<meta name="baidu-site-verification" content="SjtXCxQWOd">
+<!-- 个人域名百度验证 -->
+<meta name="baidu-site-verification" content="TFmrmKi4uB">
+<!-- github Google验证 -->
+<meta name="google-site-verification" content="hYqx1rSMO38c9cDs_PiE1zWzjtVPBuqdZZPtMnuOHrc">
+<!-- 个人域名 Google验证 -->
+<meta name="google-site-verification" content="tVCh-si3HbVcbGa9jP_lMVTEu4Ps0f9HoNrEWwom5tY">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-fill-left.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/roastduck32x32.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/roastduck16x16.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+
+  <meta name="description" content="GLTools 提供的数学计算库：&amp;quot;math3d.h&amp;quot; 以下变量声明如不额外指出，都来自该库。">
+<meta name="keywords" content="矩阵栈,矩阵变换">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL学习之路8-向量和矩阵">
+<meta property="og:url" content="http://roastduck.xyz/article/OpenGL学习之路8-向量和矩阵.html">
+<meta property="og:site_name" content="烤鸭的小火炉">
+<meta property="og:description" content="GLTools 提供的数学计算库：&amp;quot;math3d.h&amp;quot; 以下变量声明如不额外指出，都来自该库。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/06/19/5d09c8713228676380.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/19/5d09c87323a3251051.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/19/5d09c872badec61408.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/19/5d09c872aeebb42436.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/19/5d09c871725a787319.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/19/5d09c8727550b82255.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/19/5d09c872754fa65050.jpg">
+<meta property="og:updated_time" content="2019-07-15T11:16:18.538Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGL学习之路8-向量和矩阵">
+<meta name="twitter:description" content="GLTools 提供的数学计算库：&amp;quot;math3d.h&amp;quot; 以下变量声明如不额外指出，都来自该库。">
+<meta name="twitter:image" content="https://i.loli.net/2019/06/19/5d09c8713228676380.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://roastduck.xyz/article/OpenGL学习之路8-向量和矩阵.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>OpenGL学习之路8-向量和矩阵 | 烤鸭的小火炉</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/roastduckcd" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#FB6D6F; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">烤鸭的小火炉</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">一只喜欢看布袋戏的烤鸭</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-gossip">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/gossip" rel="section"><i class="menu-item-icon fa fa-fw fa-coffee"></i> <br>随笔</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://roastduck.xyz/article/OpenGL学习之路8-向量和矩阵.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="阳仔">
+      <meta itemprop="description" content="蹉跎错,消磨过,最是光阴化浮沫">
+      <meta itemprop="image" content="/jianxiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="烤鸭的小火炉">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">OpenGL学习之路8-向量和矩阵
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-19 13:29:26" itemprop="dateCreated datePublished" datetime="2019-06-19T13:29:26+00:00">2019-06-19</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/图形处理/" itemprop="url" rel="index"><span itemprop="name">图形处理</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/图形处理/OpenGL/" itemprop="url" rel="index"><span itemprop="name">OpenGL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/article/OpenGL学习之路8-向量和矩阵.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/article/OpenGL学习之路8-向量和矩阵.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-symbolscount">
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">11 分钟</span>
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>GLTools 提供的数学计算库：<code>&quot;math3d.h&quot;</code></li>
+<li>以下变量声明如不额外指出，都来自该库。</li>
+</ul>
+<a id="more"></a>
+<h3 id="向量"><a href="#向量" class="headerlink" title="向量"></a>向量</h3><ul>
+<li>向量：具有方向和大小，坐标表示为（x, y, z）（从原点出发）。</li>
+<li><code>M3DVector3f</code>：表示向量(x, y, z）</li>
+<li><p><code>M3DVector4f</code>：表示向量(x, y, z, w)，w为x, y, z的缩放因子，通常为1.0。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 声明并初始化一个4维变量</span><br><span class="line">M3DVector4f vVectro= &#123;0.0f,0.0f,1.0f,1.0f&#125;;</span><br><span class="line">// 声明⼀一个三分量顶点数组</span><br><span class="line">M3DVector3f vVerts[] = &#123;</span><br><span class="line">    -0.5f,0.0f,0.0f,</span><br><span class="line">    0.5f,0.0f,0.0f,</span><br><span class="line">    0.0f,0.5f,0.0f</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="矩阵"><a href="#矩阵" class="headerlink" title="矩阵"></a>矩阵</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><ul>
+<li>由 m × n 个数排成的m行n列的数表称为m行n列的矩阵，简称m × n矩阵。</li>
+<li>矩阵的转置：将矩阵逐行变成列，就矩阵的转置矩阵。</li>
+<li>行矩阵矩阵和列矩阵。不同系统对矩阵存储的方式不一样。<ul>
+<li>行矩阵：逐行存储的矩阵, <strong>windows D3D 采用</strong><br>  $ \begin{bmatrix}<br>  1 &amp; 0 &amp; 0 &amp; 0 \<br>  0&amp; 1 &amp; 0 &amp; 0 \<br>  0 &amp;  0 &amp; 1  &amp; 0 \<br>  x &amp; y &amp; z &amp; 1<br>  \end{bmatrix}$</li>
+<li>列矩阵：逐列存储的矩阵, <strong>OpenGL 采用</strong><br>  $ \begin{bmatrix}<br>  1 &amp; 0 &amp; 0 &amp; x \<br>  0&amp; 1 &amp; 0 &amp; y \<br>  0 &amp;  0 &amp; 1  &amp; z \<br>  0 &amp; 0 &amp; 0 &amp; 1<br>  \end{bmatrix}$</li>
+<li>行矩阵和列矩阵互为转置。</li>
+<li><a href="https://www.jianshu.com/p/bfc8327eaad3" target="_blank" rel="noopener">OpenGL中矩阵的行主序与列主序</a></li>
+</ul>
+</li>
+<li>OpenGL 中列矩阵表示<ul>
+<li><code>typedef float M3DMatrix33f[9]</code>：3 * 3 矩阵</li>
+<li><code>typedef float M3DMatrix33f[16]</code>：4 * 4 矩阵（齐次坐标）</li>
+</ul>
+</li>
+</ul>
+<h4 id="计算法则"><a href="#计算法则" class="headerlink" title="计算法则"></a>计算法则</h4><h5 id="点乘"><a href="#点乘" class="headerlink" title="点乘"></a>点乘</h5><ul>
+<li>一个向量和它在另一个向量上的投影的长度，是标量（无方向）。</li>
+<li>$\underset{a}{\rightarrow} <em> \underset{b}{\rightarrow} = |a| </em> |b| * cos(\Theta )$</li>
+<li>u=(u1,u2,u3) v=(v1,v2,v3)<br>  $u * v = u_1v_1+u_2v_2+u_3v_3$</li>
+<li><p>函数形式: 结果由返回值接收</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回值范围 -1 ~ 1</span></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">m3dDotProduct3</span><span class="params">(<span class="keyword">const</span> M3DVector3f u,<span class="keyword">const</span> M3DVector3f v)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// 返回两个向量间的弧度值</span></span></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">m3dGetAngleBetweenVector3</span><span class="params">(<span class="keyword">const</span> M3DVector3f u,<span class="keyword">const</span> M3DVector3f v)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="向量的叉乘"><a href="#向量的叉乘" class="headerlink" title="向量的叉乘"></a>向量的叉乘</h5><ul>
+<li>结果是一个新的向量，称为向量积(法向量)，它垂直于相乘的a、b两向量所构成的平面。方向由右手法则得出。</li>
+<li>如果a，b互相垂直，那么和叉乘得出的法向量就能构成一个三维坐标系统。</li>
+<li>$\underset{a}{\rightarrow} \times  \underset{b}{\rightarrow} = |a| <em> |b| </em> sin(\Theta )$，方向垂直向量a和b组成的平面。</li>
+<li>u=(u1,u2,u3) v=(v1,v2,v3)<br>  $u  \times   v = ( u_2v_3 - v_2u_3 , u_3v_1 - v_3u_1, u_1v_2 - u_2v_1)$</li>
+<li><p>函数形式：结果通过参数指针传递</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">m3dCrossProduct3</span><span class="params">(M3DVector3f result, <span class="keyword">const</span> M3DVector3f u, <span class="keyword">const</span> M3DVector3f v)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="矩阵乘法"><a href="#矩阵乘法" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h5><ul>
+<li>第一个矩阵的列数（column）和第二个矩阵的行数（row）相同时才能进行。</li>
+<li>计算规则就是矩阵a的第一行乘以矩阵b的第一列，各个元素对应相乘然后求和作为第一元素的值<br>  <img src="https://i.loli.net/2019/06/19/5d09c8713228676380.png" alt="opengl_matrix_multiplication"></li>
+<li>矩阵是没有叉乘一说的。  <blockquote><p>matlab里矩阵叉乘表示的是构成矩阵的列向量分别做叉乘后所得列向量再组成的矩阵。例如（用matlab的格式） a1,a2,a3为三维列向量，b1,b2,b3为三维列向量 A = [a1,a2,a3]; B = [b1,b2,b3]; 那么 cross(A,B) 也即楼主说的A和B的叉乘结果为： [cross(a1,b1), cross(a2,b2), cross(a3,b3)]</p>
+<footer><strong>别拦着我逃学 百度知道回答中的评论</strong><cite><a href="https://zhidao.baidu.com/question/154361626.html" target="_blank" rel="noopener">zhidao.baidu.com/question/154361626.html</a></cite></footer></blockquote>
+</li>
+</ul>
+<h3 id="OpenGL-中的矩阵"><a href="#OpenGL-中的矩阵" class="headerlink" title="OpenGL 中的矩阵"></a>OpenGL 中的矩阵</h3><ul>
+<li>OpenGL中的坐标变换都是通过矩阵运算完成的，与图形学的描述完全一致。要注意的是变换中的矩阵乘法是右乘。</li>
+</ul>
+<h4 id="变换术语"><a href="#变换术语" class="headerlink" title="变换术语"></a>变换术语</h4><ul>
+<li>视图：观察者或摄像机的空间位置，对应视图矩阵<ul>
+<li>视图变换：移动观察者或摄像机来观察物体</li>
+<li>实际开发者并不操作，只是为了方便理解。</li>
+</ul>
+</li>
+<li>模型：物体的空间位置，在场景中移动物体，对应模型矩阵<ul>
+<li>模型变换：操作模型和其中特定的对象，对模型进行仿射变换。由于矩阵乘法不遵守结合律，所以变换顺序不同，结果也不一样。<br>  <img src="https://i.loli.net/2019/06/19/5d09c87323a3251051.jpg" alt="opengl_model_view_transform_difference"></li>
+<li>实际开发者并不操作，只是为了方便理解。</li>
+</ul>
+</li>
+<li>模型视图：描述视图和模型变换的二元性<ul>
+<li>模型视图变换：模型变换和视图变换在管线中的集合。由于两种变换是相对的，有时两种变换分别得到的效果是一样的（比如使看到的物体变小，可以将视图沿+z平移，或者将模型沿-z平移）。</li>
+<li>由于模型对应的物体坐标系只针对某个物体模型本身，而视图针对所有的模型。<strong>所以视图变化会影响所有模型，而模型变换只影响自身。</strong></li>
+<li>开发者实际操作，<strong>对应的模型视图矩阵是同时对所有模型有效的</strong>。</li>
+</ul>
+</li>
+<li>投影：改变视景体大小或重新设置它的形状<ul>
+<li>投影变换：将经过模型视图变换后的3维顶点转换为2位坐标。这种投影定义了视景体并创建了裁剪平面。</li>
+<li>两种投影方式：<a href="http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF2-%E5%9D%90%E6%A0%87%E7%B3%BB%E5%8F%8A%E6%8A%95%E5%BD%B1%E6%96%B9%E5%BC%8F.html#投影方式">正交投影和透视投影</a></li>
+<li>开发者实际操作。</li>
+</ul>
+</li>
+<li>视口：这是伪变化，只是对窗口上的最终输出进行缩放<ul>
+<li>视口变换：投影变换后的坐标转换到屏幕坐标系中。</li>
+</ul>
+</li>
+<li><a href="http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF2-%E5%9D%90%E6%A0%87%E7%B3%BB%E5%8F%8A%E6%8A%95%E5%BD%B1%E6%96%B9%E5%BC%8F.html#矩阵变换">关于几个变换矩阵的理论映射关系</a></li>
+<li>顶点变换管线<br><img src="https://i.loli.net/2019/06/19/5d09c872badec61408.jpg" alt="opengl_vertex_transform_pipeline"><br>模型视图矩阵和投影矩阵由开发者传入，透视除法和视口变换由GL内部完成。</li>
+</ul>
+<h4 id="OpenGL-中的照相机和物体"><a href="#OpenGL-中的照相机和物体" class="headerlink" title="OpenGL 中的照相机和物体"></a>OpenGL 中的照相机和物体</h4><ul>
+<li><p>使用 <code>GLFrame</code> 对象描述世界坐标系中的相机和物体。</p>
+  <blockquote><p>GLFrame叫参考帧，其中存储了1个世界坐标点和2个世界坐标下的方向向量，也就是9个glFloat值，分别用来表示：当前位置点，向前方向向量，向上方向向量。</p>
+<p>GLFrame可以表示世界坐标系中任意物体的位置与方向。无论是相机还是模型，都可以使用GLFrame来表示。对任意一个使用GLFrame来表示的物体而言，涉及到的坐标系有两个：永远不变的世界坐标系，针对于自身的物体坐标系(即绘图坐标系)。</p>
+<footer><strong>超频化石鱼 OpenGL自定义相机与模型：GLFrame</strong><cite><a href="https://blog.csdn.net/fyyyr/article/details/79298664" target="_blank" rel="noopener">blog.csdn.net/fyyyr/article/details/79298664</a></cite></footer></blockquote>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GLFrame</span> &#123;</span></span><br><span class="line">    <span class="keyword">protected</span>:</span><br><span class="line">        <span class="comment">// Where am I? 位置坐标</span></span><br><span class="line">        M3DVector3f vOrigin; </span><br><span class="line">        <span class="comment">// Where am I going? 前进方向，Z 轴方向</span></span><br><span class="line">        M3DVector3f vForward;</span><br><span class="line">        <span class="comment">// Which way is up? Y 轴方向</span></span><br><span class="line">        M3DVector3f vUp; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  Y轴向量和Z轴向量进行叉乘，得到X轴向量。</p>
+<blockquote>
+<p>虽然都是 <code>M3DVector3f</code> 类型，但是 <code>vOrigin</code> 只表示一个坐标点。而 <code>vForward</code> 和 <code>vUp</code> 表示的是向量，有距离和方向（原点出发到该点）。</p>
+</blockquote>
+</li>
+<li><p>相机默认位于世界坐标系原点，观察方向为世界坐标系-Z，前进方向为 -Z，向上为世界坐标系+Y，向右为世界坐标系+X。相机本身坐标系垂直屏幕向右为+X，向上为+Y，屏幕相离为+Z（Z轴方向和世界坐标系相反）。一般绘制开始时将其远离物体，向世界坐标系+Z方向移动，即相机坐标系-Z方向移动。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> GLFrame::GetCameraMatrix(M3DMatrix44f m,<span class="keyword">bool</span> bRotationOnly = flase);</span><br></pre></td></tr></table></figure>
+<p>  该函数就是将相机坐标系转换到世界坐标系。由于Z轴方向不一致，过程就是对相机先做一次旋转（Z轴的反转），再做一次平移（相机和世界坐标系是相对运动的，因此函数实现中会看到取负数）。</p>
+</li>
+<li><p>物体默认位于世界坐标系原点，与世界坐标系重合。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用来生成模型矩阵</span></span><br><span class="line"><span class="keyword">void</span> GLFrame::GetMatrix(M3DMatrix44f matrix, <span class="keyword">bool</span> bRotationOnly = <span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><code>GLFrame</code> 变换成矩阵时的对应位置，记住OpenGL中矩阵是列主序。<br>  <img src="https://i.loli.net/2019/06/19/5d09c872aeebb42436.jpg" alt="opengl_GLFrame_Matrix"><br>  X轴方向向量由 Y 叉乘 Z 得到，T 表示平移即 <code>vOrigin</code>。</li>
+</ul>
+<h3 id="OpenGL-矩阵栈"><a href="#OpenGL-矩阵栈" class="headerlink" title="OpenGL 矩阵栈"></a>OpenGL 矩阵栈</h3><ul>
+<li><p>为了方便管理和应用变换矩阵，通常使用矩阵栈 <code>GLMatrixStack.h</code>。顶点的变换（平移、缩放等）通过和栈顶的变换矩阵相乘实现。OpenGL 为模型视图矩阵和投影矩阵各维护一个矩阵堆栈。栈顶就是当前坐标变换矩阵，进入OpenGL管道的每个坐标(齐次坐标)都会先乘上这个矩阵，结果才是对应点在场景中的世界坐标。<br>  <img src="https://i.loli.net/2019/06/19/5d09c871725a787319.jpg" alt="opengl_vertex_transform_transform"></p>
+</li>
+<li><p>入栈与出栈<br>  <img src="https://i.loli.net/2019/06/19/5d09c8727550b82255.jpg" alt="opengl_matrix_stack_workflow"><br>  以矩阵2为基础状态，物体A应用矩阵3变换。先复制矩阵2并压栈，以此保存原来状态，便于快速回到基础状态。然后矩阵2 <em> 矩阵3，得到最终变换矩阵，新矩阵会覆盖掉栈顶矩阵。物体A应用新的变换后，将当前栈顶矩阵出栈，恢复到基础状态。<em>*压栈和出栈必须成对</em></em>。</p>
+</li>
+<li><p>每次变换是以世界坐标系的原点为参考点（顶点数据以世界坐标系）进行。也就是要固定世界坐标系，使用模型视图变换来移动物体。</p>
+  <blockquote><p>2）OpenGL物体建模实际上是分两步走的。第一步，在世界坐标系的原点位置绘制出该物体；第二步，通过modelview变换矩阵对世界坐标系原点处的物体进行仿射变换，将该物体移动到世界坐标系的目标位置处。</p>
+<footer><strong>chriszeng87 OpenGL使用矩阵堆栈glpushMatrix的原因</strong><cite><a href="https://chriszeng87.iteye.com/blog/2125018" target="_blank" rel="noopener">chriszeng87.iteye.com/blog/2125018</a></cite></footer></blockquote>
+</li>
+<li><p>记住模型视图变换是全局有效的。如果我们换一个角度，从物体角度看，相当于世界坐标系变换了。物体A应用一个变换A后，世界坐标系变换；继续绘制物体B，B就被绘制在变换后的原点上。由于我们给出的变换B仍是以原世界坐标系为参照，现在对物体B应用变换B，实际上物体B应用的是变换A*变换B。因此每次变换后需要pop栈顶矩阵，恢复原来的世界坐标系。反过来说，以世界坐标系为参照，就是要恢复模型视图矩阵。？？</p>
+<blockquote>
+<p>如果不先复制栈顶其实也可以，保存新的变换矩阵，在恢复时求出新变换矩阵的逆矩阵，再乘回去，也能得到变换前的矩阵。但是吃力不讨好。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="典型渲染循环"><a href="#典型渲染循环" class="headerlink" title="典型渲染循环"></a>典型渲染循环</h3><p><img src="https://i.loli.net/2019/06/19/5d09c872754fa65050.jpg" alt="opengl_render_cycle"></p>
+<h3 id="函数解析"><a href="#函数解析" class="headerlink" title="函数解析"></a>函数解析</h3><ul>
+<li><p>初始化</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GLMatrixStack		modelViewMatrix;</span><br><span class="line">GLMatrixStack		projectionMatrix;</span><br></pre></td></tr></table></figure>
+<p>  这里是 c++ 对象的隐式初始化，会自动调用下面的构造函数</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造函数，默认栈深度64</span></span><br><span class="line">GLMatrixStack::GLMatrixStack(<span class="keyword">int</span> iStackDepth = <span class="number">64</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>加载或重置栈顶矩阵。一般只使用 <code>LoadIdentity</code>，通常使用后面的 <code>push</code>。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用单元矩阵重置栈顶矩阵</span></span><br><span class="line"><span class="keyword">void</span> GLMatrixStack::LoadIdentity(<span class="keyword">void</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用任意矩阵重置栈顶矩阵</span></span><br><span class="line"><span class="comment">// 参数:4*4矩阵</span></span><br><span class="line"><span class="keyword">void</span> GLMatrixStack::LoadMatrix(<span class="keyword">const</span> M3DMatrix44f m);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 GLFame 转换为矩阵，再重置栈顶矩阵</span></span><br><span class="line"><span class="keyword">void</span> GLMatrixStack::LoadMatrix(GLFrame &amp;frame);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>入栈和出栈</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 栈顶矩阵复制后，再重新放到栈顶（保存变换状态）</span></span><br><span class="line"><span class="keyword">void</span> GLMatrixStack::PushMatrix(<span class="keyword">void</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将矩阵压入栈顶</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PushMatrix</span><span class="params">(<span class="keyword">const</span> M3DMatrix44f mMatrix)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 GLFame 转换为矩阵，再压⼊栈顶</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PushMatrix</span><span class="params">(GLFame &amp;frame)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 出栈(移除栈顶矩阵，恢复之前保存的变换状态) </span></span><br><span class="line"><span class="keyword">void</span> GLMatrixStack::PopMatrix(<span class="keyword">void</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>栈顶矩阵乘法</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 矩阵乘以栈顶矩阵，相乘结果覆盖原栈顶矩阵</span></span><br><span class="line"><span class="keyword">void</span> GLMatrixStack::MultMatrix(<span class="keyword">const</span> M3DMatrix44f);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 GLFame 转换为矩阵，再乘以栈顶矩阵，相乘结果覆盖原栈顶矩阵</span></span><br><span class="line"><span class="keyword">void</span> GLMatrixStack::MultMatrix(GLFrame &amp;frame);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>获取栈顶矩阵</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 栈顶矩阵作为返回值</span></span><br><span class="line"><span class="keyword">const</span> M3DMatrix44f &amp; GLMatrixStack::GetMatrix(<span class="keyword">void</span>);</span><br><span class="line"><span class="comment">// 使用形参接收栈顶矩阵</span></span><br><span class="line"><span class="keyword">void</span> GLMatrixStack::GetMatrix(M3DMatrix44f mMatrix);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>仿射变换</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 旋转 </span></span><br><span class="line"><span class="comment">// 参数 angle 是传递的度数，不是弧度值</span></span><br><span class="line"><span class="keyword">void</span> MatrixStack::Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);</span><br><span class="line"><span class="comment">// 平移</span></span><br><span class="line"><span class="keyword">void</span> MatrixStack::Translate(GLfloat x, GLfloat y, GLfloat z);</span><br><span class="line"><span class="comment">// 缩放</span></span><br><span class="line"><span class="keyword">void</span> MatrixStack::Scale(GLfloat x, GLfloat y, GLfloat z);</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/article/OpenGL学习之路8-向量和矩阵.html">OpenGL学习之路8-向量和矩阵</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 阳仔 的个人博客">阳仔</a></p>
+  <p><span>发布时间:</span>2019年06月19日 - 13:06</p>
+  <p><span>最后更新:</span>2019年07月15日 - 11:07</p>
+  <p><span>原始链接:</span><a href="/article/OpenGL学习之路8-向量和矩阵.html" title="OpenGL学习之路8-向量和矩阵">http://roastduck.xyz/article/OpenGL学习之路8-向量和矩阵.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://roastduck.xyz/article/OpenGL学习之路8-向量和矩阵.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+      });
+    });  
+</script>
+
+      
+    </div>
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/矩阵栈/" rel="tag"><i class="fa fa-tags"></i> 矩阵栈</a>
+          
+            <a href="/tags/矩阵变换/" rel="tag"><i class="fa fa-tags"></i> 矩阵变换</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/article/OpenGL学习之路7-混合.html" rel="next" title="OpenGL学习之路7-混合">
+                <i class="fa fa-chevron-left"></i> OpenGL学习之路7-混合
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/article/OpenGL学习之路9-纹理（上）.html" rel="prev" title="OpenGL学习之路9-纹理（上）">
+                OpenGL学习之路9-纹理（上） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/jianxiu.png" alt="阳仔">
+            
+              <p class="site-author-name" itemprop="name">阳仔</p>
+              <p class="site-description motion-element" itemprop="description">蹉跎错,消磨过,最是光阴化浮沫</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/roastduckcd" title="GitHub &rarr; https://github.com/roastduckcd" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.jianshu.com/u/8f6ea27db0c7" title="简书 &rarr; https://www.jianshu.com/u/8f6ea27db0c7" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#向量"><span class="nav-text">向量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵"><span class="nav-text">矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原理"><span class="nav-text">原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算法则"><span class="nav-text">计算法则</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#点乘"><span class="nav-text">点乘</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#向量的叉乘"><span class="nav-text">向量的叉乘</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#矩阵乘法"><span class="nav-text">矩阵乘法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenGL-中的矩阵"><span class="nav-text">OpenGL 中的矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#变换术语"><span class="nav-text">变换术语</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OpenGL-中的照相机和物体"><span class="nav-text">OpenGL 中的照相机和物体</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenGL-矩阵栈"><span class="nav-text">OpenGL 矩阵栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#典型渲染循环"><span class="nav-text">典型渲染循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数解析"><span class="nav-text">函数解析</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">阳仔</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">162k</span>
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'Ck2z7fsTPsdmwBD4N3JjmNRG-gzGzoHsz',
+    appKey: 'JXRAAfxGqYDsVLnOGO5Fcc4u',
+    placeholder: '各位道友，请举手发言',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; 
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  <!-- 鼠标单击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  <!-- 点击窗口关闭侧边栏 -->
+  <script type="text/javascript" src="/js/src/close-sidebar.js"></script>
+  <!-- 百度分享 -->
+  <!-- <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","qzone","sqq","tsina","bdysc","renren","tqq","bdxc","tieba","douban","ibaidu","youdao","sdo","mail","isohu","ty","fbook","twi","linkedin","copy","print"],"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"4","bdPos":"right","bdTop":"101.28695678710938"},"image":{"viewList":["weixin","sqq","tsina","tqq","renren"],"viewText":"分享到：","viewSize":"16"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+  </script> -->
+</body>
+</html>

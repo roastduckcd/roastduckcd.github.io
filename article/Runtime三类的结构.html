@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<!-- coding百度验证 -->
+<meta name="baidu-site-verification" content="SjtXCxQWOd">
+<!-- 个人域名百度验证 -->
+<meta name="baidu-site-verification" content="TFmrmKi4uB">
+<!-- github Google验证 -->
+<meta name="google-site-verification" content="hYqx1rSMO38c9cDs_PiE1zWzjtVPBuqdZZPtMnuOHrc">
+<!-- 个人域名 Google验证 -->
+<meta name="google-site-verification" content="tVCh-si3HbVcbGa9jP_lMVTEu4Ps0f9HoNrEWwom5tY">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-fill-left.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/roastduck32x32.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/roastduck16x16.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+
+  <meta name="description" content="在 Runteim一 中我们已经看到过类的结构体">
+<meta name="keywords" content="Runtime">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Runtime三类的结构">
+<meta property="og:url" content="http://roastduck.xyz/article/Runtime三类的结构.html">
+<meta property="og:site_name" content="烤鸭的小火炉">
+<meta property="og:description" content="在 Runteim一 中我们已经看到过类的结构体">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/03/22/5c93e11b3b50a.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/03/22/5c93e11b3be8d.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/03/22/5c93e11b2d416.jpg">
+<meta property="og:updated_time" content="2019-07-15T11:16:18.538Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Runtime三类的结构">
+<meta name="twitter:description" content="在 Runteim一 中我们已经看到过类的结构体">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/22/5c93e11b3b50a.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://roastduck.xyz/article/Runtime三类的结构.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Runtime三类的结构 | 烤鸭的小火炉</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/roastduckcd" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#FB6D6F; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">烤鸭的小火炉</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">一只喜欢看布袋戏的烤鸭</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-gossip">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/gossip" rel="section"><i class="menu-item-icon fa fa-fw fa-coffee"></i> <br>随笔</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://roastduck.xyz/article/Runtime三类的结构.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="阳仔">
+      <meta itemprop="description" content="蹉跎错,消磨过,最是光阴化浮沫">
+      <meta itemprop="image" content="/jianxiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="烤鸭的小火炉">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Runtime三类的结构
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-22 03:08:58" itemprop="dateCreated datePublished" datetime="2019-03-22T03:08:58+00:00">2019-03-22</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS/Runtime/" itemprop="url" rel="index"><span itemprop="name">Runtime</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/article/Runtime三类的结构.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/article/Runtime三类的结构.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-symbolscount">
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.7k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><p>在 <a href="http://roastduck.xyz/article/Runtime%E4%B8%80%E5%AF%B9%E8%B1%A1%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%9C%AC%E8%B4%A8.html">Runteim一</a> 中我们已经看到过类的结构体</p>
+<a id="more"></a>
+  <figure class="highlight objc"><figcaption><span>Object.mm</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_class *Class;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight c++"><figcaption><span>objc-rutime-new.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">objc_class</span> :</span> objc_object &#123;</span><br><span class="line">    <span class="comment">// Class ISA;       // 继承的 isa；8 bytes</span></span><br><span class="line">    Class superclass;   <span class="comment">// 父类；8 bytes</span></span><br><span class="line">    <span class="keyword">cache_t</span> cache;      <span class="comment">// 方法缓存；16 bytes</span></span><br><span class="line">    <span class="keyword">class_data_bits_t</span> bits;     <span class="comment">// 包含类数据的地址</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">class_rw_t</span> *data() &#123; </span><br><span class="line">        <span class="keyword">return</span> bits.data();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setData</span><span class="params">(<span class="keyword">class_rw_t</span> *newData)</span> </span>&#123;</span><br><span class="line">        bits.setData(newData);</span><br><span class="line">    <span class="comment">// 省略一大波</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="cache-方法缓存"><a href="#cache-方法缓存" class="headerlink" title="cache 方法缓存"></a><code>cache</code> 方法缓存</h3><ul>
+<li><p>方法缓存另讲。这里只看看其成员</p>
+  <figure class="highlight c++"><figcaption><span>objc-runtime-new.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">uint32_t</span> <span class="keyword">mask_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cache_t</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">bucket_t</span> *_<span class="title">buckets</span>;</span>  <span class="comment">// 8 bytes</span></span><br><span class="line">    <span class="keyword">mask_t</span> _mask;       <span class="comment">// 4 bytes</span></span><br><span class="line">    <span class="keyword">mask_t</span> _occupied;   <span class="comment">// 4 bytes</span></span><br><span class="line">    <span class="comment">//省略函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  得出该结构体大小 16 bytes，后面我们推断内存地址用。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">struct bucket_t &#123;</span><br><span class="line">private:</span><br><span class="line">#if __arm64__</span><br><span class="line">    MethodCacheIMP _imp;  // 8 bytes 方法实现</span><br><span class="line">    cache_key_t _key;       // 8 bytes 方法编号</span><br><span class="line">#else</span><br><span class="line">    cache_key_t _key;</span><br><span class="line">    MethodCacheIMP _imp;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>  用一个结构体将方法编号和对应的实现互相绑定。ARM64下方法实现在内存中靠前存放，其他架构靠后存放。为什么？</p>
+</li>
+</ul>
+<h3 id="成员变量-bits"><a href="#成员变量-bits" class="headerlink" title="成员变量 bits"></a>成员变量 <code>bits</code></h3><ul>
+<li>其实 bits 并不能直接得到类数据，还需要和一个 MASK 进行运算。</li>
+<li><p>先看一下结构体成员确定内存大小</p>
+  <figure class="highlight c++"><figcaption><span>objc-runtime-new.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">long</span>		<span class="keyword">uintptr_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">class_data_bits_t</span> &#123;</span></span><br><span class="line">    <span class="comment">// Values are the FAST_ flags above.</span></span><br><span class="line">    <span class="keyword">uintptr_t</span> bits;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  64 位下 long 占 8 bytes。也就是结构体的大小。综合一下得出<code>objc_class</code>在内存中占 40 bytes。之后验证我们需要根据字节数进行偏移。</p>
+</li>
+<li><p>获取类的数据：<code>objc_class::data()</code>，该函数又调用了<code>class_data_bits_t::data()</code></p>
+  <figure class="highlight c++"><figcaption><span>objc-runtime-new.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> !__LP64__</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> FAST_DATA_MASK 0xfffffffc <span class="comment">// ARM64</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">elif</span> 1</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> FAST_DATA_MASK 0x00007ffffffffff8 <span class="comment">// X86_64 下和 ISA_MASK 一样的</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class_rw_t</span>* data() &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">class_rw_t</span> *)(bits &amp; FAST_DATA_MASK);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="类的可读可写数据"><a href="#类的可读可写数据" class="headerlink" title="类的可读可写数据"></a>类的可读可写数据</h3><ul>
+<li><p>函数最终返回一个结构体指针，这个结构体中就是真正的数据。这里面的数据是可读写的。</p>
+<blockquote>
+<p>const 离谁近就修饰的谁</p>
+</blockquote>
+  <figure class="highlight c++"><figcaption><span>objc-runtime-new.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">class_rw_t</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint32_t</span> flags;             <span class="comment">// </span></span><br><span class="line">    <span class="keyword">uint32_t</span> version;           <span class="comment">// 版本号</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">class_ro_t</span> *ro;       <span class="comment">// 只读数据</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">method_array_t</span> methods;     <span class="comment">// 方法列表</span></span><br><span class="line">    <span class="keyword">property_array_t</span> properties;<span class="comment">// 属性列表</span></span><br><span class="line">    <span class="keyword">protocol_array_t</span> protocols; <span class="comment">// 协议列表</span></span><br><span class="line"></span><br><span class="line">    Class firstSubclass;        <span class="comment">// 当前类的首个子类</span></span><br><span class="line">    Class nextSiblingClass;     <span class="comment">// 姊妹类（当前类和这个继承自同一个类）</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *demangledName;        <span class="comment">//类的符号名</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  数据中我们重点关注 <code>ro</code>, <code>methods</code>, <code>properties</code>，<code>protocols</code>。</p>
+<p>  首先 LLDB 调试一下，验证内存是否如此分布。调试还是在 X86_64 环境下进行。验证代码在<a href="#调试验证">文末</a><br>  <img src="https://i.loli.net/2019/03/22/5c93e11b3b50a.jpg" alt="class_data_get"><br>  <img src="https://i.loli.net/2019/03/22/5c93e11b3be8d.jpg" alt="class_data_detail"></p>
+</li>
+</ul>
+<h3 id="类的只读数据-ro"><a href="#类的只读数据-ro" class="headerlink" title="类的只读数据 ro"></a>类的只读数据 <code>ro</code></h3><ul>
+<li><p>结构体定义</p>
+  <figure class="highlight c++"><figcaption><span>objc-runtime-new.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">class_ro_t</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint32_t</span> flags;</span><br><span class="line">    <span class="keyword">uint32_t</span> instanceStart; <span class="comment">// 存储实例成员的起始内存偏移</span></span><br><span class="line">    <span class="keyword">uint32_t</span> instanceSize;  <span class="comment">// 实例成员大小</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __LP64__</span></span><br><span class="line">    <span class="keyword">uint32_t</span> reserved;      <span class="comment">// 保留字段，ARM64下没有</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">uint8_t</span> * ivarLayout; <span class="comment">// type-encoding ？</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> * name;          <span class="comment">// 类名    </span></span><br><span class="line">    <span class="keyword">method_list_t</span> * baseMethodList;</span><br><span class="line">    <span class="keyword">protocol_list_t</span> * baseProtocols;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">ivar_list_t</span> * ivars;  <span class="comment">// 实例成员列表</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">uint8_t</span> * weakIvarLayout; <span class="comment">// weak 修饰的成员</span></span><br><span class="line">    <span class="keyword">property_list_t</span> *baseProperties;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">method_list_t</span> *baseMethods() <span class="keyword">const</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> baseMethodList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>  从这里能得出为什么我们不能在分类添加成员变量的原因。分类加载时，主类已经初始化完毕。实例成员列表 <code>*ivars</code> 有 <code>const</code>修饰，因此一旦初始化就不能再被更改。属性列表不是只读的，因此分类可以添加属性。但是不能生成成员变量，当然也不会有 setter 和 getter 方法。</p>
+<blockquote>
+<p><code>baseProperties</code> 在 <code>class_ro_t</code>中是一个指针变量。由于 ro 只读，因此该指针变量不可被修改，但是其内容应该是能修改的。 </p>
+</blockquote>
+<p>  <code>ro</code>的内存分布<br>  <img src="https://i.loli.net/2019/03/22/5c93e11b2d416.jpg" alt="class_ro"><br>  细心的读者可能已经发现，<code>rw</code>和<code>ro</code>中的方法列表、属性列表和协议列表地址都是相同。笔者没弄明白为什么要这么设计？？？<br>  <code>method_list_t</code>、<code>ivar_list_t</code>和<code>property_list_t</code> 都是继承自模板结构体`</p>
+  <figure class="highlight c++"><figcaption><span>objc-runtime-new.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Element, <span class="keyword">typename</span> List, <span class="keyword">uint32_t</span> FlagMask&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">entsize_list_tt</span> &#123;</span></span><br><span class="line">    <span class="comment">// entsize_list_tt 的大小:flag</span></span><br><span class="line">    <span class="comment">// method_list_t: 低2位为 flag，高14位为大小	flagMasK 为 0x3</span></span><br><span class="line">    <span class="comment">// ivar和 property list: 4个字节都表示大小	flagMasK 为 0x0</span></span><br><span class="line">    <span class="keyword">uint32_t</span> entsizeAndFlags; </span><br><span class="line">    <span class="keyword">uint32_t</span> count;     <span class="comment">// 方法/成员/属性的数量</span></span><br><span class="line">    Element first;      <span class="comment">// 第一个方法/成员/属性的数据</span></span><br><span class="line">    </span><br><span class="line">			</span><br><span class="line">    <span class="keyword">uint32_t</span> entsize() <span class="keyword">const</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> entsizeAndFlags &amp; ~FlagMask; </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 普通打印结构体只能查看第一个元素，对于其他的我们通过调用 get(int)获取。其算法就是在首元素的基础上进行偏移 。</span></span><br><span class="line">    <span class="function">Element&amp; <span class="title">getOrEnd</span><span class="params">(<span class="keyword">uint32_t</span> i)</span> <span class="keyword">const</span> </span>&#123; </span><br><span class="line">        assert(i &lt;= count);</span><br><span class="line">        <span class="keyword">return</span> *(Element *)((<span class="keyword">uint8_t</span> *)&amp;first + i*entsize()); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">Element&amp; <span class="title">get</span><span class="params">(<span class="keyword">uint32_t</span> i)</span> <span class="keyword">const</span> </span>&#123; </span><br><span class="line">        assert(i &lt; count);</span><br><span class="line">        <span class="keyword">return</span> getOrEnd(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  与之相近的还有<code>class_rw_t</code>中的<code>method_array_t</code>、<code>property_array_t</code>和<code>protocol_array_t</code>，但它们是继承自模板类</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename Element, typename List&gt;</span><br><span class="line">class list_array_tt &#123;</span><br><span class="line">    struct array_t &#123;</span><br><span class="line">        uint32_t count;</span><br><span class="line">        List* lists[0];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  其中的 <code>Element</code> 和 <code>List</code> 是泛型，前者继承时会替换为对应的结构体类型，后者会对应替换为<code>method_list_t</code>、<code>ivar_list_t</code>和<code>property_list_t</code>。</p>
+  <figure class="highlight c++"><figcaption><span>objc-runtime-new.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">method_t</span> &#123;</span></span><br><span class="line">    SEL name;           <span class="comment">// 方法名</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *types;  <span class="comment">// type-encoding</span></span><br><span class="line">    MethodListIMP imp;  <span class="comment">// 方法实现</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ivar_t</span> &#123;</span></span><br><span class="line">    <span class="keyword">int32_t</span> *offset;    <span class="comment">// 相对于偏移</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;   <span class="comment">// 实例变量名</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *type;   <span class="comment">// 变量类型</span></span><br><span class="line">    <span class="comment">// alignment is sometimes -1; use alignment() instead</span></span><br><span class="line">    <span class="keyword">uint32_t</span> alignment_raw; <span class="comment">// 对齐</span></span><br><span class="line">    <span class="keyword">uint32_t</span> size;          <span class="comment">// 占用内存大小</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">property_t</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;       <span class="comment">// 属性名</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *attributes; <span class="comment">// 属性类型，type-encoding</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>查看一下 method list并遍历出所有方法名
+![method_list_t](https://i.loli.net/2019/03/22/5c93e11b3a388.jpg)
+遍历出的方法列表中并没有未实现的方法，同时类方法也没有出现。类方法应该出现在元类中。关于类方法其实[上一篇文章翻译的倒数第二段](http://roastduck.xyz/article/Runtime%E4%BA%8C%E5%AF%B9%E8%B1%A1-%E7%B1%BB%E5%AF%B9%E8%B1%A1-%E5%85%83%E7%B1%BB%E5%AF%B9%E8%B1%A1.html)已有提及。感兴趣的读者可以自行尝试。
+</code></pre><h3 id="调试代码"><a href="#调试代码" class="headerlink" title="调试代码"></a>调试代码</h3><figure class="highlight objc"><figcaption><span>Person.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span> : <span class="title">NSObject</span> </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="keyword">int</span> age;</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 实现</span></span><br><span class="line">- (<span class="keyword">void</span>)run:(<span class="built_in">NSInteger</span>)distance;</span><br><span class="line">+ (<span class="keyword">void</span>)walk;</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 不实现</span></span><br><span class="line">- (<span class="keyword">void</span>)sing;</span><br><span class="line">+ (<span class="keyword">void</span>)eat;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><figcaption><span>Person.m</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="built_in">NSString</span> *address;</span><br><span class="line">    <span class="keyword">bool</span> sex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><figcaption><span>main.m</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Person *p = [Person alloc];</span><br><span class="line"></span><br><span class="line">p.name = <span class="string">@"songyang"</span>;</span><br><span class="line">p.age = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">[p run:<span class="number">100</span>];</span><br><span class="line">[Person walk];</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/article/Runtime三类的结构.html">Runtime三类的结构</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 阳仔 的个人博客">阳仔</a></p>
+  <p><span>发布时间:</span>2019年03月22日 - 03:03</p>
+  <p><span>最后更新:</span>2019年07月15日 - 11:07</p>
+  <p><span>原始链接:</span><a href="/article/Runtime三类的结构.html" title="Runtime三类的结构">http://roastduck.xyz/article/Runtime三类的结构.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://roastduck.xyz/article/Runtime三类的结构.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+      });
+    });  
+</script>
+
+      
+    </div>
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Runtime/" rel="tag"><i class="fa fa-tags"></i> Runtime</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/article/Runtime二对象-类对象-元类对象.html" rel="next" title="Runtime二对象-类对象-元类对象">
+                <i class="fa fa-chevron-left"></i> Runtime二对象-类对象-元类对象
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/article/碎碎念.html" rel="prev" title="碎碎念">
+                碎碎念 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/jianxiu.png" alt="阳仔">
+            
+              <p class="site-author-name" itemprop="name">阳仔</p>
+              <p class="site-description motion-element" itemprop="description">蹉跎错,消磨过,最是光阴化浮沫</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/roastduckcd" title="GitHub &rarr; https://github.com/roastduckcd" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.jianshu.com/u/8f6ea27db0c7" title="简书 &rarr; https://www.jianshu.com/u/8f6ea27db0c7" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#cache-方法缓存"><span class="nav-text">cache 方法缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#成员变量-bits"><span class="nav-text">成员变量 bits</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的可读可写数据"><span class="nav-text">类的可读可写数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的只读数据-ro"><span class="nav-text">类的只读数据 ro</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调试代码"><span class="nav-text">调试代码</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">阳仔</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">162k</span>
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'Ck2z7fsTPsdmwBD4N3JjmNRG-gzGzoHsz',
+    appKey: 'JXRAAfxGqYDsVLnOGO5Fcc4u',
+    placeholder: '各位道友，请举手发言',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; 
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  <!-- 鼠标单击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  <!-- 点击窗口关闭侧边栏 -->
+  <script type="text/javascript" src="/js/src/close-sidebar.js"></script>
+  <!-- 百度分享 -->
+  <!-- <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","qzone","sqq","tsina","bdysc","renren","tqq","bdxc","tieba","douban","ibaidu","youdao","sdo","mail","isohu","ty","fbook","twi","linkedin","copy","print"],"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"4","bdPos":"right","bdTop":"101.28695678710938"},"image":{"viewList":["weixin","sqq","tsina","tqq","renren"],"viewText":"分享到：","viewSize":"16"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+  </script> -->
+</body>
+</html>

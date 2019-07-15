@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<!-- coding百度验证 -->
+<meta name="baidu-site-verification" content="SjtXCxQWOd">
+<!-- 个人域名百度验证 -->
+<meta name="baidu-site-verification" content="TFmrmKi4uB">
+<!-- github Google验证 -->
+<meta name="google-site-verification" content="hYqx1rSMO38c9cDs_PiE1zWzjtVPBuqdZZPtMnuOHrc">
+<!-- 个人域名 Google验证 -->
+<meta name="google-site-verification" content="tVCh-si3HbVcbGa9jP_lMVTEu4Ps0f9HoNrEWwom5tY">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-fill-left.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/roastduck32x32.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/roastduck16x16.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+
+  <meta name="description" content="隐藏面：观察者看不见的部分，比如电脑屏幕的背面，较近物体挡住的较远物体的部分。既然看不见，对于这部分的顶点数据，就没必要渲染，应该提早裁减以提高性能。这种操作就是隐藏面消除(Hidden surface elimination)。">
+<meta name="keywords" content="渲染技巧,隐藏面消除,深度测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL学习之路6-隐藏面消除和深度测试">
+<meta property="og:url" content="http://roastduck.xyz/article/OpenGL学习之路6-隐藏面消除和深度测试.html">
+<meta property="og:site_name" content="烤鸭的小火炉">
+<meta property="og:description" content="隐藏面：观察者看不见的部分，比如电脑屏幕的背面，较近物体挡住的较远物体的部分。既然看不见，对于这部分的顶点数据，就没必要渲染，应该提早裁减以提高性能。这种操作就是隐藏面消除(Hidden surface elimination)。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/06/09/5cfcf535a1ffd51936.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/09/5cfcf5358250f96665.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/09/5cfcf5358067f59546.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/09/5cfcf5357fe6f71457.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/09/5cfcf535be06e97447.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/06/09/5cfcf53582b3038309.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/09/5cfcf5357fe6266382.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/09/5cfcf5356ba9593539.jpg">
+<meta property="og:updated_time" content="2019-07-15T11:16:18.538Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGL学习之路6-隐藏面消除和深度测试">
+<meta name="twitter:description" content="隐藏面：观察者看不见的部分，比如电脑屏幕的背面，较近物体挡住的较远物体的部分。既然看不见，对于这部分的顶点数据，就没必要渲染，应该提早裁减以提高性能。这种操作就是隐藏面消除(Hidden surface elimination)。">
+<meta name="twitter:image" content="https://i.loli.net/2019/06/09/5cfcf535a1ffd51936.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://roastduck.xyz/article/OpenGL学习之路6-隐藏面消除和深度测试.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>OpenGL学习之路6-隐藏面消除和深度测试 | 烤鸭的小火炉</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/roastduckcd" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#FB6D6F; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">烤鸭的小火炉</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">一只喜欢看布袋戏的烤鸭</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-gossip">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/gossip" rel="section"><i class="menu-item-icon fa fa-fw fa-coffee"></i> <br>随笔</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://roastduck.xyz/article/OpenGL学习之路6-隐藏面消除和深度测试.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="阳仔">
+      <meta itemprop="description" content="蹉跎错,消磨过,最是光阴化浮沫">
+      <meta itemprop="image" content="/jianxiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="烤鸭的小火炉">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">OpenGL学习之路6-隐藏面消除和深度测试
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-09 20:00:29" itemprop="dateCreated datePublished" datetime="2019-06-09T20:00:29+00:00">2019-06-09</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/图形处理/" itemprop="url" rel="index"><span itemprop="name">图形处理</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/图形处理/OpenGL/" itemprop="url" rel="index"><span itemprop="name">OpenGL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/article/OpenGL学习之路6-隐藏面消除和深度测试.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/article/OpenGL学习之路6-隐藏面消除和深度测试.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-symbolscount">
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.3k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">8 分钟</span>
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>隐藏面：观察者看不见的部分，比如电脑屏幕的背面，较近物体挡住的较远物体的部分。既然看不见，对于这部分的顶点数据，就没必要渲染，应该提早裁减以提高性能。这种操作就是隐藏面消除(Hidden surface elimination)。<a id="more"></a></li>
+<li>消除隐藏面的几种方法<ul>
+<li>油画法</li>
+<li>正背面剔除法</li>
+</ul>
+</li>
+</ul>
+<h3 id="油画法-不使用"><a href="#油画法-不使用" class="headerlink" title="油画法(不使用)"></a>油画法(不使用)</h3><ul>
+<li>先渲染离观察者较远的物体，再渲染较近的。需要先对物体距观察者距离进行排序，然后从最远的物体开始。<br>  <img src="https://i.loli.net/2019/06/09/5cfcf535a1ffd51936.jpg" alt="opengl_oil_painting"></li>
+<li>但是如果物体之间不能确定距离大小，比如交叉重叠的物体。这种情况油画法无法处理。同时油画法会处理一个物体所有顶点数据，没有对看不到的进行裁剪，性能上达不到最优。所以这种方式并没使用。<br>  <img src="https://i.loli.net/2019/06/09/5cfcf5358250f96665.jpg" alt="opengl_oil_painting_defect"></li>
+</ul>
+<h3 id="正背面剔除法-Face-Culling"><a href="#正背面剔除法-Face-Culling" class="headerlink" title="正背面剔除法 Face Culling"></a>正背面剔除法 Face Culling</h3><h5 id="相关原理"><a href="#相关原理" class="headerlink" title="相关原理"></a>相关原理</h5><ul>
+<li>对于n面物体，某一时刻肯定有我们看不到的面，比如3维6面物体，某一时刻我们最多只能看到3个面。将这些看不到的面的数据剔除，能极大的提高渲染效率。</li>
+<li><p>如何判断一个物体的正背面呢？</p>
+<ul>
+<li><p>在OpenGL中默认按逆时针环绕组成的面为正面，反之为背面。但是也可以通过函数指定正面环绕形式。</p>
+<blockquote>
+<p>环绕：顶点顺序和顶点连线方向一致形成平面的方式。{a,b,c}</p>
+</blockquote>
+<p>  <img src="https://i.loli.net/2019/06/09/5cfcf5358067f59546.jpg" alt="opengl_triangle_windings"></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 指定哪种环绕方式为正面</span><br><span class="line">void glFrontFace(GLenum mode);</span><br></pre></td></tr></table></figure>
+<p>  mode参数为: <code>GL_CW</code>(顺时针), <code>GL_CCW</code>(逆时针),默认值:<code>GL_CCW</code></p>
+</li>
+<li><p>同时我们还要注意观察点位置。因为对于同一个面，观察点在一侧假设看到的是逆时针，在另一侧观察则是顺时针。<br>  <img src="https://i.loli.net/2019/06/09/5cfcf5357fe6f71457.jpg" alt="opengl_camera_pos_affect_windings"></p>
+</li>
+</ul>
+</li>
+<li>确定好以上两点，OpenGL 会自行判断哪些点是正面，只对正面进行渲染。</li>
+</ul>
+<h5 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h5><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 开启表面剔除</span><br><span class="line">void glEnable(GL_CULL_FACE);</span><br><span class="line">// 关闭表⾯剔除</span><br><span class="line">void glDisable(GL_CULL_FACE);</span><br><span class="line"></span><br><span class="line">// 用户选择剔除正⾯/背⾯，GL_FRONT, GL_BACK(默认), GL_FRONT_AND_BACK。</span><br><span class="line">void glCullFace(GL_BACK);</span><br></pre></td></tr></table></figure>
+
+front 和 back 是相对于摄像机，或者以人眼看向屏幕。
+</code></pre><h5 id="示例-剔除正面？？的两种方式"><a href="#示例-剔除正面？？的两种方式" class="headerlink" title="示例: 剔除正面？？的两种方式"></a>示例: 剔除正面？？的两种方式</h5><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 直接指定</span><br><span class="line">glCullFace(GL_FRONT);</span><br><span class="line"></span><br><span class="line">// 间接指定</span><br><span class="line">// 指定顺时针环绕方式为正面</span><br><span class="line">glFrontFace(GL_CW);</span><br><span class="line">// 剔除远的背面</span><br><span class="line">glCullFace(GL_BACK);</span><br></pre></td></tr></table></figure>
+
+![opengl_cull_front_two_ways](media/opengl_cull_front_two_ways.jpg)
+* `GL_FRONT` 指 NMPQ，`GL_BACK` 指 BADC。这是相对于摄像机镜头的，不会变动。
+* 当使用默认环绕方式，NMPQ 为正面。正面和GL_FRONT重合。使用GL_FRONT。
+* 当指定顺时针环绕为正面时，BADC为正面，NMPQ为背面。所以剔除GL_BACK。
+</code></pre><h3 id="深度测试"><a href="#深度测试" class="headerlink" title="深度测试"></a>深度测试</h3><h5 id="相关原理-1"><a href="#相关原理-1" class="headerlink" title="相关原理"></a>相关原理</h5><ul>
+<li>深度就是像素点在世界坐标Z轴上的绝对值，表示离摄像机的距离，深度越大，距离越远。注意深度是针对渲染区域的所有像素点，而不是物体顶点。</li>
+<li>为什么使用深度？避免油画法需要固定物体渲染顺序的问题。油画法渲染必须先远后进，才能达到较近物体挡住较远物体的效果。使用了深度后，渲染顺序就不再重要。OpenGL 只会渲染深度值小的像素。</li>
+<li>专门存储当前渲染区域像素深度值的内存区域叫深度缓冲区。只要存在深度缓冲区，当前像素的深度值就会被写入。可以使用函数 <code>glDepthMask(GL_FALSE)</code>来禁⽌写⼊。</li>
+<li><blockquote><p>深度缓冲是在片段着色器运行之后（以及模板测试(Stencil Testing)运行之后。<br>现在大部分的GPU都提供一个叫做提前深度测试(Early Depth Testing)的硬件特性。提前深度测试允许深度测试在片段着色器之前运行。只要我们清楚一个片段永远不会是可见的（它在其他物体之后），我们就能提前丢弃这个片段。片段着色器通常开销都是很大的，所以我们应该尽可能少运行它们。<br>当使用提前深度测试时，片段着色器的一个限制是你不能写入片段的深度值。如果一个片段着色器对它的深度值进行了写入，提前深度测试是不可能的。OpenGL不能提前知道深度值。<br>···<br>这个（从观察者的视角）变换z值的方程是嵌入在投影矩阵中的，所以当我们将一个顶点坐标从观察空间至裁剪空间的时候这个非线性方程就被应用了。</p><footer><strong>cqltbe131421 opengl学习之路十六，深度测试</strong><cite><a href="https://blog.csdn.net/cqltbe131421/article/details/82906652" target="_blank" rel="noopener">blog.csdn.net/cqltbe131421/article/details/82906652</a></cite></footer></blockquote> 
+</li>
+<li><p>深度缓冲区(Depth Buffer)和颜色缓冲区(Color Buffer)是一一对应的。前者存储已绘制的像素的深度值，后者存储已绘制的像素的颜色。绘制像素之前，对于每个新的输入片元，将其深度值和深度缓冲区中存储的已绘制像素点的深度值比较，如果新的深度值小于缓冲区的，就会使用新片元信息替换掉深度缓冲区和颜色缓冲区的值，并且绘制出新像素。反之则会放弃新像素的信息，继续使用深度缓冲区和颜色缓冲区存储的值。这个过程就是深度测试。<br>  <img src="https://i.loli.net/2019/06/09/5cfcf535be06e97447.jpg" alt="opengl_depth_test"><br>  这些过程都是在一轮渲染迭代中，图中分步进行表示的是不同物体顶点处理的先后顺序。</p>
+</li>
+<li>深度测试默认是关闭的。</li>
+</ul>
+<h5 id="深度值的计算"><a href="#深度值的计算" class="headerlink" title="深度值的计算"></a>深度值的计算</h5><ul>
+<li>深度缓冲是由窗口系统自动创建的。深度值一般由16 bit、24 bit或32 bit表示。通常是24 bit。位数越多，精度越高。深度值范围一般为[0,1]。</li>
+<li>一种计算方式<br>  $depth=\frac{z - near}{far - near}$<br>  z为坐标值；near为摄像机到近裁面距离；far为摄像机到远裁面距离；near&lt;z&lt;far。<br>  <img src="https://i.loli.net/2019/06/09/5cfcf53582b3038309.png" alt="opengl_linear_depth_equation"><br>  当near和far确定时，深度值和Z值成正比关系。所有点的精度都是一样的。<br>  但是现实生活中观察物体，越远的物体越模糊。我们能分辨眼前花朵纹路，不会去关心远处大楼上商标的笔画。因此越远的物体，精度可以降低，减少运算性能的消耗。<br>  因此我们采用的方程是非线性的。<br>  $depth = \frac{1/z - 1/near}{1/far - 1/near}$<br>  <img src="https://i.loli.net/2019/06/09/5cfcf5357fe6266382.png" alt="opengl_nonlinear_depth_equation"><br>  由上图可以直观看出非线性关系的走势。要注意深度值0.5的值并不代表着物体的z值是位于可视区域的中间。</li>
+</ul>
+<h5 id="深度测试的问题-Z-Fighting"><a href="#深度测试的问题-Z-Fighting" class="headerlink" title="深度测试的问题: Z-Fighting"></a>深度测试的问题: Z-Fighting</h5><ul>
+<li><p>预防为主，一般在大型OpenGL项目会碰到的多。</p>
+  <blockquote><p>当深度值精确度很低时，容易引起ZFighting现象，表现为两个物体靠的很近时确定谁在前，谁在后时出现了歧义。<br>···<br>1.不要将两个物体靠的太近，避免渲染时三角形叠在一起。这种方式要求对场景中物体插入一个少量的偏移，那么就可能避免ZFighting现象。例如上面的立方体和平面问题中，将平面下移0.001f就可以解决这个问题。当然手动去插入这个小的偏移是要付出代价的。<br>2.尽可能将近裁剪面设置得离观察者远一些。上面我们看到，在近裁剪平面附近，深度的精确度是很高的，因此尽可能让近裁剪面远一些的话，会使整个裁剪范围内的精确度变高一些。但是这种方式会使离观察者较近的物体被裁减掉，因此需要调试好裁剪面参数。<br>3.使用更高位数的深度缓冲区，通常使用的深度缓冲区是24位的，现在有一些硬件使用使用32位的缓冲区，使精确度得到提高。</p>
+<footer><strong>The fool OpenGL学习脚印：深度测试(depth testing)</strong><cite><a href="https://blog.csdn.net/wangdingqiaoit/article/details/5220660" target="_blank" rel="noopener">blog.csdn.net/wangdingqiaoit/article/details/5220660</a></cite></footer></blockquote>
+</li>
+<li><p>什么事Z-fighting？由非线性图看出，深度0.5以后，Z值增大，对应的深度值会越来越靠近。受深度值精度（bit位）影响，当两个面很接近时，可能出现深度值相差很小甚至相等的情况，此时不能确定两个面的先后顺序，可能造成两个面相互交叉的情况（不确定先后，不知道用哪个面的颜色等信息）。<br>  <img src="https://i.loli.net/2019/06/09/5cfcf5356ba9593539.jpg" alt="opengl_depth_testing_zFighting"></p>
+</li>
+<li><p>如何解决Z-fighting？插入偏移实现，OpenGL 自动实现。一般不用开启，影响性能。</p>
+<ul>
+<li><p>第一步，启用多边形偏移</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 启⽤用Polygon Offset ⽅方式 </span></span><br><span class="line"><span class="comment">// GL_POLYGON_OFFSET_POINT  对应光栅化模式: GL_POINT 点</span></span><br><span class="line"><span class="comment">// GL_POLYGON_OFFSET_LINE 对应光栅化模式: GL_LINE 线</span></span><br><span class="line"><span class="comment">// GL_POLYGON_OFFSET_FILL 对应光栅化模式: GL_FILL 面</span></span><br><span class="line">glEnable(GL_POLYGON_OFFSET_FILL)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二步，计算偏移量（由OpenGL完成）<br>$Offset = ( m <em> factor ) + ( r </em> units)$<br>　　m : 多边形的深度的斜率的最大值,理解⼀个多边形越是与近裁剪面平行,m 就越接近于0。就是深度值。<br>　　r : 能产生于窗口坐标系的深度值中可分辨的差异最小值.r 是由具体OpenGL 平台指定的⼀个常量.<br>　　factor :<br>　　units :<br>　　offset大于0，模型离摄像机越远；offset小于0，模型离摄像机越近。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">glPolygonOffset(Glfloat factor,Glfloat units)</span><br></pre></td></tr></table></figure>
+<p>  一般将 factor、units 设为-1,-1可满足要求。</p>
+</li>
+<li><p>第三部，关闭多边形偏移</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDisable(GL_POLYGON_OFFSET_FILL)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="相关函数-1"><a href="#相关函数-1" class="headerlink" title="相关函数"></a>相关函数</h5><ul>
+<li> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 激活深度测试</span><br><span class="line">glEnable(GL_DEPTH_TEST)</span><br><span class="line">// 刷新深度缓冲区（每次渲染前都应该做一次，否则测试时会使用到上一次渲染存储的深度值）</span><br><span class="line">// 默认刷新使用最大值1</span><br><span class="line">glClear(GL_DEPTH_BUFFER_BIT)</span><br><span class="line"></span><br><span class="line">// 指定深度测试时比较方式，默认小于（新值比缓冲值）</span><br><span class="line">// GL_ALWAYS 不比较，直接通过</span><br><span class="line">// GL_NEVER 不比较，都不通过</span><br><span class="line">// GL_LESS 小于</span><br><span class="line">// GL_LEQUAL 小于等于</span><br><span class="line">// GL_EQUAL 等于</span><br><span class="line">// GL_GEQUAL 大于等于</span><br><span class="line">// GL_GREATER 大于</span><br><span class="line">// GL_NOTEQUAL 不等于</span><br><span class="line">glDepthFunc(GLEnum mode);</span><br><span class="line"></span><br><span class="line">// 禁⽌写⼊深度缓冲区（一般不用吧）</span><br><span class="line">glDepthMask(GL_FALSE)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ul>
+<li><a href="https://www.cnblogs.com/haoyul/p/6048953.html" target="_blank" rel="noopener">OpenGL中的深度、深度缓存、深度测试及保存成图片</a></li>
+<li><a href="https://blog.csdn.net/cqltbe131421/article/details/82906652" target="_blank" rel="noopener">深度测试</a></li>
+<li><a href="https://blog.csdn.net/wangdingqiaoit/article/details/52206602" target="_blank" rel="noopener">OpenGL学习脚印：深度测试(depth testing)</a></li>
+<li><a href="https://learnopengl.com/Advanced-OpenGL/Depth-testing" target="_blank" rel="noopener">Depth Testing</a></li>
+<li><a href="https://blog.csdn.net/cauchyweierstrass/article/details/53047680" target="_blank" rel="noopener">几种测试</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/article/OpenGL学习之路6-隐藏面消除和深度测试.html">OpenGL学习之路6-隐藏面消除和深度测试</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 阳仔 的个人博客">阳仔</a></p>
+  <p><span>发布时间:</span>2019年06月09日 - 20:06</p>
+  <p><span>最后更新:</span>2019年07月15日 - 11:07</p>
+  <p><span>原始链接:</span><a href="/article/OpenGL学习之路6-隐藏面消除和深度测试.html" title="OpenGL学习之路6-隐藏面消除和深度测试">http://roastduck.xyz/article/OpenGL学习之路6-隐藏面消除和深度测试.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://roastduck.xyz/article/OpenGL学习之路6-隐藏面消除和深度测试.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+      });
+    });  
+</script>
+
+      
+    </div>
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/渲染技巧/" rel="tag"><i class="fa fa-tags"></i> 渲染技巧</a>
+          
+            <a href="/tags/隐藏面消除/" rel="tag"><i class="fa fa-tags"></i> 隐藏面消除</a>
+          
+            <a href="/tags/深度测试/" rel="tag"><i class="fa fa-tags"></i> 深度测试</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/article/OpenGL学习之路5-渲染管线-代码实现.html" rel="next" title="OpenGL学习之路5-渲染管线-代码实现">
+                <i class="fa fa-chevron-left"></i> OpenGL学习之路5-渲染管线-代码实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/article/OpenGL学习之路7-混合.html" rel="prev" title="OpenGL学习之路7-混合">
+                OpenGL学习之路7-混合 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/jianxiu.png" alt="阳仔">
+            
+              <p class="site-author-name" itemprop="name">阳仔</p>
+              <p class="site-description motion-element" itemprop="description">蹉跎错,消磨过,最是光阴化浮沫</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/roastduckcd" title="GitHub &rarr; https://github.com/roastduckcd" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.jianshu.com/u/8f6ea27db0c7" title="简书 &rarr; https://www.jianshu.com/u/8f6ea27db0c7" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>简书</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#油画法-不使用"><span class="nav-text">油画法(不使用)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正背面剔除法-Face-Culling"><span class="nav-text">正背面剔除法 Face Culling</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#相关原理"><span class="nav-text">相关原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关函数"><span class="nav-text">相关函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#示例-剔除正面？？的两种方式"><span class="nav-text">示例: 剔除正面？？的两种方式</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#深度测试"><span class="nav-text">深度测试</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#相关原理-1"><span class="nav-text">相关原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#深度值的计算"><span class="nav-text">深度值的计算</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#深度测试的问题-Z-Fighting"><span class="nav-text">深度测试的问题: Z-Fighting</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关函数-1"><span class="nav-text">相关函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-text">参考链接</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">阳仔</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">162k</span>
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'Ck2z7fsTPsdmwBD4N3JjmNRG-gzGzoHsz',
+    appKey: 'JXRAAfxGqYDsVLnOGO5Fcc4u',
+    placeholder: '各位道友，请举手发言',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; 
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  <!-- 鼠标单击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  <!-- 点击窗口关闭侧边栏 -->
+  <script type="text/javascript" src="/js/src/close-sidebar.js"></script>
+  <!-- 百度分享 -->
+  <!-- <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","qzone","sqq","tsina","bdysc","renren","tqq","bdxc","tieba","douban","ibaidu","youdao","sdo","mail","isohu","ty","fbook","twi","linkedin","copy","print"],"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"4","bdPos":"right","bdTop":"101.28695678710938"},"image":{"viewList":["weixin","sqq","tsina","tqq","renren"],"viewText":"分享到：","viewSize":"16"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+  </script> -->
+</body>
+</html>
