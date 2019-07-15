@@ -1,5 +1,5 @@
 ---
-title: OpenGL学习之路9-纹理(上)
+title: OpenGL学习之路9-纹理（上）
 date: 2019-06-19 13:32:23
 comments: true
 toc: true

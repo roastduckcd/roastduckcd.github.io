@@ -1,5 +1,5 @@
 ---
-title: OpenGL-渲染架构及固定管线着色器
+title: OpenGL学习之路3-渲染架构及固定管线着色器
 date: 2019-05-23 20:31:21
 comments: true
 toc: true

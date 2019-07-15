@@ -1,5 +1,5 @@
 ---
-title: OpenGL术语
+title: OpenGL学习之路1-部分术语
 date: 2019-05-17 00:47:46
 comments: true
 toc: true

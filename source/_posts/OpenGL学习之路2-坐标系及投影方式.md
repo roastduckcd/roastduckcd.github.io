@@ -1,5 +1,5 @@
 ---
-title: OpenGL坐标系及投影方式
+title: OpenGL学习之路2-坐标系及投影方式
 date: 2019-05-29 11:41:41
 comments: true
 toc: true

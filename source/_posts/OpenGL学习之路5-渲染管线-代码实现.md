@@ -1,5 +1,5 @@
 ---
-title: OpenGL渲染管线-代码实现
+title: OpenGL学习之路5-渲染管线-代码实现
 date: 2019-05-31 11:10:07
 comments: true
 toc: true

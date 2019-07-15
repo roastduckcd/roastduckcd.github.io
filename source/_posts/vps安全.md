@@ -13,16 +13,13 @@ date: 2019-02-23 01:46:20
 top:
 ---
 
-　　这篇文章是[简书作者@乜明文章](https://www.jianshu.com/p/b35d9a4b4eb5) 的 CentOS 6 64位版本。
-
+　　　　这篇文章是[简书作者@乜明文章](https://www.jianshu.com/p/b35d9a4b4eb5) 的 CentOS 6 64位版本。
 #### 修改 ssh 默认端口（远程连接安全）
+* 查看要修改的端口是否被占用
 
-* 查看要修改的端口是否被占用<!--more-->
-
-	```
-	netstat -anp | grep 2101
-	```
-
+    ```
+    netstat -anp | grep 2101
+    ``` 
 * 修改`/etc/ssh/sshd_config`
 
     ```
@@ -38,12 +35,16 @@ top:
 * 使用新端口链接
 
     ```
-    ssh -p 2101 root@144.202.39.248
+    ssh -p 2101 root@IP
     ```
 * 链接成功再去吧22端口删掉，并重启 ssh
 * 如果失败，尝试开启 2101 端口并通过防火墙。笔者没用下面这句是成功了，所以并不清楚会出现什么问题。
 
     ```
+    # 查看防火墙，每行前面的 ACCEPT 和 REJECT 表明端口是通过还是拒绝
+    
+    /etc/init.d/iptables status 
+    
     /sbin/iptables -I INPUT -p tcp --dport 2101 -j ACCEPT
     
     service iptables save
@@ -60,7 +61,7 @@ top:
     ```
 
     然后会列出一堆用户及其信息
-    ![linux_get_all_users](https://i.loli.net/2019/02/23/5c7038d932da9.jpg)
+    ![linux_get_all_users](https://i.loli.net/2019/07/12/5d27e98f10eb593204.jpg)
     每一行就是一个用户，其格式如下：
     
     ```
@@ -77,26 +78,27 @@ top:
 
 * 禁止非`wheel`组用户使用`su`命令
 
-	```
-	vi /etc/pam.d/su
-	    
-	打开下面这句的注释，注意看清楚，看清楚，看清楚!!!
-	auth required pam_wheel.so use_uid
-	```
-	保存后，再使用`git`用户登录。即使密码输入正确也会提示错误或者无权限。
-	
-	```
-	// 登录 git 用户
-	su git
-	    
-	// 登录 root 用户
-	su
-	// su: incorrect passwd
-	    
-	sudo -i
-	// git is not in the sudoers file.  This incident will be reported.
-	```
-    ![linux_no_wheel_login](https://i.loli.net/2019/02/23/5c7038d913436.jpg)
+    ```
+    vi /etc/pam.d/su
+    
+    打开下面这句的注释，注意看清楚，看清楚，看清楚!!!
+    auth required pam_wheel.so use_uid
+    ```
+    
+    保存后，再使用`git`用户登录。即使密码输入正确也会提示错误或者无权限。
+    
+    ```
+    // 登录 git 用户
+    su git
+    
+    // 登录 root 用户
+    su
+    // su: incorrect passwd
+    
+    sudo -i
+    // git is not in the sudoers file.  This incident will be reported.
+    ```
+    ![linux_no_wheel_login](https://i.loli.net/2019/07/12/5d27e97bec01b53173.jpg)
 
 * 要登录`root`，需要将 `git` 用户添加到 `wheel` 组。再执行上面的命令就 ok。
     
@@ -116,7 +118,7 @@ top:
     // 查看 wheel 组用户
     cat /etc/group | grep wheel
     ```
-    ![linux_get_wheel_user](https://i.loli.net/2019/02/23/5c7038d9310b9.jpg)
+    ![linux_get_wheel_user](https://i.loli.net/2019/07/12/5d27e97c1f1b975630.jpg)
     好吧，我猜错了，总之`su`是登录不上了。查了一下，`sudo -i`需要修改`/etc/sudoers`文件。[解决 is not in the sudoers file](https://blog.csdn.net/gouxf_0219/article/details/80592773)
     
 * 这里只是记录命令，如何将用户移出组和删除用户。
@@ -134,7 +136,7 @@ top:
 
 #### 禁止 ssh 以 root 用户登录，需要在 root 下操作。（远程连接安全）
 
-* 前提你要有其他用户可以ssh
+* 前提你要有其他用户可以ssh, 比如上面的git，并且git已经加入了 wheel 用户组。
 
     ```
     vi /etc/ssh/sshd_config
@@ -145,15 +147,14 @@ top:
     // 重启 ssh 服务
     service sshd restart
     ```
-    ![forbid_ssh_root](https://i.loli.net/2019/02/23/5c7038d92e29f.jpg)
+    ![forbid_ssh_root](https://i.loli.net/2019/07/12/5d27e97c0cf2514423.jpg)
 
 * 现在笔者就只能使用 git 用户登录了
-    ![ssh_login_git](https://i.loli.net/2019/02/23/5c7038d933123.jpg)
+    ![ssh_login_git](https://i.loli.net/2019/07/12/5d27e97c2c37d10002.jpg)
     
 #### 设置 ssh 免密登录并禁止密码登录（远程连接安全）
 
 　　密码登录有一定风险，万一泄露或者黑客暴力破解就不好了。使用 RSA 就不容易破解了，除非黑客又黑掉你本地电脑，拿到你的私钥文件。
-
 　　注意以下操作是基于服务器登录用户为 `git`。
 
 * 本地生成密钥对
@@ -171,11 +172,12 @@ top:
     ```
 * 传输过程跟网速有关，最后会需要输入 `git` 用户的密码。完成后就可以免密登录。
 
-    ![ssh-copy-id](https://i.loli.net/2019/02/23/5c7038d9564b0.jpg)
+    ![ssh-copy-id](https://i.loli.net/2019/07/12/5d27e989211a883816.jpg)
     
-* 设置别名登录
-
-	上面的方式每次登录都需要输入端口号和 IP，略显麻烦。本地编辑`~/.ssh/config`文件
+* 设置别名并且使用公钥登录
+    在服务器使用root用户编辑`/etc/ssh/sshd_config`文件，将`PubkeyAuthentication`修改为`yes`； 
+将`AuthorizedKeysFile path/to/authorized_keys`前面加上`#`去掉，并且修改`path`为登录用户`authorized_keys`文件的绝对路径。
+　　上面的方式每次登录都需要输入端口号和 IP，略显麻烦。本地编辑`~/.ssh/config`文件
 
     ```
     ###### for personal server
@@ -186,12 +188,12 @@ top:
       PreferredAuthentications publickey
       IdentityFile ~/.ssh/blog_server_rsa # 本地私钥文件路径
     ```
-现在就可以使用`ssh vultr`免密登录了。
+现在就可以使用`ssh vultr`免密登录了。如果失败，先确认上面文件路径是否正确。
 
-* 禁止密码登录
+* 禁止密码登录。成功后使用`ssh ip`方式登录就不会再提示输入密码。
 
 	`git`用户登录服务端设置
-
+	
     ```
     // 切换到 root 用户
     su
@@ -205,5 +207,4 @@ top:
     // 重启 ssh 服务
     service sshd restart
     ```
-     
-        
+   

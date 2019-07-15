@@ -1,5 +1,5 @@
 ---
-title: OpenGL-mac环境搭建及简单渲染
+title: OpenGL学习之路4-mac环境搭建及简单渲染
 date: 2019-05-23 21:01:09
 comments: true
 toc: true

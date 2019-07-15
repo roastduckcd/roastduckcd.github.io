@@ -1,5 +1,5 @@
 ---
-title: OpenGL学习之路10-纹理(下)
+title: OpenGL学习之路10-纹理（下）
 date: 2019-06-19 13:53:09
 comments: true
 toc: true
@@ -33,7 +33,8 @@ tags:
 * 解决方案：使用 Mip 贴图。
 
 ### MIP 贴图
-* MipMap: 多级渐远纹理。􏳉􏰕􏰖
+
+* MipMap: 多级渐远纹理。
 * 多用在复杂场景，比如游戏等。在应用开发中较少涉及。
 * 如果物体很远，产生的片元可能很少。而它却又有一张和近处物体同样高分辨率的纹理。在获取纹理时，GL可能需要跨越很大一段纹理才能取到片元坐标对应的纹理。这可能造成在小物体上产生不真实的感觉，同时这一部分高分辨率也浪费了内存空间，并且降低了性能。
 * Mip贴图纹理由**一系列**纹理图像组成，每个图像大小在(s,t)每个轴的方向上都缩小一半（前一个图像的1/4），直到最后一个图像为 1 * 1 的单元 。OpenGL 会使用一组新的过滤方式，为不同距离的物体选择出最合适的纹理。
@@ -44,7 +45,8 @@ tags:
     ```
 
 ### 使用
-* 􏳕􏲶只有[纹理参数中设置](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF9-%E7%BA%B9%E7%90%86(%E4%B8%8A).html#设置纹理参数)的过滤方式 `GL_TEXTURE_MIN_FILTER` 为以下四种才可以生成 Mip 贴图。
+
+* 只有 [纹理参数中设置](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF10-%E7%BA%B9%E7%90%86%EF%BC%88%E4%B8%8B%EF%BC%89.html#设置纹理参数) 的过滤方式 `GL_TEXTURE_MIN_FILTER` 为以下四种才可以生成 Mip 贴图。
     * `GL_NEAREST_MIPMAP_NEAREST`: 性能非常好，闪烁现象最弱
     * `GL_LINEAR_MIPMAP_NEAREST`: 常用于对游戏加速
     * `GL_LINEAR_MIPMAP_LINEAR`和`GL_NEAREST_MIPMAP_LINEAR`: 过滤器在 Mip 层之间进行了额外插值，以消除过滤痕迹
@@ -52,7 +54,7 @@ tags:
 * 函数原型
 
     ```c++
-    void glGenerateMipmap(􏰮GLenum target􏰳);
+    void glGenerateMipmap(GLenum target);
     ```
     为指定纹理对象生成Mipmap贴图。`target` 为纹理类型，一般取值`GL_TEXTURE_1D`、`GL_TEXTURE_2D`、`GL_TEXTURE_3D`。纹理对象在[绑定纹理](http://roastduck.xyz/article/OpenGL%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF9-%E7%BA%B9%E7%90%86(%E4%B8%8A).html#绑定纹理状态)时已经被指定。
     
