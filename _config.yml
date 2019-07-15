@@ -124,6 +124,8 @@ deploy:
     branch: master
   - type: git
     repo: vultr:/home/git/repo/hexo.git
+  - type: git
+    repo: vultr233:/home/git/repo/hexo.git
 
 # 统计
 ## dependenices: https://github.com/theme-next/hexo-symbols-count-time
